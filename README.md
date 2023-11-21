@@ -2,7 +2,7 @@
 fully functioning chess engine completed with C++!
 
 ### Made By:
-Abhi, Anthony, Satya
+Abhi, Anthony Fuca, Satya
 
 ### Started On:
 November 21 2023
