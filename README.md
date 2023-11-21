@@ -1,6 +1,6 @@
 # ChessEngine
 fully functioning chess engine completed with C++!
 
-##Made By:##
+### Made By:
 Abhi, Anthony, Satya
 
