@@ -22,7 +22,6 @@ int main() {
 
 
                     if (cpuDifficulty > 4 || cpuDifficulty < 0) {
-                        //SHOULD THIS BE CERR??
                         if (!isWhiteInit) cerr << "Invalid White Player Computer Difficulty";
                         else cerr << "Invalid Black Player Computer Difficulty";
                         break;
@@ -66,9 +65,43 @@ int main() {
             // IMPLEMENT RESIGNATION
             //
         } else if (cmd == "move") {
+            char startFile = 'a';
+            int startRank = 1;
+            char endFile = 'h';
+            int endRank = 8;
+            bool validSquares = true;
+
+            if (startFile < 'a' || startFile > 'h') {
+                cerr << "Invalid Starting File" << endl;
+                validSquares = false;
+            }
+
+            if (startRank < 1 || startRank > 8) {
+                cerr << "Invalid Starting Rank" << endl;
+                validSquares = false;
+            }
+
+            if (endFile < 'a' || startFile > 'h') {
+                cerr << "Invalid Ending File" << endl;
+                validSquares = false;
+            }
+
+            if (endRank < 1 || startRank > 8) {
+                cerr << "Invalid Ending Rank" << endl;
+                validSquares = false;
+            }
+
+            if (validSquares) {
+                //
+                // IMPLEMENT THE MOVE
+                //
+            }
+        } else if (cmd == "setup") {
             //
-            // IMPLEMENT MOVES
-            //
+            // IMPLEMENT LOGIC CHECKING IF A GAME IS CURRENTLY RUNNING
+            // 
+            
+
         }
     }
 }
