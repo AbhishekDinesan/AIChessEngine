@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <sstream>
 // ADD INCLUDE STATEMENTS
 using namespace std;
 
@@ -8,22 +9,28 @@ int main() {
     while (true) {
         cin >> cmd;
         
+        // GAME 
         if (cmd == "game") {
-            string playerType;
+            string input = "";
+            string playerType = "";
+            string strCpuDifficulty;
             int cpuDifficulty = 0;
             bool isWhiteInit = false;
             bool isBlackInit = false;
 
-            while (!isWhiteInit || !isBlackInit) {
-                cin >> playerType;
-                if (playerType == "computer") {
-                    cin.ignore(); // removes the "]" from the input 
-                    cin >> cpuDifficulty;
 
+            while (!isWhiteInit || !isBlackInit) {
+                
+                getline(cin, playerType, '[');
+                
+                if (playerType == "computer") {
+                     
+                    getline(cin, strCpuDifficulty, ']');
+                    // CONVERT STRING TO INT AND STORE IT
 
                     if (cpuDifficulty > 4 || cpuDifficulty < 0) {
-                        if (!isWhiteInit) cerr << "Invalid White Player Computer Difficulty";
-                        else cerr << "Invalid Black Player Computer Difficulty";
+                        if (!isWhiteInit) cerr << "Invalid White Player Computer Difficulty" << endl;
+                        else cerr << "Invalid Black Player Computer Difficulty" << endl;
                         break;
                     } 
 
@@ -55,16 +62,21 @@ int main() {
                         isBlackInit = true;
                     }
                 } else {
-                    // SHOULD THIS BE CERR??
                     if (!isWhiteInit) cerr << "Invalid White Player Type" << endl;
                     else cerr << "Invalid Black Player Type" << endl;
                 }
             }
-        } else if (cmd == "resign") {
+        } 
+        
+        // RESIGN
+        else if (cmd == "resign") {
             // 
             // IMPLEMENT RESIGNATION
             //
-        } else if (cmd == "move") {
+        } 
+        
+        // MOVE
+        else if (cmd == "move") {
             char startFile = 'a';
             int startRank = 1;
             char endFile = 'h';
@@ -96,12 +108,94 @@ int main() {
                 // IMPLEMENT THE MOVE
                 //
             }
-        } else if (cmd == "setup") {
+        } 
+        
+        // SETUP
+        else if (cmd == "setup") {
             //
             // IMPLEMENT LOGIC CHECKING IF A GAME IS CURRENTLY RUNNING
             // 
-            
+            while (true) {
+                string oper;
+                string colour;
+                char piece = 'K';
+                char file = 'a';
+                int rank = 1;
 
+                cin >> oper;
+                if (oper == "done") {
+                    break;
+                } else if (oper == "+") {
+                    cin >> piece;
+                    if (piece != 'K' && piece != 'k' && 
+                        piece != 'Q' && piece != 'q' && 
+                        piece != 'B' && piece != 'b' &&
+                        piece != 'N' && piece != 'n' &&
+                        piece != 'R' && piece != 'r' &&
+                        piece != 'P' && piece != 'p') {
+                            cerr << "Invalid Piece" << endl;
+                            cin.clear();
+                            continue;
+                        }
+
+                        cin >> file;
+                    if (file < 'a' || file > 'h') {
+                        cerr << "Invalid File" << endl;
+                        cin.clear();
+                        continue;
+                    }
+
+                    cin >> rank;
+                    if (rank < 1 || rank > 8) {
+                        cerr << "Invalid Rank" << endl;
+                        cin.clear();
+                        continue;
+                    }
+
+                    //
+                    // IMPLEMENT THE ADDITION OF A PIECE TO THE BOARD
+                    //
+                } else if (oper == "-") {
+
+                       cin >> file;
+                    if (file < 'a' || file > 'h') {
+                        cerr << "Invalid File" << endl;
+                        cin.clear();
+                        continue;
+                    }
+
+                    cin >> rank;
+                    if (rank < 1 || rank > 8) {
+                        cerr << "Invalid Rank" << endl;
+                        cin.clear();
+                        continue;
+                    }
+
+                    //
+                    // IMPLEMENT THE REMOVAL OF A PIECE FROM THE BOARD
+                    //
+
+                } else if (oper == "=") {
+                    cin >> colour; 
+                    if (colour != "white" && colour != "black") {
+                        cerr << "Invalid Piece" << endl;
+                        cin.clear();
+                        continue;
+                    }
+
+                    //
+                    // SET THE INDICATED PLAYERS TURN
+                    //
+
+                }
+            }
+            //
+            // CHECK FOR A VALID BOARD
+            //
+
+            //
+            // **MAYBE** ADD THINGS TO INDICATE THE ALLOWANCE OF CASTLING AND EN PASSANT
+            //
         }
     }
 }
