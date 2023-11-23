@@ -3,7 +3,7 @@
 #include <sstream>
 // ADD INCLUDE STATEMENTS
 using namespace std;
-const int MAX_DIFFICULTY;
+const int MAX_DIFFICULTY = 5;
 
 int main()
 {
@@ -15,6 +15,7 @@ int main()
         // GAME
         if (cmd == "game")
         {
+            cout << "testing" << endl;
             string input = "";
             string playerType = "";
             string strCpuDifficulty;
