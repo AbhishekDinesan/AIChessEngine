@@ -3,239 +3,284 @@
 #include <sstream>
 // ADD INCLUDE STATEMENTS
 using namespace std;
-const int MAX_DIFFICULTY = 5;
 
-int main()
+bool isValidCpuInput(string s) {
+    return (s >= "1" && s <= "4");
+}
+
+bool isValidFileInput(char c) {
+    return (c >= 'a' && c <= 'h');
+}
+
+bool isValidRankInput(char c) {
+    return (c >= '1' && c <= '8');
+}
+
+bool isValidPieceInput(char c) {
+    return (c == 'K' || c == 'k' || c == 'Q' || c == 'q' ||
+            c == 'B' || c == 'b' || c == 'N' || c == 'n' ||
+            c == 'R' || c == 'r' || c == 'P' || c == 'p');
+}
+
+int main() 
 {
+    int whiteScore = 0;
+    int blackScore = 0;
     string cmd;
     while (true)
     {
         cin >> cmd;
-
-        // GAME
         if (cmd == "game")
         {
-            cout << "testing" << endl;
-            string input = "";
+            string parameter = "";
             string playerType = "";
-            string strCpuDifficulty;
+            string strCpuDifficulty = "";
             int cpuDifficulty = 0;
             bool isWhiteInit = false;
             bool isBlackInit = false;
 
             while (!isWhiteInit || !isBlackInit)
             {
-
-                getline(cin, playerType, '[');
-
-                if (playerType == "computer")
+                cin >> parameter;
+                istringstream processParameter {parameter};
+                getline(processParameter, playerType, '[');
+                
+                if (playerType == "computer") 
                 {
-
-                    getline(cin, strCpuDifficulty, ']');
-                    // CONVERT STRING TO INT AND STORE IT
-
-                    if (cpuDifficulty > MAX_DIFFICULTY || cpuDifficulty < 0)
+                    getline(processParameter, strCpuDifficulty, ']');
+                    if (!isValidCpuInput(strCpuDifficulty)) 
                     {
-                        if (!isWhiteInit)
-                            cerr << "Invalid White Player Computer Difficulty" << endl;
-                        else
-                            cerr << "Invalid Black Player Computer Difficulty" << endl;
+                        cerr << "Invalid Input: \"" << strCpuDifficulty;
+                        cerr << "\" is not a valid computer difficulty" << endl;
+                        //
+                        //  DELETE EXISTING PLAYERS
+                        //
+                        cin.ignore(int(2147483647),'\n');
                         break;
+                    } 
+                    else 
+                    {
+                        istringstream strToInt {strCpuDifficulty};
+                        strToInt >> cpuDifficulty;
                     }
 
-                    if (!isWhiteInit)
-                    {
+                    if (!isWhiteInit) {
                         //
-                        // IMPLEMENT WHITE PLAYER INITIALIZATION AS A COMPUTER
-                        // WITH cpuDifficulty DIFFICULTY
+                        // INITIALIZE WHITE PLAYER AS COMPUTER
                         //
+                        cout << "WHITE = COMPUTER" << cpuDifficulty << endl;
                         isWhiteInit = true;
-                    }
-                    else
+                    } 
+                    else 
                     {
                         //
-                        // IMPLEMENT BLACK PLAYER INITIALIZATION AS A COMPUTER
-                        // WITH cpuDifficulty DIFFICULTY
+                        // INITIALIZE BLACK PLAYER AS COMPUTER
                         //
+                        cout << "BLACK = COMPUTER" << cpuDifficulty << endl;
                         isBlackInit = true;
                     }
-                    cin.ignore(); // removes the "]" from the input
+
                 }
-                else if (playerType == "human")
+                else if (playerType == "human" && !isWhiteInit) 
                 {
-                    if (!isWhiteInit)
-                    {
-                        //
-                        // IMPLEMENT WHITE PLAYER INITIALIZATION AS A HUMAN
-                        //
-                        isWhiteInit = true;
-                    }
-                    else
-                    {
-                        //
-                        // IMPLEMENT BLACK PLAYER INITIALIZATION AS A HUMAN
-                        //
-                        isBlackInit = true;
-                    }
+                    //
+                    // INITIALIZE WHITE PLAYER AS HUMAN
+                    //
+                    cout << "WHITE = HUMAN" << endl;
+                    isWhiteInit = true;
+                } 
+                else if (playerType == "human" && !isBlackInit) 
+                {
+                    //
+                    // INITIALIZE BLACK PLAYER AS HUMAN
+                    //
+                    cout << "BLACK = HUMAN" << endl;
+                    isBlackInit = true;
                 }
-                else
+                else 
                 {
-                    if (!isWhiteInit)
-                        cerr << "Invalid White Player Type" << endl;
-                    else
-                        cerr << "Invalid Black Player Type" << endl;
-                }
-            }
-        }
-
-        // RESIGN
-        else if (cmd == "resign")
-        {
-            //
-            // IMPLEMENT RESIGNATION
-            //
-        }
-
-        // MOVE
-        else if (cmd == "move")
-        {
-            char startFile = 'a';
-            int startRank = 1;
-            char endFile = 'h';
-            int endRank = 8;
-            bool validSquares = true;
-
-            if (startFile < 'a' || startFile > 'h')
-            {
-                cerr << "Invalid Starting File" << endl;
-                validSquares = false;
-            }
-
-            if (startRank < 1 || startRank > 8)
-            {
-                cerr << "Invalid Starting Rank" << endl;
-                validSquares = false;
-            }
-
-            if (endFile < 'a' || startFile > 'h')
-            {
-                cerr << "Invalid Ending File" << endl;
-                validSquares = false;
-            }
-
-            if (endRank < 1 || startRank > 8)
-            {
-                cerr << "Invalid Ending Rank" << endl;
-                validSquares = false;
-            }
-
-            if (validSquares)
-            {
-                //
-                // IMPLEMENT THE MOVE
-                //
-            }
-        }
-
-        // SETUP
-        else if (cmd == "setup")
-        {
-            //
-            // IMPLEMENT LOGIC CHECKING IF A GAME IS CURRENTLY RUNNING
-            //
-            while (true)
-            {
-                string oper;
-                string colour;
-                char piece = 'K';
-                char file = 'a';
-                int rank = 1;
-
-                cin >> oper;
-                if (oper == "done")
-                {
+                    cerr << "Invalid Input: \"" << playerType;
+                    cerr << "\" is not a valid player type" << endl;
+                    //
+                    //  DELETE EXISTING PLAYERS
+                    //
+                    cin.ignore(int(2147483647),'\n');
                     break;
                 }
-                else if (oper == "+")
-                {
-                    cin >> piece;
-                    if (piece != 'K' && piece != 'k' &&
-                        piece != 'Q' && piece != 'q' &&
-                        piece != 'B' && piece != 'b' &&
-                        piece != 'N' && piece != 'n' &&
-                        piece != 'R' && piece != 'r' &&
-                        piece != 'P' && piece != 'p')
-                    {
-                        cerr << "Invalid Piece" << endl;
-                        cin.clear();
-                        continue;
-                    }
+            }
+        }
+        else if (cmd == "resign") 
+        {
+            //
+            // RESIGN
+            //
+            cout << "Resigned" << endl;
+        }
+        else if (cmd == "move") 
+        {
+            //
+            // CHECK TO SEE IF A GAME IS IN PROGRESS
+            //
 
-                    cin >> file;
-                    if (file < 'a' || file > 'h')
-                    {
-                        cerr << "Invalid File" << endl;
-                        cin.clear();
-                        continue;
-                    }
-
-                    cin >> rank;
-                    if (rank < 1 || rank > 8)
-                    {
-                        cerr << "Invalid Rank" << endl;
-                        cin.clear();
-                        continue;
-                    }
-
-                    //
-                    // IMPLEMENT THE ADDITION OF A PIECE TO THE BOARD
-                    //
+            char processChar = '0';
+            int startFile = -1;
+            int startRank = -1;
+            int endFile = -1;
+            int endRank = -1;
+            bool reset = false;
+            
+            while (startFile == -1 || startRank == -1 || endFile == -1 || endRank == -1) {
+                cin >> processChar;
+                if (!isValidFileInput(processChar)) {
+                    cerr << "Invalid Input: \"" << processChar;
+                    cerr << "\" is not a valid file" << endl;
+                    cin.ignore(int(2147483647),'\n');
+                    reset = true;
+                    break;
                 }
-                else if (oper == "-")
-                {
+                else if (startFile == -1) startFile = processChar - 'a';
+                else endFile = processChar - 'a';
 
-                    cin >> file;
-                    if (file < 'a' || file > 'h')
-                    {
-                        cerr << "Invalid File" << endl;
-                        cin.clear();
-                        continue;
-                    }
-
-                    cin >> rank;
-                    if (rank < 1 || rank > 8)
-                    {
-                        cerr << "Invalid Rank" << endl;
-                        cin.clear();
-                        continue;
-                    }
-
-                    //
-                    // IMPLEMENT THE REMOVAL OF A PIECE FROM THE BOARD
-                    //
+                cin >> processChar;
+                if (!isValidRankInput(processChar)) {
+                    cerr << "Invalid Input: \"" << processChar;
+                    cerr << "\" is not a valid rank" << endl;
+                    cin.ignore(int(2147483647),'\n');
+                    reset = true;
+                    break;
                 }
-                else if (oper == "=")
+                else if (startRank == -1) startRank = processChar - '1';
+                else endRank = processChar - '1';
+            }
+            if (reset) continue;
+
+            //
+            //  EXECUTE MOVE
+            //
+
+            cout << "From: (" << startFile << "," << startRank << ")" << endl;
+            cout << "To: (" << endFile << "," << endRank << ")" << endl;
+        }
+        else if (cmd == "setup") 
+        {
+            while (true) 
+            {
+                string subCmd = "";
+                string colour;
+                char processChar = '\0';
+                char piece = '\0';
+                int file = -1;
+                int rank = -1;
+
+                cin >> subCmd;
+                if (subCmd == "done") break;
+                else if (subCmd == "+")
                 {
+                    cin >> processChar;
+                    if (!isValidPieceInput(processChar)) 
+                    {
+                        cerr << "Invalid Input: \"" << processChar;
+                        cerr << "\" is not a valid piece identifier" << endl;
+                        cin.ignore(int(2147483647),'\n');
+                        continue;
+                    }
+                    else piece = processChar;
+
+                    cin >> processChar;
+                    if (!isValidFileInput(processChar)) 
+                    {
+                        cerr << "Invalid Input: \"" << processChar;
+                        cerr << "\" is not a valid file" << endl;
+                        cin.ignore(int(2147483647),'\n');
+                        continue;
+                    }
+                    else file = processChar - 'a';
+
+                    cin >> processChar;
+                    if (!isValidRankInput(processChar)) 
+                    {
+                        cerr << "Invalid Input: \"" << processChar;
+                        cerr << "\" is not a valid rank" << endl;
+                        cin.ignore(int(2147483647),'\n');
+                        continue;
+                    }
+                    else rank = processChar - '1';
+                    //
+                    // ADD PIECE TO THE BOARD
+                    //
+                    cout << piece << " added at (" << file << "," << rank << ")" << endl; 
+                }
+                else if (subCmd == "-")
+                {
+                    cin >> processChar;
+                    if (!isValidFileInput(processChar)) 
+                    {
+                        cerr << "Invalid Input: \"" << processChar;
+                        cerr << "\" is not a valid file" << endl;
+                        cin.ignore(int(2147483647),'\n');
+                        continue;
+                    }
+                    else file = processChar - 'a';
+
+                    cin >> processChar;
+                    if (!isValidRankInput(processChar)) 
+                    {
+                        cerr << "Invalid Input: \"" << processChar;
+                        cerr << "\" is not a valid rank" << endl;
+                        cin.ignore(int(2147483647),'\n');
+                        continue;
+                    }
+                    else rank = processChar - '1';
+
+                    //
+                    // REMOVE PIECE TO THE BOARD
+                    //
+                    cout << "piece removed from (" << file << "," << rank << ")" << endl; 
+                }
+                else if (subCmd == "=") {
                     cin >> colour;
-                    if (colour != "white" && colour != "black")
+                    if (colour != "white" && colour != "black") 
                     {
-                        cerr << "Invalid Piece" << endl;
-                        cin.clear();
+                        cerr << "Invalid Input: \"" << colour;
+                        cerr << "\" is not a valid colour" << endl;
+                        cin.ignore(int(2147483647),'\n');
                         continue;
                     }
-
                     //
-                    // SET THE INDICATED PLAYERS TURN
+                    // SET THE TURN TO THE INDICATED PLAYER
                     //
+                    cout << colour << " player's turn" << endl;
+                }
+                else 
+                {
+                    cerr << "Invalid Input: \"" << subCmd;
+                    cerr << "\" is not a valid command within the setup scope" << endl;
+                    cin.ignore(int(2147483647),'\n');
+                    continue;
                 }
             }
-            //
-            // CHECK FOR A VALID BOARD
-            //
 
             //
-            // **MAYBE** ADD THINGS TO INDICATE THE ALLOWANCE OF CASTLING AND EN PASSANT
+            // CHECK FOR VALID BOARD
+            // 
+
             //
+            // **MAYBE** ADD FIELDS FOR EN PASSANT AND CASTLING RIGHTS
+            //
+        }
+        else if (cmd == "undo")
+        {
+            //
+            // UNDO PREVIOUS MOVE
+            //
+            cout << "Move Undid" << endl;
+        } 
+        else 
+        {
+            cerr << "Invalid Input: \"" << cmd;
+            cerr << "\" is not a valid command" << endl;
+            cin.ignore(int(2147483647),'\n');
+            continue;
         }
     }
 }
