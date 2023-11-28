@@ -1,3 +1,5 @@
+/*
+
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 //#include <X11/Xlib.h>     ?GIVING ERROR?
@@ -25,4 +27,8 @@ class Xwindow {
 
 };
 
+
+
 #endif
+
+*/
