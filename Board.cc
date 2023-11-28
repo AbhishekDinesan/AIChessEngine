@@ -1,8 +1,9 @@
-
+#include <stdexcept>
 #include "Board.h"
 #include "NonePiece.h"
  
 #include "square.h"
+
 
 //constructor for Board 
 Board::Board() : squares(8, std::vector<Square>(8)) {
