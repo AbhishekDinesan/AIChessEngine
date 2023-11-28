@@ -1,4 +1,3 @@
-
 #ifndef _ABSTRACTPIECE_H_
 #define _ABSTRACTPIECE_H_
 
@@ -8,12 +7,14 @@ class Piece {
     bool isWhite;
     bool isAlive;
     Move nextMove {};
+    struct coords { int x, y; };
+    coords position;
  public:
-  virtual void isValidMove(Move &m) = 0;
-  virtual bool getColour() = 0;
-  virtual bool getAlive() = 0;
-  virtual int getX() = 0;
-  virtual int getY() = 0;
+  virtual bool isValidMove(Move &m) = 0; // CHANGED TO A BOOL
+  virtual bool getColour() const;
+  virtual bool getAlive() const;
+  virtual int getX() const;
+  virtual int getY() const;
   virtual ~Piece() = default;
 };
 

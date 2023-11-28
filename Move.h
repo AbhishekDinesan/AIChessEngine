@@ -1,29 +1,28 @@
-/*
-
 #ifndef __MOVE_H__
 #define __MOVE_H__
 
+#include "Board.h"
+#include "AbstractPiece.h"
 //add a square class
 
 class Move
 {
     Board *board;
     Piece *piece;
-    struct position From;
-    struct position To;
+    struct coords {int x, y;};
+    coords From;
+    coords To;
 
 public:
     Move();
     ~Move();
 
-    CapturedPiece();
-    isCheck();
-    UpdateBoard();
-    possibleMoves();
-    willCheck();
+    Piece CapturedPiece();
+    bool isCheck();
+    void UpdateBoard();
+    // possibleMoves(); IDK WHAT TYPE THIS SHOULD BE SO I COMMENTED IT OUT SO IT DOESN'T COMPLAIN
+    bool willCheck();
 
 };
 
 #endif
-
-*/
