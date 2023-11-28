@@ -1,0 +1,5 @@
+This file is used to break this program down into multiple problems
+
+1. Right now, I am trying to get a grid to show up on the screen
+- This would require the Board and Square class to be functional,
+and to print out a 8x8 chess grid
