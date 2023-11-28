@@ -2,7 +2,7 @@
 #ifndef _ABSTRACTPIECE_H_
 #define _ABSTRACTPIECE_H_
 
-enum class PieceEnum { None, Pawn, Rook, Knight, Bishop, Queen, King };
+enum class PieceEnum {None, Pawn, Rook, Knight, Bishop, Queen, King};
 
 class Piece {
     bool isWhite;
