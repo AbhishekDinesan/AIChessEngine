@@ -1,8 +1,10 @@
 #ifndef __MOVE_H__
 #define __MOVE_H__
 
-#include "Board.h"
-#include "AbstractPiece.h"
+
+class Piece; 
+class Board; 
+
 //add a square class
 
 class Move
