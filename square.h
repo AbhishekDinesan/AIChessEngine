@@ -31,6 +31,8 @@ public:
 
     void notifyObservers(); 
     void attach(Observer *o); 
+    void setPiece(Piece *piece); 
 };
+
 
 #endif
