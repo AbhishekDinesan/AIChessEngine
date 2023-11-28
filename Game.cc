@@ -1,5 +1,5 @@
-#include "game.h"
-#include "board.h" // Assuming you have a board.h file
+#include "Game.h"
+#include "Board.h" // Assuming you have a board.h file
 // #include "player.h" // Assuming you have a player.h file
 
 Game::Game() : board(nullptr)
