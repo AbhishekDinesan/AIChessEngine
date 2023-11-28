@@ -48,4 +48,12 @@ void Square::attach(Observer *o) {
     observers.emplace_back(o); 
 }
 
+//setPiece(piece) sets the piece to the current square, and
+//    and notifies the observers of a change to the piece 
+// NOTE: THIS IS NOT IN THE UML, WILL NEED TO INCLUDE IN REPORT 
+void Square::setPiece(Piece *piece) {
+    occupiedBy = piece; 
+    notifyObservers(); 
+}
+
 
