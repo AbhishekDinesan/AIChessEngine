@@ -1,8 +1,9 @@
 #include "AbstractPiece.h"
 #include "NonePiece.h"
 
-bool Piece::isValidMove(Move &m) { return true; }
-bool Piece::getColour() const { return isWhite; }
-bool Piece::getAlive() const { return isAlive; }
-int Piece::getX() const { return position.x; }
-int Piece::getY() const { return position.y; }
+None::None() {}
+bool None::isValidMove(Move &m) { return true; }
+bool None::getColour() const { return isWhite; }
+bool None::getAlive() const { return isAlive; }
+int None::getX() const { return position.x; }
+int None::getY() const { return position.y; }

@@ -18,8 +18,7 @@ class Move
 public:
     Move();
     ~Move();
-
-    Piece CapturedPiece();
+    Piece* CapturedPiece();
     bool isCheck();
     void UpdateBoard();
     // possibleMoves(); IDK WHAT TYPE THIS SHOULD BE SO I COMMENTED IT OUT SO IT DOESN'T COMPLAIN
