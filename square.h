@@ -18,7 +18,7 @@ class Square {
     std::vector<Observer *> observers; 
     
     Piece *occupiedBy;  
-4
+
 public:
 
     Square();
