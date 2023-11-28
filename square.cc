@@ -2,24 +2,50 @@
 
 #include "square.h"
 
-Square::Square() : x(0), y(0)
-{
-    // Constructor implementation, set default values or initialize as needed
+
+//Default constructor for square 
+Square::Square() : x(0), y(0), occupied(false), occupiedBy(nullptr) {}  
+
+
+//Destructor for square 
+Square::~Square() {
+    for(auto obs : observers) {
+        delete obs; 
+    }
 }
 
-Square::~Square()
-{
-    // Destructor implementation, if needed
-}
-
-int Square::getX()
-{
-    // Implementation to get the x-coordinate
+//returns the X value of the square 
+int Square::getX() {
     return x;
 }
 
-int Square::getY()
-{
-    // Implementation to get the y-coordinate
+//returns the Y value of the square
+int Square::getY() {
     return y;
 }
+
+bool Square::getOccupied() {
+    if(occupiedBy ==  nullptr) {
+        return false; 
+    } else {
+        return true; 
+    }
+}
+
+Piece *Square::getOccupyingPc() {
+    return this->occupiedBy; 
+}
+
+//the square will notify all of the observers about a change that has happened on this
+//    square. 
+void Square::notifyObservers() {
+    for(Observer *obs : observers) {
+        obs->notify(*this);
+    }
+}
+
+void Square::attach(Observer *o) {
+    observers.emplace_back(o); 
+}
+
+
