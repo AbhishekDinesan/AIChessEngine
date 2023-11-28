@@ -25,7 +25,7 @@ int Square::getY() {
 }
 
 bool Square::getOccupied() {
-    if(occupiedBy == nullptr) {
+    if(occupiedBy ==  nullptr) {
         return false; 
     } else {
         return true; 
