@@ -38,7 +38,7 @@ Piece *Square::getOccupyingPc() {
 
 //the square will notify all of the observers about a change that has happened on this
 //    square. 
-void Square::notifyObservers() {
+void Square::notifyObservers(Square &) {
     for(Observer *obs : observers) {
         obs->notify(*this);
     }
@@ -53,7 +53,7 @@ void Square::attach(Observer *o) {
 // NOTE: THIS IS NOT IN THE UML, WILL NEED TO INCLUDE IN REPORT 
 void Square::setPiece(Piece *piece) {
     occupiedBy = piece; 
-    notifyObservers(); 
+    notifyObservers(*this); 
 }
 
 

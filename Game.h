@@ -29,6 +29,7 @@ public:
     bool endGame();
     void movePiece();
     void printBoard();
+    void addPiece(char piece, int x, int y);
     friend std::ostream &operator<<(std::ostream &out, const Game &g);
 };
 

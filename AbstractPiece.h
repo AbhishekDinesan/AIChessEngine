@@ -18,12 +18,8 @@ class Piece
 {
   bool isWhite;
   bool isAlive;
-  // Move nextMove {};
-  struct coords
-  {
-    int x, y;
-  };
-  coords position;
+  // Move nextMove {}
+  int x, y;
 
 public:
   virtual bool isValidMove(Move &m) = 0; // CHANGED TO A BOOL
@@ -31,6 +27,8 @@ public:
   virtual bool getAlive() const = 0;
   virtual int getX() const = 0;
   virtual int getY() const = 0;
+  virtual void setX(int newX) = 0;
+  virtual void setY(int newY) = 0;
   virtual ~Piece() = default;
 };
 

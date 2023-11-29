@@ -228,6 +228,7 @@ int main()
                     //
                     // ADD PIECE TO THE BOARD
                     //
+                    
                     cout << piece << " added at (" << file << "," << rank << ")" << endl;
                 }
                 else if (subCmd == "-")
