@@ -1,6 +1,8 @@
 #include "Game.h"
 #include "Board.h"          // Assuming you have a board.h file
 #include "AbstractPlayer.h" // Assuming you have a player.h file
+#include "AbstractPiece.h"
+#include "PawnPiece.h"
 #include <ostream>
 
 Game::Game() {}
@@ -60,6 +62,18 @@ bool Game::endGame()
 void Game::movePiece() // wouldn't this be called from the game function
 {
     Move *newMove = new Move();
+}
+
+void Game::addPiece(char piece, int x, int y) {
+    Piece* p;
+    if (piece == 'P') {
+        bool beenMoved = (x == 6) ? true : false;
+        p = new Pawn(true, true, beenMoved, x, y);
+    }
+    else if (piece == 'p') {
+        bool beenMoved = (x == 1) ? true : false;
+        p = new Pawn(false, true, beenMoved, x, y);
+    }
 }
 
 std::ostream &operator<<(std::ostream &out, const Game &g)

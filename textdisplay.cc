@@ -5,6 +5,7 @@ TextDisplay::TextDisplay() : theDisplay(8, std::vector<char>(8, '_')) {}
 
 void TextDisplay::notify(Square &s)
 {
+    
 }
 
 TextDisplay::~TextDisplay() {}

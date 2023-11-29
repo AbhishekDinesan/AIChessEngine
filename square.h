@@ -29,7 +29,7 @@ public:
     bool getOccupied(); 
     Piece *getOccupyingPc();
 
-    void notifyObservers(); 
+    void notifyObservers(Square &s); 
     void attach(Observer *o); 
     void setPiece(Piece *piece); 
 };
