@@ -37,7 +37,7 @@ Board::Board() : squares(8, std::vector<Square>(8))
 
     // PAWNS
     for (int cols = 0; cols < 8; ++cols) {
-        Piece *blackPawn = new Pawn(false, true, cols, 1);
+        Piece *blackPawn = new Pawn(false, true, false, cols, 1);
     }
     
     // EMPTY SPACES
@@ -51,7 +51,7 @@ Board::Board() : squares(8, std::vector<Square>(8))
     }
 
     for (int cols = 0; cols < 8; ++cols) {
-        Piece *whitePawn = new Pawn(true, true, cols, 6);
+        Piece *whitePawn = new Pawn(true, true, false, cols, 6);
     }
 
     // Rook *whiteLRook = new Rook(true, true, 0, 7);
