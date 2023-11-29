@@ -1,4 +1,4 @@
-
+#include <stdexcept>
 #include "Board.h"
 #include "NonePiece.h"
 #include "square.h"
