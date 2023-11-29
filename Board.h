@@ -8,8 +8,8 @@
 
 class Board
 {
-    //2D Vector of Squares to represent the board. 
-    std::vector<std::vector<Square>> squares; 
+    // 2D Vector of Squares to represent the board.
+    std::vector<std::vector<Square>> squares;
 
 public:
     Board();
@@ -19,13 +19,11 @@ public:
     void removePiece(int x, int y);
     bool isOccupied(int x, int y);
     bool isCovered(int x, int y);
-    // Piece getPiece();
-
+    PieceEnum getPiece();
 
     bool isCheck();
-    bool isCheckMate(); 
-    void undoMove(); 
-
+    bool isCheckMate();
+    void undoMove();
 };
 
 #endif
