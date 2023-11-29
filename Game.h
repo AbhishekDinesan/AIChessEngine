@@ -12,9 +12,9 @@ class Game
 {
     Board *board;
     // Player PlayerOne;
-    // Player PlayerTwo;
-    // Player currentPlayer;
-    // int moveCount;
+    //  Player PlayerTwo;
+    //  Player currentPlayer;
+    int moveCount;
     // Vector pastMoves;
 
 public:

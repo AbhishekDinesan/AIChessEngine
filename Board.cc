@@ -1,7 +1,6 @@
 
 #include "Board.h"
 #include "NonePiece.h"
-
 #include "square.h"
 #include "stdexcept"
 
