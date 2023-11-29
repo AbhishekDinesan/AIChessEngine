@@ -5,6 +5,8 @@
 
 #include <vector>
 #include "square.h"
+#include <iostream>
+#include "textdisplay.h"
 
 class Board
 {
@@ -15,6 +17,7 @@ public:
     Board();
     ~Board();
 
+    TextDisplay *td;
     void addPiece(int x, int y, Piece &p);
     void removePiece(int x, int y);
     bool isOccupied(int x, int y);
@@ -24,6 +27,7 @@ public:
     bool isCheck();
     bool isCheckMate();
     void undoMove();
+    friend std::ostream &operator<<(std::ostream &out, const Board &b);
 };
 
 #endif

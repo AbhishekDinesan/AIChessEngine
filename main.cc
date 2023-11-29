@@ -38,6 +38,7 @@ int main()
         if (cmd == "game")
         {
             Game g;
+            g.init();
             cout << "game has been created" << endl;
             string parameter = "";
             string playerType = "";
