@@ -3,10 +3,12 @@
 #include "NonePiece.h"
 #include "square.h"
 #include "stdexcept"
+#include "textdisplay.h"
 
 // constructor for Board
 Board::Board() : squares(8, std::vector<Square>(8))
 {
+    TextDisplay *newTextDisplay = new TextDisplay();
     for (int x = 0; x < 8; ++x)
     {
         for (int y = 0; y < 8; ++y)
