@@ -4,11 +4,13 @@
 #include "square.h"
 #include "stdexcept"
 #include "textdisplay.h"
+#include <stdio.h>
 
 // constructor for Board
 Board::Board() : squares(8, std::vector<Square>(8))
 {
-    TextDisplay *newTextDisplay = new TextDisplay();
+    TextDisplay *newTextDisplay = new TextDisplay;
+    td = newTextDisplay;
     for (int x = 0; x < 8; ++x)
     {
         for (int y = 0; y < 8; ++y)
@@ -17,6 +19,7 @@ Board::Board() : squares(8, std::vector<Square>(8))
             squares[x][y].setPiece(emptypiece);
         }
     }
+    std::cout << "do we get this far" << std::endl;
 }
 
 // destructor for Board.
@@ -73,6 +76,12 @@ bool Board::isOccupied(int x, int y)
 bool Board::isCovered(int x, int y)
 {
     return false;
+}
+
+std::ostream &operator<<(std::ostream &out, const Board &b)
+{
+    out << *(b.td);
+    return out;
 }
 
 // implementation for this needs to wait until we define pieces:

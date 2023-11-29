@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Board.h"          // Assuming you have a board.h file
 #include "AbstractPlayer.h" // Assuming you have a player.h file
+#include <ostream>
 
 Game::Game() {}
 
@@ -11,12 +12,13 @@ Game::~Game()
 
 void Game::init()
 {
-    board = new Board(); // this should create new 8 x 8 grid
-                         // PlayerOne = new Player();
-                         // PlayerTwo = new PlayerTwo();
-                         // Player currentPlayer = PlayerOne;
-                         // Vector pastmoves;
-                         // std::vector<std::vector<Move>> pastMoves;
+    board = new Board();
+    printBoard(); // this should create new 8 x 8 grid
+    // PlayerOne = new Player();
+    // PlayerTwo = new PlayerTwo();
+    // Player currentPlayer = PlayerOne;
+    // Vector pastmoves;
+    // std::vector<std::vector<Move>> pastMoves;
     moveCount = 0;
 }
 
@@ -58,4 +60,15 @@ bool Game::endGame()
 void Game::movePiece() // wouldn't this be called from the game function
 {
     Move *newMove = new Move();
+}
+
+std::ostream &operator<<(std::ostream &out, const Game &g)
+{
+    out << g.board;
+    return out;
+}
+
+void Game::printBoard()
+{
+    std::cout << *board; // Use a pointer to dereference and print the Board
 }

@@ -6,6 +6,7 @@
 #include "Board.h"
 #include "AbstractPlayer.h"
 #include "Player.h"
+#include "textdisplay.h"
 
 // class Board; forward declerations
 // class Player;
@@ -27,6 +28,8 @@ public:
     bool ValidBoard();
     bool endGame();
     void movePiece();
+    void printBoard();
+    friend std::ostream &operator<<(std::ostream &out, const Game &g);
 };
 
 #endif
