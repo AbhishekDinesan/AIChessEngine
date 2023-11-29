@@ -3,21 +3,16 @@
 #include <iostream>
 #include <vector>
 #include "AbstractObserver.h"
-class Cell;
+class Square;
 
-class TextDisplay : public Observer<Cell>
+class TextDisplay : public Observer
 {
     std::vector<std::vector<char>> theDisplay;
-    const int gridSize;
 
 public:
-    TextDisplay(int n);
-
-    // void notify(Cell &c) override;
-    // SubscriptionType subType() override;
-
+    TextDisplay();
+    void notify(Square &s) override;
     ~TextDisplay();
-
     friend std::ostream &operator<<(std::ostream &out, const TextDisplay &td);
 };
 

@@ -4,6 +4,8 @@
 #define __GAME_H__
 
 #include "Board.h"
+#include "AbstractPlayer.h"
+#include "Player.h"
 
 // class Board; forward declerations
 // class Player;
@@ -11,8 +13,8 @@
 class Game
 {
     Board *board;
-    // Player PlayerOne;
-    //  Player PlayerTwo;
+    Player *PlayerOne;
+    Player *PlayerTwo;
     //  Player currentPlayer;
     int moveCount;
     // Vector pastMoves;
