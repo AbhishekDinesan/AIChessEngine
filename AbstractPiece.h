@@ -29,6 +29,7 @@ public:
   virtual int getY() const = 0;
   virtual void setX(int newX) = 0;
   virtual void setY(int newY) = 0;
+  virtual PieceEnum pieceType() = 0;
   virtual ~Piece() = default;
 };
 
