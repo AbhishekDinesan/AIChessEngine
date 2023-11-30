@@ -40,8 +40,6 @@ int main()
         cin >> cmd;
         if (cmd == "game")
         {
-            g = make_unique<Game>();
-            //g.init();
             string parameter = "";
             string playerType = "";
             string strCpuDifficulty = "";
@@ -116,6 +114,10 @@ int main()
                     //
                     cin.ignore(int(2147483647), '\n');
                     break;
+                }
+
+                if (isWhiteInit && isBlackInit) {
+                    g = make_unique<Game>();
                 }
             }
         }
