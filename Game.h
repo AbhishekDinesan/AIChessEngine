@@ -13,7 +13,7 @@
 
 class Game
 {
-    Board *board;
+    
     Player *PlayerOne;
     Player *PlayerTwo;
     //  Player currentPlayer;
@@ -24,6 +24,8 @@ public:
     Game();
     ~Game();
 
+
+    Board *board; 
     void init();
     bool ValidBoard();
     bool endGame();
@@ -31,6 +33,7 @@ public:
     void printBoard();
     void addPiece(char piece, int x, int y);
     friend std::ostream &operator<<(std::ostream &out, const Game &g);
+ 
 };
 
 #endif

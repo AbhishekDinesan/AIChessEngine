@@ -136,15 +136,19 @@ bool Board::isCovered(int x, int y)
     return false;
 }
 
+Piece *Board::getPiecePtr(int x, int y) {
+    Piece *p = squares[x][y].getOccupyingPc(); 
+    return p; 
+}
+
 std::ostream &operator<<(std::ostream &out, const Board &b)
 {
     out << *(b.td);
     return out;
 }
 
-// implementation for this needs to wait until we define pieces:
-// Piece Board::getPiece()
-// {
-//     // Implementation to get a piece from the board
-//     // You may need to define the Piece class and return an instance of it
-// }
+//IMPLEMENT THIS: (just a placeholder)
+PieceEnum Board::getPiece(int x, int y)
+{
+    return PieceEnum::Rook;  
+}

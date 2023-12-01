@@ -61,7 +61,8 @@ bool Game::endGame()
 
 void Game::movePiece() // wouldn't this be called from the game function
 {
-    Move *newMove = new Move();
+
+    //Move *newMove = new Move();
 }
 
 void Game::addPiece(char piece, int x, int y) {

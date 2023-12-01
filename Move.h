@@ -7,6 +7,8 @@ class Board;
 
 //add a square class
 
+class Game; 
+
 class Move
 {
     Board *board;
@@ -14,15 +16,18 @@ class Move
     struct coords {int x, y;};
     coords From;
     coords To;
+    Piece *captured; 
+    bool didcapture; 
 
 public:
-    Move();
+    Move(Board *board, Piece *piece, coords From, coords To); 
     ~Move();
     Piece* CapturedPiece();
     bool isCheck();
     void UpdateBoard();
     // possibleMoves(); IDK WHAT TYPE THIS SHOULD BE SO I COMMENTED IT OUT SO IT DOESN'T COMPLAIN
     bool willCheck();
+    bool executeMove(Game *g, int x, int y, Piece *p); 
 
 };
 
