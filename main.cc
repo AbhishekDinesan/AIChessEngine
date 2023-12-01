@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include "Game.h"
+#include <memory>
 // ADD INCLUDE STATEMENTS
 using namespace std;
 
@@ -33,7 +34,6 @@ int main()
     int blackScore = 0;
     unique_ptr<Game> g;
     string cmd;
-    
 
     while (true)
     {
@@ -116,7 +116,8 @@ int main()
                     break;
                 }
 
-                if (isWhiteInit && isBlackInit) {
+                if (isWhiteInit && isBlackInit)
+                {
                     g = make_unique<Game>();
                 }
             }
@@ -232,7 +233,7 @@ int main()
                     //
                     // ADD PIECE TO THE BOARD
                     //
-                    
+
                     cout << piece << " added at (" << file << "," << rank << ")" << endl;
                 }
                 else if (subCmd == "-")
