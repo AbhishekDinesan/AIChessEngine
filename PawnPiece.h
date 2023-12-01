@@ -21,6 +21,7 @@ class Pawn : public Piece {
     void setY(int newY) override;
     bool getPassantability() const;
     bool isFirstMove() const;
+    PieceEnum pieceType() override;
 };
 
 #endif

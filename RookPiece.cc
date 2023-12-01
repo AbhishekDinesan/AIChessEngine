@@ -8,6 +8,7 @@ bool Rook::getAlive() const { return isAlive; }
 int Rook::getX() const { return x; }
 int Rook::getY() const { return y; }
 bool Rook::canCastle() const { return canCastleFlag; }
+PieceEnum Rook::pieceType() { return PieceEnum::Rook; }
 
 void Rook::setX(int newX)
 {

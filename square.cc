@@ -1,6 +1,7 @@
 // square.cc
-
+#include <iostream>
 #include "square.h"
+using namespace std;
 
 
 //Default constructor for square 
@@ -24,12 +25,13 @@ int Square::getY() {
     return y;
 }
 
+void Square::setCoords(int x, int y) {
+    this->x = x;
+    this->y = y;
+}
+
 bool Square::getOccupied() {
-    if(occupiedBy ==  nullptr) {
-        return false; 
-    } else {
-        return true; 
-    }
+    return occupied;
 }
 
 Piece *Square::getOccupyingPc() {
@@ -38,9 +40,9 @@ Piece *Square::getOccupyingPc() {
 
 //the square will notify all of the observers about a change that has happened on this
 //    square. 
-void Square::notifyObservers(Square &) {
+void Square::notifyObservers(Square &s) {
     for(Observer *obs : observers) {
-        obs->notify(*this);
+        obs->notify(s);
     }
 }
 

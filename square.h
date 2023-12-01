@@ -26,6 +26,7 @@ public:
 
     int getX();
     int getY();
+    void setCoords(int x, int y);
     bool getOccupied(); 
     Piece *getOccupyingPc();
 

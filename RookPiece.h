@@ -21,6 +21,7 @@ public:
     void setX(int newX) override;
     void setY(int newY) override;
     bool canCastle() const;
+    PieceEnum pieceType() override;
 };
 
 #endif

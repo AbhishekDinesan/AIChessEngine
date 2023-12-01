@@ -31,15 +31,15 @@ int main()
 {
     int whiteScore = 0;
     int blackScore = 0;
+    unique_ptr<Game> g;
     string cmd;
+    
+
     while (true)
     {
         cin >> cmd;
         if (cmd == "game")
         {
-            Game g;
-            g.init();
-            cout << "game has been created" << endl;
             string parameter = "";
             string playerType = "";
             string strCpuDifficulty = "";
@@ -114,6 +114,10 @@ int main()
                     //
                     cin.ignore(int(2147483647), '\n');
                     break;
+                }
+
+                if (isWhiteInit && isBlackInit) {
+                    g = make_unique<Game>();
                 }
             }
         }

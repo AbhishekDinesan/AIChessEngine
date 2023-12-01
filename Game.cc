@@ -4,11 +4,19 @@
 #include "AbstractPiece.h"
 #include "PawnPiece.h"
 #include <ostream>
+using namespace std;
 
-Game::Game() {}
+Game::Game() : moveCount{0} {
+    board = make_unique<Board>();
+    printBoard(); 
+}
 
-//don't need to free resources here, board will be deletd on its own. 
-Game::~Game() { }
+
+Game::~Game()
+{
+    //delete board; IM USING UNIQUE POINTERS NOW 
+}
+
 
 void Game::init()
 {
@@ -85,7 +93,7 @@ std::ostream &operator<<(std::ostream &out, const Game &g)
 
 void Game::printBoard()
 {
-    std::cout << *board; // Use a pointer to dereference and print the Board
+    std::cout << *board->td; // Use a pointer to dereference and print the Board
 }
 
 
