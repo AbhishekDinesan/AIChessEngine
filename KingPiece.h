@@ -23,6 +23,7 @@ public:
     void setY(int newY) override;
     bool isInCheck() const;
     bool isFirstMove() const;
+    PieceEnum pieceType() override;
 };
 
 #endif

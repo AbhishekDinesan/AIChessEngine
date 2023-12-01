@@ -9,6 +9,7 @@ int King::getX() const { return x; }
 int King::getY() const { return y; }
 bool King::isInCheck() const { return inCheck; }
 bool King::isFirstMove() const { return !beenMoved; }
+PieceEnum King::pieceType() { return PieceEnum::King; }
 
 void King::setX(int newX)
 {

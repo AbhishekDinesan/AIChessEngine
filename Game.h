@@ -7,13 +7,14 @@
 #include "AbstractPlayer.h"
 #include "Player.h"
 #include "textdisplay.h"
+using namespace std;
 
 // class Board; forward declerations
 // class Player;
 
 class Game
 {
-    Board *board;
+    unique_ptr<Board> board;
     Player *PlayerOne;
     Player *PlayerTwo;
     //  Player currentPlayer;

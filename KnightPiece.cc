@@ -7,6 +7,7 @@ bool Knight::getColour() const { return isWhite; }
 bool Knight::getAlive() const { return isAlive; }
 int Knight::getX() const { return x; }
 int Knight::getY() const { return y; }
+PieceEnum Knight::pieceType() { return PieceEnum::Knight; }
 
 void Knight::setX(int newX)
 {

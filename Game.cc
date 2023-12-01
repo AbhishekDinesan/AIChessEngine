@@ -4,18 +4,22 @@
 #include "AbstractPiece.h"
 #include "PawnPiece.h"
 #include <ostream>
+using namespace std;
 
-Game::Game() {}
+Game::Game() : moveCount{0} {
+    board = make_unique<Board>();
+    printBoard(); 
+}
 
 Game::~Game()
 {
-    delete board;
+    //delete board; IM USING UNIQUE POINTERS NOW 
 }
 
 void Game::init()
 {
-    board = new Board();
-    printBoard(); // this should create new 8 x 8 grid
+    //unique_ptr<Board> board = make_unique<Board>();
+    //printBoard(); // this should create new 8 x 8 grid
     // PlayerOne = new Player();
     // PlayerTwo = new PlayerTwo();
     // Player currentPlayer = PlayerOne;
@@ -84,5 +88,5 @@ std::ostream &operator<<(std::ostream &out, const Game &g)
 
 void Game::printBoard()
 {
-    std::cout << *board; // Use a pointer to dereference and print the Board
+    std::cout << *board->td; // Use a pointer to dereference and print the Board
 }

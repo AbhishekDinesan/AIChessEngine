@@ -7,6 +7,7 @@ bool Queen::getColour() const { return isWhite; }
 bool Queen::getAlive() const { return isAlive; }
 int Queen::getX() const { return x; }
 int Queen::getY() const { return y; }
+PieceEnum Queen::pieceType() { return PieceEnum::Queen; }
 
 void Queen::setX(int newX)
 {

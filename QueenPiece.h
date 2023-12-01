@@ -19,6 +19,7 @@ public:
     int getY() const override;
     void setX(int newX) override;
     void setY(int newY) override;
+    PieceEnum pieceType() override;
 };
 
 #endif
