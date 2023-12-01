@@ -11,10 +11,12 @@ Game::Game() : moveCount{0} {
     printBoard(); 
 }
 
+
 Game::~Game()
 {
     //delete board; IM USING UNIQUE POINTERS NOW 
 }
+
 
 void Game::init()
 {
@@ -63,10 +65,13 @@ bool Game::endGame()
     return true;
 }
 
+/*
 void Game::movePiece() // wouldn't this be called from the game function
 {
-    Move *newMove = new Move();
+
+    //Move *newMove = new Move();
 }
+*/
 
 void Game::addPiece(char piece, int x, int y) {
     Piece* p;
@@ -90,3 +95,8 @@ void Game::printBoard()
 {
     std::cout << *board->td; // Use a pointer to dereference and print the Board
 }
+
+
+std::unique_ptr<Board>& Game::getBoard() {
+    return board;
+} 
