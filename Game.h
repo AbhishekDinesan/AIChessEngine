@@ -19,18 +19,18 @@ class Game
     //  Player currentPlayer;
     int moveCount;
     // Vector pastMoves;
+    Board *board;  
 
 public:
     Game();
     ~Game();
 
-
-    Board *board; 
     void init();
     bool ValidBoard();
     bool endGame();
     void movePiece();
     void printBoard();
+    Board *getBoard(); 
     void addPiece(char piece, int x, int y);
     friend std::ostream &operator<<(std::ostream &out, const Game &g);
  

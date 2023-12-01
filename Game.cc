@@ -87,3 +87,8 @@ void Game::printBoard()
 {
     std::cout << *board; // Use a pointer to dereference and print the Board
 }
+
+
+Board *Game::getBoard() {
+    return board; 
+} 

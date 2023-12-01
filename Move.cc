@@ -27,11 +27,13 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
     // Create the target coordinates
     coords movingTo = {x, y};
 
+    Board *boardptr; 
+
     //thisPiece represents the type of the piece that we are trying to move. 
-    PieceEnum thisPiece = g->board->getPiece(p->getX(), p->getY()); 
+    PieceEnum thisPiece = boardptr->getPiece(p->getX(), p->getY()); 
     int currentX = p->getX(); 
     int currentY = p->getY(); 
-    Piece *pieceAtMove = g->board->getPiecePtr(x,y);
+    Piece *pieceAtMove = boardptr->getPiecePtr(x,y);
 
 
     //********** BISHOP MOVE **********
@@ -52,7 +54,7 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
 
         while(checkX != x || checkY != y) {
             //if there is an obstruction in path of bishop, 
-            if(g->board->getPiece(checkX, checkY) != PieceEnum::None) {
+            if(boardptr->getPiece(checkX, checkY) != PieceEnum::None) {
                 return false; 
             }
 
@@ -123,7 +125,7 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
             //make sure the path is clear:
 
             //makes sure that the first move is valid: 
-            if (pieceAtMove != nullptr || g->board->getPiecePtr(currentX, currentY + direction) != nullptr) {
+            if (pieceAtMove != nullptr || boardptr->getPiecePtr(currentX, currentY + direction) != nullptr) {
                 return false; 
             } 
         } else if(abs(deltaX) == 1 && abs(deltaY) == direction) {
@@ -168,7 +170,7 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         int checkY = currentY + stepY;
 
         while (checkX != x || checkY != y) {
-            if (g->board->getPiecePtr(checkX, checkY) != nullptr) {
+            if (boardptr->getPiecePtr(checkX, checkY) != nullptr) {
                 return false; // Obstruction in the path
             }
             checkX += stepX;
@@ -212,7 +214,7 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
 
         //cannot "jump" over any other pieces 
         while (checkX != x || checkY != y) {
-            if (g->board->getPiecePtr(checkX, checkY) != nullptr) {
+            if (boardptr->getPiecePtr(checkX, checkY) != nullptr) {
                 return false; 
             }
             checkX += stepX;
