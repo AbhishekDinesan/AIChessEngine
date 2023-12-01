@@ -30,9 +30,10 @@ public:
     void init();
     bool ValidBoard();
     bool endGame();
-    void movePiece();
+    
+    
     void printBoard();
-    Board *getBoard(); 
+    std::unique_ptr<Board>& getBoard(); 
     void addPiece(char piece, int x, int y);
     friend std::ostream &operator<<(std::ostream &out, const Game &g);
  

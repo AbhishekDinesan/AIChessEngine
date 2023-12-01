@@ -7,15 +7,13 @@
 
 Game::Game() {}
 
-Game::~Game()
-{
-    delete board;
-}
+//don't need to free resources here, board will be deletd on its own. 
+Game::~Game() { }
 
 void Game::init()
 {
-    board = new Board();
-    printBoard(); // this should create new 8 x 8 grid
+    //unique_ptr<Board> board = make_unique<Board>();
+    //printBoard(); // this should create new 8 x 8 grid
     // PlayerOne = new Player();
     // PlayerTwo = new PlayerTwo();
     // Player currentPlayer = PlayerOne;
@@ -59,11 +57,13 @@ bool Game::endGame()
     return true;
 }
 
+/*
 void Game::movePiece() // wouldn't this be called from the game function
 {
 
     //Move *newMove = new Move();
 }
+*/
 
 void Game::addPiece(char piece, int x, int y) {
     Piece* p;
@@ -89,6 +89,6 @@ void Game::printBoard()
 }
 
 
-Board *Game::getBoard() {
-    return board; 
+std::unique_ptr<Board>& Game::getBoard() {
+    return board;
 } 
