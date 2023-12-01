@@ -11,6 +11,8 @@
 // class Board; forward declerations
 // class Player;
 
+using namespace std;  
+
 class Game
 {
     
@@ -19,7 +21,7 @@ class Game
     //  Player currentPlayer;
     int moveCount;
     // Vector pastMoves;
-    Board *board;  
+    unique_ptr<Board> board; 
 
 public:
     Game();
