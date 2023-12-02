@@ -104,7 +104,7 @@ bool Move::isValidMove() {
         Pawn *pawnptr = dynamic_cast<Pawn *>(p); 
         int deltaX = toX - currentX; 
         int deltaY = toY - currentY; 
-        int direction = (pawnptr->getColour() == true) ? 1 : -1; 
+        int direction = (pawnptr->getColour() != true) ? 1 : -1; 
 
         // Standard one square forward move
         if(deltaX == 0 && deltaY == direction) {
