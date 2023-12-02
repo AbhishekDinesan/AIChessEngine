@@ -13,22 +13,19 @@ class Move
 {
     Board *board;
     Piece *piece;
-    struct coords {int x, y;};
-    coords From;
-    coords To;
+    int fromX, fromY, toX, toY;
     Piece *captured; 
     bool didcapture; 
 
-public:
-    Move(Board *board, Piece *piece, coords From, coords To); 
+ public:
+    Move(Board *board, int fromX, int fromY, int toX, int toY); 
     ~Move();
     Piece* CapturedPiece();
     bool isCheck();
     void UpdateBoard();
     // possibleMoves(); IDK WHAT TYPE THIS SHOULD BE SO I COMMENTED IT OUT SO IT DOESN'T COMPLAIN
     bool willCheck();
-    bool executeMove(Game *g, int x, int y, Piece *p); 
-
+    bool isValidMove(); 
 };
 
 #endif
