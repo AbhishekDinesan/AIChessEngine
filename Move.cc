@@ -244,8 +244,7 @@ bool Move::isValidMove() {
 
         // Check for L-shaped move: 2 squares in one direction and 1 square in the other
         if (!((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2))) {
-            cout << "HERE" << endl; 
-            return false; // Invalid move for a Knight
+            cout << "HERE" << endl;
         }
 
         // Get the piece at the destination, if any

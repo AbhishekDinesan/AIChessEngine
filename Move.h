@@ -14,7 +14,7 @@ class Game;
 class Move
 {
     Board *board;
-    Piece *piece;
+    //Piece *piece;
     int fromX, fromY, toX, toY;
     Piece *captured; 
     bool didcapture; 

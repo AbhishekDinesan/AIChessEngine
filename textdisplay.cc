@@ -8,7 +8,10 @@ void TextDisplay::notify(Square &s)
 {
     Piece *p = s.getOccupyingPc();
     if (p->pieceType() == PieceEnum::None) {
-       theDisplay[s.getX()][s.getY()] = '_';
+        //int xCoord = s.getX();
+        //int yCoord = s.getY();
+        char spaceColour = (s.getX() % 2 == s.getY() % 2) ? ' ' : '_';
+       theDisplay[s.getX()][s.getY()] = spaceColour;
     }
     else if (p->pieceType() == PieceEnum::Pawn && p->getColour()) {
        theDisplay[s.getX()][s.getY()] = 'P';
@@ -54,11 +57,13 @@ std::ostream &operator<<(std::ostream &out, const TextDisplay &td)
 {
     for (int i = 0; i < 8; ++i)
     {
+        out << abs(i - 8) << " ";
         for (int j = 0; j < 8; ++j)
         {
-            out << td.theDisplay[i][j] << ' ';
+            out << td.theDisplay[i][j];
         }
         out << '\n';
     }
+    out << "\n  abcdefgh" << endl;
     return out;
 }
