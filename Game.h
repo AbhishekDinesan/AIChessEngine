@@ -15,14 +15,14 @@ using namespace std;
 class Game
 {
     Board* board;
-    Player *PlayerOne;
-    Player *PlayerTwo;
-    //  Player currentPlayer;
+    Player *whitePlayer;
+    Player *blackPlayer;
+    bool whiteToMove;
     int moveCount;
     // Vector pastMoves;
 
 public:
-    Game(bool customProvided, Board* theCustomBoard);
+    Game(bool whiteToMove, bool customProvided, Board* theCustomBoard);
     ~Game();
 
     void init();

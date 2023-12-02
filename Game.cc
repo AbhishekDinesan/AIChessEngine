@@ -7,7 +7,7 @@
 #include <utility>
 using namespace std;
 
-Game::Game(bool customProvided, Board* theCustomBoard) : moveCount{0}, board{theCustomBoard} { 
+Game::Game(bool whiteToMove, bool customProvided, Board* theCustomBoard) : moveCount{0}, whiteToMove{whiteToMove}, board{theCustomBoard} { 
     
     if (!customProvided) { 
         board = new Board(false); 
