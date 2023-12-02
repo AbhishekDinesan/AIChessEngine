@@ -22,9 +22,11 @@ public:
     void removePiece(int x, int y);
     bool isOccupied(int x, int y);
     bool isCovered(int x, int y);
+    
     //PieceEnum getPiece(int x, int y);
     Piece* getPiecePtr(int x, int y);
 
+    bool isValid();
     bool isCheck();
     bool isCheckMate();
     void movePiece(int fromX, int fromY, int toX, int toY);

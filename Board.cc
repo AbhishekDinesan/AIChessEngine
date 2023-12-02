@@ -25,6 +25,7 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
     for (int row = 0; row < 8; ++row) {
         squares[row].resize(8);
         for (int col = 0; col < 8; ++col) {
+            delete squares[row][col].getOccupyingPc();
             squares[row][col].setCoords(col, row);
             squares[row][col].attach(td);
         }
@@ -223,6 +224,40 @@ bool Board::isCovered(int x, int y)
 Piece *Board::getPiecePtr(int x, int y) {
     cout << "(6)" << endl;
     return squares[x][y].getOccupyingPc();
+}
+
+bool Board::isValid() {
+
+    int whiteKingCount = 0;
+    int blackKingCount = 0;
+
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+
+            // PAWNS ON FIRST AND LAST ROW
+            if (row == 0 || row == 7) {
+                if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::Pawn) {
+                    cerr << "Invalid Board Setup: No pawns can be placed on ranks 1 or 8" << endl;
+                    cerr << "The board has been reverted to the default configuration." << endl;
+                    return false;
+                }
+            }
+
+            if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::King) {
+                (squares[row][col].getOccupyingPc()->getColour()) ? ++whiteKingCount : ++blackKingCount;
+            }
+        }
+    }
+
+    //
+    // Check to see if board is in a checked position
+    //
+
+    if (whiteKingCount != 1 || blackKingCount != 1) {
+        cerr << "Invalid Board Setup: There must be exactly one king of each colour on the board" << endl;
+        cerr << "The board has been reverted to the default configuration." << endl;
+        return false;
+    }
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &b)

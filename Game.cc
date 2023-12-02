@@ -41,21 +41,7 @@ bool Game::ValidBoard()
     {
         for (int y = 0; y < 8; ++y)
         {
-            /*
-            if (board->getPiece() == PieceEnum::King) // still need to check if this is white/black
-            {
-                whiteKcount++;
-            }
-            */
-            if (x == 0 || x == 7)
-            {
-                /*
-                if (board->getPiece() == PieceEnum::Pawn)
-                {
-                    return false;
-                }
-                */
-            }
+            
         }
     }
     return whiteKcount && !isCheck;

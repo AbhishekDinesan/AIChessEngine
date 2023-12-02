@@ -220,11 +220,17 @@ int main()
                 cin >> subCmd;
                 if (subCmd == "done")
                 {
-
-                    //
-                    // JUST FOR NOW THIS IS GOOD, BUT WE WANT A VALID BOARD CHECK HERE
-                    //
                     validCustomBoard = true;
+
+                    /* THIS IS WHAT IT WILL BE LATER, BUT LEAVE IT COMMENTED FOR TESTING 
+                    if (customBoard->isValid()) {
+                        validCustomBoard = true;
+                    } else {
+                        customBoard = new Board(false);
+                        validCustomBoard = false;
+                    }
+                    */
+                    
                     break;
                 }
                 else if (subCmd == "+")
