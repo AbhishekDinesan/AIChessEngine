@@ -5,7 +5,7 @@
 
 enum class PieceEnum
 {
-  None,
+  None, 
   Pawn,
   Rook,
   Knight,

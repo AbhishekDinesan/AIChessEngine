@@ -21,6 +21,10 @@ board{board}, fromX{fromX}, fromY{fromY}, toX{toX}, toY{toY} {
 //destructor for Move
 Move::~Move() {}
 
+Piece *Move::CapturedPiece() {
+    return captured; 
+}
+
 
 
 //execute move:
@@ -83,7 +87,7 @@ bool Move::isValidMove() {
         //check for obstructions. 
         if (pieceAtMove->pieceType() != PieceEnum::None) {
             // If there is a piece at the destination, check to see if it is not our own: 
-            if (pieceAtMove->getColour() == p->getColour()) {
+            if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; 
             } else { //capture the opponent's piece: 
                 didcapture = true;
@@ -141,10 +145,16 @@ bool Move::isValidMove() {
             //in case of invalid move (defying behaviour of pawn) 
             return true; 
         }
+
     }
 
     //********** QUEEN MOVE **********
     if (p->pieceType() == PieceEnum::Queen) {
+        if(toX == currentX && toY == currentY) {
+            return false; 
+        }
+
+
         int deltaX = abs(currentX - toX);
         int deltaY = abs(currentY - toY);
 
@@ -175,19 +185,20 @@ bool Move::isValidMove() {
 
         //check for capture: 
         if (pieceAtMove->pieceType() != PieceEnum::None) {
-            if (pieceAtMove->getColour() == p->getColour()) {
+            if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; // Cannot capture own piece
             } else {
                 didcapture = true;
                 captured = pieceAtMove;
             }
         }
+        return true; 
     }
 
     //********** ROOK MOVE **********
     if (p->pieceType() == PieceEnum::Rook) {
-        int deltaX = currentX - toX;
-        int deltaY = currentY - toY;
+        int deltaX = abs(currentX - toX);
+        int deltaY = abs(currentY - toY);
 
         // Rook can move either horizontally or vertically
         if ((deltaX != 0 && deltaY != 0) || (deltaX == 0 && deltaY == 0)) {
@@ -214,7 +225,7 @@ bool Move::isValidMove() {
         //seeing if there is another piece at the spot we want to move to. 
         if (pieceAtMove != nullptr) {
             //can't capture own piece. 
-            if (pieceAtMove->getColour() == p->getColour()) {
+            if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; 
             //if not our own piece: 
             } else {
@@ -222,31 +233,37 @@ bool Move::isValidMove() {
                 captured = pieceAtMove;
             }
         }
+        return true; 
     }
 
-    //********** KNIGHT MOVE ********** 
+    //********** KNIGHT MOVE **********
     if (p->pieceType() == PieceEnum::Knight) {
         int deltaX = abs(currentX - toX);
         int deltaY = abs(currentY - toY);
 
-        //checking for l-shaped moves: 
+
+        // Check for L-shaped move: 2 squares in one direction and 1 square in the other
         if (!((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2))) {
+            cout << "HERE" << endl; 
             return false; // Invalid move for a Knight
         }
 
-        //NOTE: knights can jump, no need to check for obstructions 
+        // Get the piece at the destination, if any
+        Piece* pieceAtMove = board->getPiecePtr(toX, toY);
 
-        //did we "land" on a piece: 
+        // Check if there's a piece at the destination
         if (pieceAtMove != nullptr) {
-            //cannot capture our own piece: 
-            if (pieceAtMove->getColour() == p->getColour()) {
-                return false; 
+            // If there is a piece, check if it's a capture (cannot capture pieces of the same color)
+            if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
+                return false; // Cannot capture own piece
             } else {
-                didcapture = true;
-                captured = pieceAtMove;
+                didcapture = true; 
+                captured = pieceAtMove; 
             }
         }
+        return true; 
     }
+
 
     //********** NONE MOVE ********** 
     if(p->pieceType() == PieceEnum::None) {
@@ -258,3 +275,47 @@ bool Move::isValidMove() {
 }
 
 bool Move::willCheck() { return false; }
+
+bool isWithinBounds(int x, int y) {
+    return x >= 0 && x < 8 && y >= 0 && y <8; 
+}
+
+
+std::vector<Move> Move::possibleMoves(Piece *p) {
+    std::vector<Move> moves;
+    int currentX = p->getX();
+    int currentY = p->getY();
+
+    switch (p->pieceType()) {
+        case PieceEnum::Pawn: {
+            Pawn *pawnptr = dynamic_cast<Pawn *>(p);  
+
+            int direction = (pawnptr->getColour() == true) ? 1 : -1; //direction of moves: 
+            // Check forward move
+            if (board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None) {
+                moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + direction));
+            }
+            // Check captures
+            if (isWithinBounds(currentX + 1, currentY + direction) && 
+                board->getPiecePtr(currentX + 1, currentY + direction)->getColour() != p->getColour()) {
+                moves.push_back(Move(this->board, currentX, currentY, currentX + 1, currentY + direction));
+            }
+            if (isWithinBounds(currentX - 1, currentY + direction) && 
+                board->getPiecePtr(currentX - 1, currentY + direction)->getColour() != p->getColour()) {
+                moves.push_back(Move(this->board, currentX, currentY, currentX - 1, currentY + direction));
+            }
+            //moving two space in the first move for Pawns: 
+            //need to check if the move is within bounds, that moving two spaces is unobstructed (Pawn can't jump), and 
+            //
+            if (pawnptr->isFirstMove() && 
+                    isWithinBounds(currentX, currentY + 2 * direction) && //is move within board's bounds. 
+                    board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None && //
+                    board->getPiecePtr(currentX, currentY + 2 * direction)->pieceType() == PieceEnum::None) {
+                    moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + 2 * direction));
+            }
+        }
+        // Other cases (Rook, Knight, Bishop, Queen, King)
+        // ...
+    }
+    return moves;
+}
