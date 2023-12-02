@@ -65,7 +65,7 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
 
     // PAWNS
     for (int col = 0; col < 8; ++col) {
-        Pawn *blackPawn = new Pawn(false, true, false, col, 1);
+        Pawn *blackPawn = new Pawn(false, true, true, col, 1);
         squares[col][1].setPiece(blackPawn); // SWapped ROWS/COLS
      }
     
@@ -80,7 +80,7 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
     }
 
     for (int col = 0; col < 8; ++col) {
-        Pawn *whitePawn = new Pawn(true, true, false, col, 6);
+        Pawn *whitePawn = new Pawn(true, true, true, col, 6);
         squares[col][6].setPiece(whitePawn);
     }
 
@@ -178,11 +178,11 @@ void Board::addPiece(int x, int y, char c)
     }
     else if (c == 'P') {
         // POTENTIAL FOR ADDING FIRST MOVE RIGHTS AND ENPASSANT PROPERTIES (AS OF NOW NONE OF THAT)
-        p = new Pawn(true, true, true, x, y);
+        p = new Pawn(true, true, false, x, y);
     }
     else if (c == 'p') {
         // POTENTIAL FOR ADDING FIRST MOVE RIGHTS AND ENPASSANT PROPERTIES (AS OF NOW NONE OF THAT)
-        p = new Pawn(false, true, true, x, y);
+        p = new Pawn(false, true, false, x, y);
     }
 
     squares[x][y].setPiece(p);
