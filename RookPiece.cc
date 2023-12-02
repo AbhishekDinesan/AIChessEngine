@@ -1,5 +1,6 @@
 #include "AbstractPiece.h"
 #include "RookPiece.h"
+#include <memory>
 
 Rook::Rook(bool isWhite, bool isAlive, bool canCastle, int x, int y) : isWhite{isWhite}, isAlive{isAlive}, canCastleFlag{canCastle}, x{x}, y{y} {}
 
