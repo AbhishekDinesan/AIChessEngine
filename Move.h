@@ -1,6 +1,8 @@
 #ifndef __MOVE_H__
 #define __MOVE_H__
 
+#include <stdlib.h> 
+#include <vector>
 
 class Piece; 
 class Board; 
@@ -23,7 +25,7 @@ class Move
     Piece* CapturedPiece();
     bool isCheck();
     void UpdateBoard();
-    // possibleMoves(); IDK WHAT TYPE THIS SHOULD BE SO I COMMENTED IT OUT SO IT DOESN'T COMPLAIN
+    std::vector<Move> possibleMoves(Piece *p);   
     bool willCheck();
     bool isValidMove(); 
 };
