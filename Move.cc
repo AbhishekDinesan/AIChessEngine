@@ -106,6 +106,7 @@ bool Move::isValidMove() {
         int deltaY = toY - currentY; 
         int direction = (pawnptr->getColour() != true) ? 1 : -1; 
 
+
         // Standard one square forward move
         if(deltaX == 0 && deltaY == direction) {
             if(pieceAtMove->pieceType() != PieceEnum::None) {
