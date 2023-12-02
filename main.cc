@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include "Game.h"
-#include <memory>
 // ADD INCLUDE STATEMENTS
 using namespace std;
 
@@ -33,8 +32,10 @@ int main()
     int whiteScore = 0;
     int blackScore = 0;
     unique_ptr<Game> g;
+    Board* customBoard;
+    bool validCustomBoard = false;
     string cmd;
-
+    
     while (true)
     {
         cin >> cmd;
@@ -116,9 +117,8 @@ int main()
                     break;
                 }
 
-                if (isWhiteInit && isBlackInit)
-                {
-                    g = make_unique<Game>();
+                if (isWhiteInit && isBlackInit) {
+                    g = make_unique<Game>(validCustomBoard, customBoard);
                 }
             }
         }
@@ -131,9 +131,11 @@ int main()
         }
         else if (cmd == "move")
         {
-            //
-            // CHECK TO SEE IF A GAME IS IN PROGRESS
-            //
+            if (!g) {
+                cerr << "Invalid Input: Moves cannot be made until a game has been started" << endl;
+                cin.ignore(int(2147483647), '\n');
+                continue;;
+            }
 
             char processChar = '0';
             int startFile = -1;
@@ -174,16 +176,25 @@ int main()
             }
             if (reset)
                 continue;
-
-            //
-            //  EXECUTE MOVE
-            //
+            
+            cout << "(1)" << endl;
+            g->movePiece(startFile, startRank, endFile, endRank);
+            g->printBoard();
 
             cout << "From: (" << startFile << "," << startRank << ")" << endl;
             cout << "To: (" << endFile << "," << endRank << ")" << endl;
         }
         else if (cmd == "setup")
         {
+            if (g != nullptr) {
+                cerr << "Invalid Input: Setup mode cannot be accessed while a game is in progress" << endl;
+                cin.ignore(int(2147483647), '\n');
+                continue;
+            } else {
+                cout << "(0)" << endl;
+                customBoard = new Board(true);
+            }
+
             while (true)
             {
                 string subCmd = "";
@@ -194,8 +205,14 @@ int main()
                 int rank = -1;
 
                 cin >> subCmd;
-                if (subCmd == "done")
+                if (subCmd == "done") {
+                    
+                    //
+                    // JUST FOR NOW THIS IS GOOD, BUT WE WANT A VALID BOARD CHECK HERE
+                    //
+                    validCustomBoard = true;
                     break;
+                }
                 else if (subCmd == "+")
                 {
                     cin >> processChar;
@@ -230,11 +247,14 @@ int main()
                     }
                     else
                         rank = processChar - '1';
-                    //
-                    // ADD PIECE TO THE BOARD
-                    //
+                    
 
-                    cout << piece << " added at (" << file << "," << rank << ")" << endl;
+                    // PIECES BEING ADDED TO THE BOARD
+                    cout << "(1)" << endl;
+                    customBoard->addPiece(file, rank, piece);
+                    cout << *customBoard;
+                    
+                    //cout << piece << " added at (" << file << "," << rank << ")" << endl;
                 }
                 else if (subCmd == "-")
                 {

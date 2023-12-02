@@ -1,11 +1,14 @@
 // square.cc
 #include <iostream>
 #include "square.h"
+//#include "NonePiece.h"
 using namespace std;
 
 
 //Default constructor for square 
-Square::Square() : x(0), y(0), occupied(false), occupiedBy(nullptr) {}  
+Square::Square() : x(0), y(0), occupied(false), occupiedBy(nullptr) {
+    //None *emptyPiece = new None();
+}  
 
 
 //Destructor for square 

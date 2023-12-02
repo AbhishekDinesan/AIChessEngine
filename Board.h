@@ -14,21 +14,22 @@ class Board
     std::vector<std::vector<Square>> squares;
 
 public:
-    Board();
+    Board(bool emptyBoard);
     ~Board();
 
     TextDisplay *td;
-    void addPiece(int x, int y, Piece &p);
+    void addPiece(int x, int y, char c);
     void removePiece(int x, int y);
     bool isOccupied(int x, int y);
     bool isCovered(int x, int y);
-    PieceEnum getPiece(int x, int y);
-
-    Piece *getPiecePtr(int x, int y);    
+    //PieceEnum getPiece(int x, int y);
+    Piece* getPiecePtr(int x, int y);
 
     bool isCheck();
     bool isCheckMate();
+    void movePiece(int fromX, int fromY, int toX, int toY);
     void undoMove();
+    friend class Move;
     friend std::ostream &operator<<(std::ostream &out, const Board &b);
 };
 

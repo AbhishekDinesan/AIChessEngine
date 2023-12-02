@@ -4,29 +4,31 @@
 #include "AbstractPiece.h"
 #include "PawnPiece.h"
 #include <ostream>
-#include <memory>
+#include <utility>
 using namespace std;
 
-Game::Game() : moveCount{0}
-{
-    board = make_unique<Board>();
-    printBoard();
+Game::Game(bool customProvided, Board* theCustomBoard) : moveCount{0}, board{theCustomBoard} { 
+    
+    if (!customProvided) { 
+        board = new Board(false); 
+    }
+    printBoard(); 
 }
 
 Game::~Game()
 {
-    // delete board; IM USING UNIQUE POINTERS NOW
+    //delete board; IM USING UNIQUE POINTERS NOW 
 }
 
 void Game::init()
 {
-    // unique_ptr<Board> board = make_unique<Board>();
-    // printBoard(); // this should create new 8 x 8 grid
-    //  PlayerOne = new Player();
-    //  PlayerTwo = new PlayerTwo();
-    //  Player currentPlayer = PlayerOne;
-    //  Vector pastmoves;
-    //  std::vector<std::vector<Move>> pastMoves;
+    //unique_ptr<Board> board = make_unique<Board>();
+    //printBoard(); // this should create new 8 x 8 grid
+    // PlayerOne = new Player();
+    // PlayerTwo = new PlayerTwo();
+    // Player currentPlayer = PlayerOne;
+    // Vector pastmoves;
+    // std::vector<std::vector<Move>> pastMoves;
     moveCount = 0;
 }
 
@@ -65,27 +67,19 @@ bool Game::endGame()
     return true;
 }
 
-/*
-void Game::movePiece() // wouldn't this be called from the game function
+void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be called from the game function
 {
-
-    //Move *newMove = new Move();
+    cout << "(2)" << endl;
+    Move m = Move(board, fromX, fromY, toX, toY);
+    cout << "(3)" << endl;
+   if (m.isValidMove()) {
+        board->movePiece(fromX, fromY, toX, toY);
+        // ADD THE MOVE TO A VECTOR FOR THE UNDO FUNCTION
+   }
 }
-*/
 
-void Game::addPiece(char piece, int x, int y)
-{
-    Piece *p;
-    if (piece == 'P')
-    {
-        bool beenMoved = (x == 6) ? true : false;
-        p = new Pawn(true, true, beenMoved, x, y);
-    }
-    else if (piece == 'p')
-    {
-        bool beenMoved = (x == 1) ? true : false;
-        p = new Pawn(false, true, beenMoved, x, y);
-    }
+void Game::addPiece(int x, int y, char piece) {
+    board->addPiece(x, y, piece);
 }
 
 std::ostream &operator<<(std::ostream &out, const Game &g)
@@ -96,10 +90,5 @@ std::ostream &operator<<(std::ostream &out, const Game &g)
 
 void Game::printBoard()
 {
-    std::cout << *board->td; // Use a pointer to dereference and print the Board
-}
-
-std::unique_ptr<Board> &Game::getBoard()
-{
-    return board;
+    cout << *board->td;; // Use a pointer to dereference and print the Board
 }

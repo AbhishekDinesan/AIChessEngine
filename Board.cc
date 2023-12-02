@@ -15,12 +15,12 @@
 using namespace std;
 
 // constructor for Board
-Board::Board() /*: squares(8, std::vector<Square>(8)*)*/
+Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
 {
-    
     TextDisplay *newTextDisplay = new TextDisplay;
     td = newTextDisplay;
 
+    
     squares.resize(8);
     for (int row = 0; row < 8; ++row) {
         squares[row].resize(8);
@@ -28,6 +28,18 @@ Board::Board() /*: squares(8, std::vector<Square>(8)*)*/
             squares[row][col].setCoords(col, row);
             squares[row][col].attach(td);
         }
+    }
+
+    if (emptyBoard) {
+        for (int row = 0; row < 8; ++row)
+        {
+            for (int col = 0; col < 8; ++col)
+                {
+                    None *emptypiece = new None(col, row);
+                    squares[col][row].setPiece(emptypiece);
+              }
+        }
+        return;
     }
 
     Rook *blackLRook = new Rook(false, true, true, 0, 0);
@@ -66,7 +78,6 @@ Board::Board() /*: squares(8, std::vector<Square>(8)*)*/
             squares[col][row].setPiece(emptypiece);
         }
     }
-    
 
     for (int col = 0; col < 8; ++col) {
         Pawn *whitePawn = new Pawn(true, true, false, col, 6);
@@ -93,7 +104,6 @@ Board::Board() /*: squares(8, std::vector<Square>(8)*)*/
 
     King *whiteKing = new King(true, true, false, false, 4, 7);
     squares[4][7].setPiece(whiteKing);
-
 }
 
 // destructor for Board.
@@ -109,15 +119,73 @@ Board::~Board()
     }
 }
 
-void Board::addPiece(int x, int y, Piece &p)
+void Board::movePiece(int fromX, int fromY, int toX, int toY) {
+    cout << "(2)" << endl;
+    Piece* movedPiece = squares[fromX][fromY].getOccupyingPc();
+    cout << "(3)" << endl;
+    delete squares[toX][toY].getOccupyingPc();
+    
+    None* emptyPiece = new None(fromX, fromY);
+    squares[fromX][fromY].setPiece(emptyPiece);
+    movedPiece->setX(toX);
+    movedPiece->setY(toY);
+    squares[toX][toY].setPiece(movedPiece);
+    
+}
+
+void Board::addPiece(int x, int y, char c)
 {
     // make sure that coordinates are within bounds
     if (x < 0 || x >= 8 || y < 0 || y >= 8)
     {
         throw std::out_of_range("Coordinates are out of the board's bounds.");
     }
+    
+    delete squares[x][y].getOccupyingPc();
 
-    squares[x][y].setPiece(&p);
+    Piece *p;
+    if (c == 'K') {
+        p = new King(true, true, false, false, x, y);
+    } 
+    else if (c == 'k') {
+        p = new King(false, true, false, false, x, y);
+    }
+    else if (c == 'Q') {
+        p = new Queen(true, true, x, y);
+    }
+    else if (c == 'q') {
+        p = new Queen(false, true, x, y);
+    }
+    else if (c == 'R') {
+        // Potential for adding castling rights (AS OF NOW NO CASTLING WITH ADDED PIECES)
+        p = new Rook(true, true, false, x, y);
+    }
+    else if (c == 'r') {
+        // Potential for adding castling rights (AS OF NOW NO CASTLING WITH ADDED PIECES)
+        p = new Rook(false, true, false, x, y);
+    }
+    else if (c == 'N') {
+        p = new Knight(true, true, x, y);
+    }
+    else if (c == 'n') {
+        p = new Knight(false, true, x, y);
+    }
+    else if (c == 'B') {
+        p = new Bishop(true, true, x, y);
+    }
+    else if (c == 'b') {
+        p = new Bishop(false, true, x, y);
+    }
+    else if (c == 'P') {
+        // POTENTIAL FOR ADDING FIRST MOVE RIGHTS AND ENPASSANT PROPERTIES (AS OF NOW NONE OF THAT)
+        p = new Pawn(true, true, true, x, y);
+    }
+    else if (c == 'p') {
+        // POTENTIAL FOR ADDING FIRST MOVE RIGHTS AND ENPASSANT PROPERTIES (AS OF NOW NONE OF THAT)
+        p = new Pawn(false, true, true, x, y);
+    }
+
+    squares[x][y].setPiece(p);
 }
 
 // delete the piece at the index, and replace with a NonePiece.
@@ -153,8 +221,8 @@ bool Board::isCovered(int x, int y)
 }
 
 Piece *Board::getPiecePtr(int x, int y) {
-    Piece *p = squares[x][y].getOccupyingPc(); 
-    return p; 
+    cout << "(6)" << endl;
+    return squares[x][y].getOccupyingPc();
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &b)
@@ -163,8 +231,6 @@ std::ostream &operator<<(std::ostream &out, const Board &b)
     return out;
 }
 
-//IMPLEMENT THIS: (just a placeholder)
-PieceEnum Board::getPiece(int x, int y)
-{
-    return PieceEnum::Rook;  
-}
+//PieceEnum Board::getPiece(int x, int y) {
+   // squares[x][y].getOccupyingPc()->pieceType();
+//}

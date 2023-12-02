@@ -8,10 +8,11 @@
 #include "KnightPiece.h" 
 #include <stdlib.h> 
 #include "Game.h" 
+#include "Board.h" 
 
 
-Move::Move(Board *board, Piece *piece, coords From, coords To) :
-board{board}, piece{piece}, From{From}, To{To} {
+Move::Move(Board *board, int fromX, int fromY, int toX, int toY) :
+board{board}, fromX{fromX}, fromY{fromY}, toX{toX}, toY{toY} {
     captured = nullptr; 
     didcapture = false; 
 }
@@ -23,23 +24,24 @@ Move::~Move() {}
 
 
 //execute move:
-bool Move::executeMove(Game *g, int x, int y, Piece *p) {
+bool Move::isValidMove() {
     // Create the target coordinates
-    coords movingTo = {x, y};
+    //coords movingTo = {x, y};
 
-    Board *boardptr; 
-
+    
+    cout << "(4)" << endl;
+    Piece *p = board->getPiecePtr(fromX, fromY);
     //thisPiece represents the type of the piece that we are trying to move. 
-    PieceEnum thisPiece = boardptr->getPiece(p->getX(), p->getY()); 
+    //Piece *thisPiece = board->getPiecePtr(p->getX(), p->getY()); 
     int currentX = p->getX(); 
     int currentY = p->getY(); 
-    Piece *pieceAtMove = boardptr->getPiecePtr(x,y);
+    Piece *pieceAtMove = board->getPiecePtr(toX,toY);
 
-
+    cout << "(6)" << endl;
     //********** BISHOP MOVE **********
-    if(thisPiece == PieceEnum::Bishop) { 
-        int deltaX = abs(currentX - x); 
-        int deltaY = abs(currentY - y); 
+    if(p->pieceType() == PieceEnum::Bishop) { 
+        int deltaX = abs(currentX - toX); 
+        int deltaY = abs(currentY - toY); 
 
         //bishop can only move diagonally: 
         if(deltaY != deltaX) {
@@ -47,17 +49,16 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         }
 
         //checking for obstructions along move path: 
-        int stepX = (x > currentX) ? 1 : -1;
-        int stepY = (y > currentY) ? 1 : -1;
+        int stepX = (toX > currentX) ? 1 : -1;
+        int stepY = (toY > currentY) ? 1 : -1;
         int checkX = currentX + stepX;
         int checkY = currentY + stepY;
 
-        while(checkX != x || checkY != y) {
+        while(checkX != toX || checkY != toY) {
             //if there is an obstruction in path of bishop, 
-            if(boardptr->getPiece(checkX, checkY) != PieceEnum::None) {
+            if(board->getPiecePtr(checkX, checkY)->pieceType() != PieceEnum::None) {
                 return false; 
             }
-
             checkX += stepX; 
             checkY += stepY; 
         }
@@ -67,15 +68,12 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
             didcapture = true; 
             captured = pieceAtMove; 
         }
-        p->setX(x);
-        p->setY(y); 
-        return true; 
     } 
 
     //********** KING MOVE **********
-    if (thisPiece == PieceEnum::King) {
-        int deltaX = abs(currentX - x);
-        int deltaY = abs(currentY - y);
+    if (p->pieceType() == PieceEnum::King) {
+        int deltaX = abs(currentX - toX);
+        int deltaY = abs(currentY - toY);
 
         //make sure that the king can only move one square in any direction 
         if (deltaX > 1 || deltaY > 1) {
@@ -83,7 +81,7 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         }
 
         //check for obstructions. 
-        if (pieceAtMove != nullptr) {
+        if (pieceAtMove->pieceType() != PieceEnum::None) {
             // If there is a piece at the destination, check to see if it is not our own: 
             if (pieceAtMove->getColour() == p->getColour()) {
                 return false; 
@@ -94,21 +92,18 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         }
 
         //handle Castling: ***IDK What the fuck that is*** 
-
-        // Update the King's position
-        p->setX(x);
-        p->setY(y);
-        return true;
+        // Anthony's Edit: LOL
     }
 
     //********** Pawn MOVE **********
-    if(thisPiece == PieceEnum::Pawn) {
+    if(p->pieceType() == PieceEnum::Pawn) {
         //need to dynamically cast the superclass Piece pointer *p to a pawn:
         //otherwise we can't access subclass functions: 
         Pawn *pawnptr = dynamic_cast<Pawn *>(p); 
+        cout << "(7)" << endl;
 
-        int deltaX = x - currentX; 
-        int deltaY = y = currentY; 
+        int deltaX = toX - currentX; 
+        int deltaY = toY - currentY; 
 
         //can move either one step forward or backward 
         int direction = p->getColour() ? 1 : -1; 
@@ -116,20 +111,26 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         //checking for standard move (based on colour) 
         if(deltaX == 0 && deltaY == direction) {
             //since pawn cannot capture forward: 
-            if(pieceAtMove != nullptr) {
+            if(pieceAtMove->pieceType() != PieceEnum::None) {
                 //pawn can only capture diagonally 
                 return false; 
             }
         //checking for first Move (need to cast to subclass Pawn):  
-        } else if(pawnptr->isFirstMove() && deltaX == 0 && deltaY == 2 * direction) {
+        } else if(pawnptr->isFirstMove() && deltaX == 0 && (deltaY == 2 * direction || deltaY == direction)) {
             //make sure the path is clear:
 
             //makes sure that the first move is valid: 
-            if (pieceAtMove != nullptr || boardptr->getPiecePtr(currentX, currentY + direction) != nullptr) {
+            if (pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; 
             } 
+
+            // Checks to see if there is a peice obstructing a double move
+            if (deltaY == 2 * direction && board->getPiecePtr(currentX, currentY + deltaY)->pieceType() == PieceEnum::None) {
+                return false;
+            }
+            
         } else if(abs(deltaX) == 1 && abs(deltaY) == direction) {
-            if(pieceAtMove == nullptr || pieceAtMove->getColour() == p->getColour()) {
+            if(pieceAtMove->pieceType() == PieceEnum::None || pieceAtMove->getColour() == p->getColour()) {
                 //diagonal moves need to be a capture: 
                 return false; 
             } else {
@@ -138,19 +139,14 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
             }
         } else {
             //in case of invalid move (defying behaviour of pawn) 
-            return false; 
+            return true; 
         }
-        p->setX(x); 
-        p->setY(y); 
-
-        //a move was succesfully carried out: 
-        return true; 
     }
 
     //********** QUEEN MOVE **********
-    if (thisPiece == PieceEnum::Queen) {
-        int deltaX = abs(currentX - x);
-        int deltaY = abs(currentY - y);
+    if (p->pieceType() == PieceEnum::Queen) {
+        int deltaX = abs(currentX - toX);
+        int deltaY = abs(currentY - toY);
 
         //check for diagonal or straight move 
         bool isDiagonalMove = deltaX == deltaY;
@@ -162,15 +158,15 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         }
 
         //direction to step in: 
-        int stepX = (x > currentX) ? 1 : (x < currentX) ? -1 : 0;
-        int stepY = (y > currentY) ? 1 : (y < currentY) ? -1 : 0;
+        int stepX = (toX > currentX) ? 1 : (toX < currentX) ? -1 : 0;
+        int stepY = (toY > currentY) ? 1 : (toY < currentY) ? -1 : 0;
 
         //how we check for obstructions. 
         int checkX = currentX + stepX;
         int checkY = currentY + stepY;
 
-        while (checkX != x || checkY != y) {
-            if (boardptr->getPiecePtr(checkX, checkY) != nullptr) {
+        while (checkX != toX || checkY != toY) {
+            if (board->getPiecePtr(checkX, checkY) != nullptr) {
                 return false; // Obstruction in the path
             }
             checkX += stepX;
@@ -178,7 +174,7 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         }
 
         //check for capture: 
-        if (pieceAtMove != nullptr) {
+        if (pieceAtMove->pieceType() != PieceEnum::None) {
             if (pieceAtMove->getColour() == p->getColour()) {
                 return false; // Cannot capture own piece
             } else {
@@ -186,18 +182,12 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
                 captured = pieceAtMove;
             }
         }
-
-        //update the queen's position. 
-        p->setX(x);
-        p->setY(y);
-
-        return true;
     }
 
     //********** ROOK MOVE **********
-    if (thisPiece == PieceEnum::Rook) {
-        int deltaX = currentX - x;
-        int deltaY = currentY - y;
+    if (p->pieceType() == PieceEnum::Rook) {
+        int deltaX = currentX - toX;
+        int deltaY = currentY - toY;
 
         // Rook can move either horizontally or vertically
         if ((deltaX != 0 && deltaY != 0) || (deltaX == 0 && deltaY == 0)) {
@@ -213,8 +203,8 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
         int checkY = currentY + stepY;
 
         //cannot "jump" over any other pieces 
-        while (checkX != x || checkY != y) {
-            if (boardptr->getPiecePtr(checkX, checkY) != nullptr) {
+        while (checkX != toX || checkY != toY) {
+            if (board->getPiecePtr(checkX, checkY) != nullptr) {
                 return false; 
             }
             checkX += stepX;
@@ -232,18 +222,12 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
                 captured = pieceAtMove;
             }
         }
-
-        //succesful move: 
-        p->setX(x);
-        p->setY(y);
-
-        return true;
     }
 
     //********** KNIGHT MOVE ********** 
-    if (thisPiece == PieceEnum::Knight) {
-        int deltaX = abs(currentX - x);
-        int deltaY = abs(currentY - y);
+    if (p->pieceType() == PieceEnum::Knight) {
+        int deltaX = abs(currentX - toX);
+        int deltaY = abs(currentY - toY);
 
         //checking for l-shaped moves: 
         if (!((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2))) {
@@ -262,24 +246,15 @@ bool Move::executeMove(Game *g, int x, int y, Piece *p) {
                 captured = pieceAtMove;
             }
         }
-
-        //successful move: 
-        p->setX(x);
-        p->setY(y);
-
-        return true;
     }
 
     //********** NONE MOVE ********** 
-    if(thisPiece == PieceEnum::None) {
+    if(p->pieceType() == PieceEnum::None) {
         //impossible to move the None Piece. 
         return false; 
     }
+
+    return true;
 }
 
-
-
-
-
-
-
+bool Move::willCheck() { return false; }
