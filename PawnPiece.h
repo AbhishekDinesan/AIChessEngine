@@ -7,10 +7,11 @@ class Pawn : public Piece {
     bool isWhite;
     bool isAlive;
     bool isEnPassantable;
-    bool beenMoved;
+    
     //Move nextMove {};
     int x, y;
  public:
+    bool firstMove;
     Pawn(bool isWhite, bool isAlive, bool beenMoved, int x, int y);
     bool isValidMove(Move &m) override;
     bool getColour() const override;

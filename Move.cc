@@ -101,51 +101,38 @@ bool Move::isValidMove() {
 
     //********** Pawn MOVE **********
     if(p->pieceType() == PieceEnum::Pawn) {
-        //need to dynamically cast the superclass Piece pointer *p to a pawn:
-        //otherwise we can't access subclass functions: 
         Pawn *pawnptr = dynamic_cast<Pawn *>(p); 
-        cout << "(7)" << endl;
-
         int deltaX = toX - currentX; 
         int deltaY = toY - currentY; 
+        int direction = (pawnptr->getColour() == true) ? 1 : -1; 
 
-        //can move either one step forward or backward 
-        int direction = p->getColour() ? 1 : -1; 
-
-        //checking for standard move (based on colour) 
+        // Standard one square forward move
         if(deltaX == 0 && deltaY == direction) {
-            //since pawn cannot capture forward: 
             if(pieceAtMove->pieceType() != PieceEnum::None) {
-                //pawn can only capture diagonally 
-                return false; 
+                return false;  // Forward move but square is not empty
             }
-        //checking for first Move (need to cast to subclass Pawn):  
-        } else if(pawnptr->isFirstMove() && deltaX == 0 && (deltaY == 2 * direction || deltaY == direction)) {
-            //make sure the path is clear:
-
-            //makes sure that the first move is valid: 
-            if (pieceAtMove->pieceType() != PieceEnum::None) {
-                return false; 
-            } 
-
-            // Checks to see if there is a peice obstructing a double move
-            if (deltaY == 2 * direction && board->getPiecePtr(currentX, currentY + deltaY)->pieceType() == PieceEnum::None) {
-                return false;
+        }
+        // First move - two squares forward
+        else if(pawnptr->isFirstMove() && deltaX == 0 && deltaY == 2 * direction) {
+            // Check if the path is clear (both squares)
+            if(board->getPiecePtr(currentX, currentY + direction)->pieceType() != PieceEnum::None ||
+                    pieceAtMove->pieceType() != PieceEnum::None) {
+                        return false;
             }
-            
-        } else if(abs(deltaX) == 1 && abs(deltaY) == direction) {
-            if(pieceAtMove->pieceType() == PieceEnum::None || pieceAtMove->getColour() == p->getColour()) {
-                //diagonal moves need to be a capture: 
-                return false; 
+            pawnptr->firstMove = false; 
+        }
+        // Diagonal capture
+        else if(abs(deltaX) == 1 && deltaY == direction) {
+            if(pieceAtMove->pieceType() == PieceEnum::None || pieceAtMove->getColour() == pawnptr->getColour()) {
+                return false;  // Either no piece to capture or trying to capture own piece
             } else {
                 didcapture = true; 
-                captured = pieceAtMove; 
+                captured = pieceAtMove;
             }
-        } else {
-            //in case of invalid move (defying behaviour of pawn) 
-            return true; 
         }
-
+        else {
+            return false;  // Not a valid Pawn move
+        }
     }
 
     //********** QUEEN MOVE **********
@@ -287,15 +274,18 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
     int currentY = p->getY();
 
     switch (p->pieceType()) {
+
+        //********* PAWN POSSIBLE MOVES ************ 
         case PieceEnum::Pawn: {
             Pawn *pawnptr = dynamic_cast<Pawn *>(p);  
 
-            int direction = (pawnptr->getColour() == true) ? 1 : -1; //direction of moves: 
-            // Check forward move
+            //direction of moves based on colour: 
+            int direction = (pawnptr->getColour() == true) ? 1 : -1; 
+            //check forward move
             if (board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None) {
                 moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + direction));
             }
-            // Check captures
+            //check captures
             if (isWithinBounds(currentX + 1, currentY + direction) && 
                 board->getPiecePtr(currentX + 1, currentY + direction)->getColour() != p->getColour()) {
                 moves.push_back(Move(this->board, currentX, currentY, currentX + 1, currentY + direction));
@@ -304,9 +294,10 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                 board->getPiecePtr(currentX - 1, currentY + direction)->getColour() != p->getColour()) {
                 moves.push_back(Move(this->board, currentX, currentY, currentX - 1, currentY + direction));
             }
+
             //moving two space in the first move for Pawns: 
             //need to check if the move is within bounds, that moving two spaces is unobstructed (Pawn can't jump), and 
-            //
+            //the move is within the bounds of the board. 
             if (pawnptr->isFirstMove() && 
                     isWithinBounds(currentX, currentY + 2 * direction) && //is move within board's bounds. 
                     board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None && //
@@ -314,8 +305,41 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                     moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + 2 * direction));
             }
         }
-        // Other cases (Rook, Knight, Bishop, Queen, King)
-        // ...
+
+        //********* BISHOP POSSIBLE MOVES ************
+        case PieceEnum::Bishop: {
+            //need to check in all 4 directions. 
+            //step by 2 in X direction and by 2 in Y direction: 
+            for (int deltaX = -1; deltaX <= 1; deltaX += 2) {
+                for (int deltaY = -1; deltaY <= 1; deltaY += 2) {
+                    int checkX = currentX + deltaX;
+                    int checkY = currentY + deltaY;
+                    
+                    //check until we are out of bounds, or blocked. 
+                    while (isWithinBounds(checkX, checkY)) {
+                        Piece *pieceAtSquare = board->getPiecePtr(checkX, checkY);
+
+                        if (pieceAtSquare->pieceType() == PieceEnum::None) {
+                            // Empty square - add as a possible move
+                            moves.push_back(Move(this->board, currentX, currentY, checkX, checkY));
+                        } else {
+                            // Encounter another piece
+                            if (pieceAtSquare->getColour() != p->getColour()) {
+                                // Opponent's piece - can capture it
+                                moves.push_back(Move(this->board, currentX, currentY, checkX, checkY));
+                            }
+                            //bishop cannot jump 
+                            break;
+                        }
+                        checkX += deltaX;
+                        checkY += deltaY;
+                    }
+                }
+            }
+            break;
+        }
     }
+
+
     return moves;
 }
