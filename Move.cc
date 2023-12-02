@@ -230,7 +230,7 @@ bool Move::isValidMove() {
         int deltaY = abs(currentY - toY);
 
         //checking for l-shaped moves: 
-        if (!((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2))) {
+        if (!(deltaX == 2 && deltaY == 1) || !(deltaX == 1 && deltaY == 2)) {
             return false; // Invalid move for a Knight
         }
 

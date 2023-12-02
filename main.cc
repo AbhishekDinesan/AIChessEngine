@@ -35,6 +35,7 @@ int main()
     unique_ptr<Game> g;
     Board *customBoard;
     bool validCustomBoard = false;
+    bool whiteStarts = true;
     string cmd;
 
     while (true)
@@ -120,7 +121,7 @@ int main()
 
                 if (isWhiteInit && isBlackInit)
                 {
-                    g = make_unique<Game>(validCustomBoard, customBoard);
+                    g = make_unique<Game>(whiteStarts, validCustomBoard, customBoard);
                 }
             }
         }
@@ -173,10 +174,15 @@ int main()
                     reset = true;
                     break;
                 }
-                else if (startRank == -1)
-                    startRank = processChar - '1';
-                else
-                    endRank = processChar - '1';
+                else if (startRank == -1) {
+                    startRank = abs((processChar - '1') - 7);
+                    cout << "SR: " << startRank << endl;
+                }
+                else {
+                    endRank = abs((processChar - '1') - 7);
+                    cout << (processChar - '1') << endl;
+                    cout << "ER: " << endRank << endl;
+                }
             }
             if (reset)
                 continue;
@@ -196,7 +202,7 @@ int main()
                 cin.ignore(int(2147483647), '\n');
                 continue;
             }
-            else
+            else if (!validCustomBoard)
             {
                 cout << "(0)" << endl;
                 customBoard = new Board(true);
@@ -254,7 +260,7 @@ int main()
                         continue;
                     }
                     else
-                        rank = processChar - '1';
+                        rank = abs((processChar - '1') - 7);
 
                     // PIECES BEING ADDED TO THE BOARD
                     cout << "(1)" << endl;
@@ -285,11 +291,10 @@ int main()
                         continue;
                     }
                     else
-                        rank = processChar - '1';
+                        rank = abs((processChar - '1') - 7);
 
-                    //
-                    // REMOVE PIECE TO THE BOARD
-                    //
+                    customBoard->removePiece(file, rank);
+                    cout << *customBoard;
                     cout << "piece removed from (" << file << "," << rank << ")" << endl;
                 }
                 else if (subCmd == "=")
@@ -302,9 +307,9 @@ int main()
                         cin.ignore(int(2147483647), '\n');
                         continue;
                     }
-                    //
-                    // SET THE TURN TO THE INDICATED PLAYER
-                    //
+                    
+                    if (colour == "white") { whiteStarts = true; }
+                    else if (colour == "black") { whiteStarts = false; }
                     cout << colour << " player's turn" << endl;
                 }
                 else
