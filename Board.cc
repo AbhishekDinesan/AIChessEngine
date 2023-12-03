@@ -20,6 +20,9 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
     TextDisplay *newTextDisplay = new TextDisplay;
     td = newTextDisplay;
 
+    //Xwindow* w = new Xwindow();
+    //gd = new GraphicsDisplay(*w);
+
     squares.resize(8);
     for (int row = 0; row < 8; ++row)
     {
@@ -29,6 +32,7 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
             delete squares[row][col].getOccupyingPc();
             squares[row][col].setCoords(col, row);
             squares[row][col].attach(td);
+            //squares[row][col].attach(gd);
         }
     }
 

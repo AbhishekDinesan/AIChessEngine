@@ -11,13 +11,15 @@
 class Board
 {
     // 2D Vector of Squares to represent the board.
-
+    TextDisplay *td;
+    //GraphicsDisplay *gd;
+    
 public:
     std::vector<std::vector<Square>> squares; // made this public temporary
     Board(bool emptyBoard);
     ~Board();
 
-    TextDisplay *td;
+    
     void addPiece(int x, int y, char c);
     void removePiece(int x, int y);
     bool isOccupied(int x, int y);
