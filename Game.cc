@@ -76,5 +76,5 @@ std::ostream &operator<<(std::ostream &out, const Game &g)
 
 void Game::printBoard()
 {
-    cout << *board->td;; // Use a pointer to dereference and print the Board
+    board->printBoard(); 
 }

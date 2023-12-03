@@ -13,7 +13,7 @@ class Board
     // 2D Vector of Squares to represent the board.
     TextDisplay *td;
     //GraphicsDisplay *gd;
-    
+
 public:
     std::vector<std::vector<Square>> squares; // made this public temporary
     Board(bool emptyBoard);
@@ -33,6 +33,7 @@ public:
     bool isCheckMate();
     void movePiece(int fromX, int fromY, int toX, int toY);
     void undoMove();
+    void printBoard();
     friend class Move;
     friend std::ostream &operator<<(std::ostream &out, const Board &b);
 };
