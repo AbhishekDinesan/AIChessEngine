@@ -15,11 +15,13 @@ class Move
 {
     Board *board;
     //Piece *piece;
-    int fromX, fromY, toX, toY;
+    
     Piece *captured; 
     bool didcapture; 
 
  public:
+    int fromX, fromY, toX, toY; 
+
     Move(Board *board, int fromX, int fromY, int toX, int toY); 
     ~Move();
     Piece* CapturedPiece();

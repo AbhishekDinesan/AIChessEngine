@@ -5,6 +5,7 @@
 #include "PawnPiece.h"
 #include <ostream>
 #include <utility>
+#include <iostream> 
 using namespace std;
 
 Game::Game(bool whiteToMove, bool customProvided, Board* theCustomBoard) : moveCount{0}, whiteToMove{whiteToMove}, board{theCustomBoard} { 
@@ -71,6 +72,20 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
 {
     cout << "(2)" << endl;
     Move m = Move(board, fromX, fromY, toX, toY);
+
+    //TEMPORARY, PLEASE DELETE: 
+    std::vector<Move> moves = m.possibleMoves(board->getPiecePtr(fromX, fromY));  
+
+    Piece *pc = board->getPiecePtr(fromX, fromY);
+    std::cout << "For Piece: " << (int)pc->pieceType() << endl; 
+
+    for(Move move : moves) {
+        std::cout << (int)move.toX << " " << (int)move.toY << endl; 
+    }
+
+
+
+
     cout << "(3)" << endl;
    if (m.isValidMove()) {
         board->movePiece(fromX, fromY, toX, toY);
