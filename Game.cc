@@ -1,6 +1,6 @@
 #include "Game.h"
-#include "Board.h"          // Assuming you have a board.h file
-#include "AbstractPlayer.h" // Assuming you have a player.h file
+#include "Board.h"         
+#include "AbstractPlayer.h" 
 #include "AbstractPiece.h"
 #include "PawnPiece.h"
 #include <ostream>

@@ -48,6 +48,7 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
         }
         return;
     }
+    
 
     Rook *blackLRook = new Rook(false, true, true, 0, 0);
     Rook *blackRiRook = new Rook(false, true, true, 7, 0);
