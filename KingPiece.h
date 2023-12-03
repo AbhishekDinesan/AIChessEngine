@@ -5,15 +5,11 @@
 
 class King : public Piece
 {
-    bool isWhite;
-    bool isAlive;
     bool inCheck;
     bool beenMoved;
-    // Move nextMove {};
-    int x, y;
 
 public:
-    King(bool isWhite, bool isAlive, bool inCheck, bool beenMoved, int x, int y);
+    King(bool isWhite, bool isAlive, int x, int y, bool inCheck, bool beenMoved);
     bool isValidMove(Move &m) override;
     bool getColour() const override;
     bool getAlive() const override;

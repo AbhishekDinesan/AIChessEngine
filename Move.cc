@@ -74,7 +74,7 @@ bool Move::isValidMove() {
         }
 
         //check if there is an opponent on the position that we want to move to (capture): 
-        if (pieceAtMove != nullptr && pieceAtMove->getColour() != p->getColour()) {
+        if (pieceAtMove->pieceType() != PieceEnum::None && pieceAtMove->getColour() != p->getColour()) {
             didcapture = true; 
             captured = pieceAtMove; 
         }
@@ -126,7 +126,7 @@ bool Move::isValidMove() {
                     pieceAtMove->pieceType() != PieceEnum::None) {
                         return false;
             }
-            pawnptr->firstMove = false; 
+            pawnptr->setFirstMove(false); 
         }
         // Diagonal capture
         else if(abs(deltaX) == 1 && deltaY == direction) {
@@ -170,7 +170,7 @@ bool Move::isValidMove() {
         int checkY = currentY + stepY;
 
         while (checkX != toX || checkY != toY) {
-            if (board->getPiecePtr(checkX, checkY) != nullptr) {
+            if (board->getPiecePtr(checkX, checkY)->pieceType() != PieceEnum::None) {
                 return false; // Obstruction in the path
             }
             checkX += stepX;
@@ -209,7 +209,7 @@ bool Move::isValidMove() {
 
         //cannot "jump" over any other pieces 
         while (checkX != toX || checkY != toY) {
-            if (board->getPiecePtr(checkX, checkY) != nullptr) {
+            if (board->getPiecePtr(checkX, checkY)->pieceType() != PieceEnum::None) {
                 return false; 
             }
             checkX += stepX;
@@ -217,7 +217,7 @@ bool Move::isValidMove() {
         }
 
         //seeing if there is another piece at the spot we want to move to. 
-        if (pieceAtMove != nullptr) {
+        if (pieceAtMove->pieceType() != PieceEnum::None) {
             //can't capture own piece. 
             if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; 
@@ -246,7 +246,7 @@ bool Move::isValidMove() {
         Piece* pieceAtMove = board->getPiecePtr(toX, toY);
 
         // Check if there's a piece at the destination
-        if (pieceAtMove != nullptr) {
+        if (pieceAtMove->pieceType() != PieceEnum::None) {
             // If there is a piece, check if it's a capture (cannot capture pieces of the same color)
             if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; // Cannot capture own piece
@@ -298,10 +298,17 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                 moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + direction));
             }
 
-            //first move(two square) 
-            //checks for: first move, within bounds, no obstructions 
+            //Forward move (two squares)
+            //checkes for first move, no obstructions, 
+            if(isWithinBounds(currentX, currentY + direction * 2) && pawnptr->isFirstMove() && 
+               board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None && 
+               board->getPiecePtr(currentX, currentY + direction * 2)->pieceType() == PieceEnum::None) {
+                moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + direction * 2)); 
+            }
+
             // Capture to the right (from the pawn's perspective)
-            if(isWithinBounds(currentX + 1, currentY + direction) && 
+            //checks for: move within bounds, piece at diagonal is opponent. 
+            if(isWithinBounds(currentX + 1, currentY + direction) && pawnptr->isFirstMove() && 
                board->getPiecePtr(currentX + 1, currentY + direction)->getColour() != pawnptr->getColour()
                && board->getPiecePtr(currentX + 1, currentY + direction)->pieceType() != PieceEnum::None) {
                 Move newmove = Move(this->board, currentX, currentY, currentX + 1, currentY + direction);

@@ -4,10 +4,6 @@
 #include "AbstractPiece.h"
 
 class None : public Piece {
-    bool isWhite;
-    bool isAlive;
-    //Move nextMove {};
-    int x, y;
  public:
     None(int x, int y);
     bool isValidMove(Move &m) override; // CHANGED THIS TO A BOOL, I THINK THIS IS BETTER

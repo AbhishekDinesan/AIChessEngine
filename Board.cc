@@ -128,6 +128,8 @@ Board::~Board()
     }
 }
 
+//this function deleted the "old piece" and replaces the piece at the new index with the one we are moving
+//replaces the piece at the old position with a None piece. 
 void Board::movePiece(int fromX, int fromY, int toX, int toY)
 {
     cout << "(2)" << endl;

@@ -5,11 +5,6 @@
 
 class Knight : public Piece
 {
-    bool isWhite;
-    bool isAlive;
-    // Move nextMove {};
-    int x, y;
-
 public:
     Knight(bool isWhite, bool isAlive, int x, int y);
     bool isValidMove(Move &m) override;

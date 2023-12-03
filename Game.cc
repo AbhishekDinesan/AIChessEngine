@@ -54,6 +54,7 @@ bool Game::endGame()
     return true;
 }
 
+/* 
 void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be called from the game function
 {
     cout << "(2)" << endl;
@@ -77,6 +78,36 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         board->movePiece(fromX, fromY, toX, toY);
         // ADD THE MOVE TO A VECTOR FOR THE UNDO FUNCTION
    }
+}
+*/ 
+
+void Game::movePiece(int fromX, int fromY, int toX, int toY) {
+    Piece *pc = board->getPiecePtr(fromX, fromY); 
+    if(pc->pieceType() == PieceEnum::None) {
+        cout << "No Piece at Selected Index" << endl; 
+        return; 
+    } 
+
+    //check for the right player's turn:
+    bool isWhitePiece = (pc->getColour() == true); 
+    if(isWhitePiece != whiteToMove) {
+        cout << "Not your Turn!" << endl; 
+        return; 
+    }
+
+    //move logic: 
+    Move m = Move(board, fromX, fromY, toX, toY);
+
+    //TEMPORARY, PLEASE DELETE: 
+    std::vector<Move> moves = m.possibleMoves(board->getPiecePtr(fromX, fromY));  
+    for(Move move : moves) {
+        std::cout << (int)move.toX << " " << (int)move.toY << endl; 
+    } 
+
+    if(m.isValidMove()) {
+        board->movePiece(fromX, fromY, toX, toY); 
+        whiteToMove = !whiteToMove; 
+    }
 }
 
 void Game::addPiece(int x, int y, char piece) {

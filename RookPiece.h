@@ -5,14 +5,10 @@
 
 class Rook : public Piece
 {
-    bool isWhite;
-    bool isAlive;
-    bool canCastleFlag;
-    // Move nextMove {};
-    int x, y;
+    bool canCastleFlag; 
 
 public:
-    Rook(bool isWhite, bool isAlive, bool canCastleFlag, int x, int y);
+    Rook(bool isWhite, bool isAlive, int x, int y, bool canCastleFlag);
     bool isValidMove(Move &m) override;
     bool getColour() const override;
     bool getAlive() const override;

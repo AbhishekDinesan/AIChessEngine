@@ -1,8 +1,8 @@
 #include "AbstractPiece.h"
 #include "PawnPiece.h"
 
-Pawn::Pawn(bool isWhite, bool isAlive, bool firstMove, int x, int y) : isWhite{isWhite}, isAlive{isAlive}, firstMove{firstMove}, x{x}, y{y} {
-}
+Pawn::Pawn(bool isWhite, bool isAlive, bool firstMove, int x, int y) 
+    : Piece(isWhite, isAlive, x, y), firstMove{firstMove}, isEnPassantable{false} {}  
 
 bool Pawn::getColour() const { return isWhite; }
 bool Pawn::getAlive() const { return isAlive; }
@@ -15,6 +15,10 @@ PieceEnum Pawn::pieceType() { return PieceEnum::Pawn; }
 void Pawn::setX(int newX) { 
     x = newX; 
     return;
+}
+
+void Pawn::setFirstMove(bool b) {
+    this->firstMove = b; 
 }
 
 void Pawn::setY(int newY) { 
