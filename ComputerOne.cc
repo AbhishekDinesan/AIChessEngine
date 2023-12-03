@@ -35,8 +35,8 @@ public:
             }
         }
         int vectorLength = masterVector.size();
-        std::srand(static_cast<unsigned>(std::time(0)));
-        int random_number = std::rand() % (vectorLength - 0 + 1) + 0;
+        srand(static_cast<unsigned>(std::time(0)));
+        int random_number = rand() % (vectorLength + 1);
         m = masterVector[random_number];
     }
 };
