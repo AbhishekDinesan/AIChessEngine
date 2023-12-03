@@ -10,6 +10,12 @@
 #include "Game.h" 
 #include "Board.h" 
 
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// WE MUST CHANGE ALL INSTANCES OF None TO NonePc FOR GRAPHICS TO WORK
+//  ALSO CHANGE ALL nullptr to PieceEnum::NonePc MOVE LOGIC WAS MESSED UP A BIT 
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Move::Move(Board *board, int fromX, int fromY, int toX, int toY) :
 board{board}, fromX{fromX}, fromY{fromY}, toX{toX}, toY{toY} {
