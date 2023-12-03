@@ -277,6 +277,7 @@ bool isWithinBounds(int x, int y) {
 
 std::vector<Move> Move::possibleMoves(Piece *p) {
     std::vector<Move> moves;
+
     int currentX = p->getX();
     int currentY = p->getY();
 
@@ -284,67 +285,436 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
 
         //********* PAWN POSSIBLE MOVES ************ 
         case PieceEnum::Pawn: {
-            Pawn *pawnptr = dynamic_cast<Pawn *>(p);  
+            //need to dynamically cast to a Pawn to access pawn methods: 
+            Pawn *pawnptr = dynamic_cast<Pawn *>(p);
 
-            //direction of moves based on colour: 
-            int direction = (pawnptr->getColour() == true) ? 1 : -1; 
-            //check forward move
-            if (board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None) {
+            // Direction of moves based on colour:
+            int direction = (pawnptr->getColour() != true) ? 1 : -1;
+
+            // Forward move (one square)
+            //checks for: within bounds, no obsturctions, 
+            if (isWithinBounds(currentX, currentY + direction) &&
+                board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None) {
                 moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + direction));
             }
-            //check captures
-            if (isWithinBounds(currentX + 1, currentY + direction) && 
-                board->getPiecePtr(currentX + 1, currentY + direction)->getColour() != p->getColour()) {
-                moves.push_back(Move(this->board, currentX, currentY, currentX + 1, currentY + direction));
-            }
-            if (isWithinBounds(currentX - 1, currentY + direction) && 
-                board->getPiecePtr(currentX - 1, currentY + direction)->getColour() != p->getColour()) {
-                moves.push_back(Move(this->board, currentX, currentY, currentX - 1, currentY + direction));
+
+            //first move(two square) 
+            //checks for: first move, within bounds, no obstructions 
+            // Capture to the right (from the pawn's perspective)
+            if(isWithinBounds(currentX + 1, currentY + direction) && 
+               board->getPiecePtr(currentX + 1, currentY + direction)->getColour() != pawnptr->getColour()
+               && board->getPiecePtr(currentX + 1, currentY + direction)->pieceType() != PieceEnum::None) {
+                Move newmove = Move(this->board, currentX, currentY, currentX + 1, currentY + direction);
+                newmove.didcapture = true; 
+                moves.push_back(newmove); 
             }
 
-            //moving two space in the first move for Pawns: 
-            //need to check if the move is within bounds, that moving two spaces is unobstructed (Pawn can't jump), and 
-            //the move is within the bounds of the board. 
-            if (pawnptr->isFirstMove() && 
-                    isWithinBounds(currentX, currentY + 2 * direction) && //is move within board's bounds. 
-                    board->getPiecePtr(currentX, currentY + direction)->pieceType() == PieceEnum::None && //
-                    board->getPiecePtr(currentX, currentY + 2 * direction)->pieceType() == PieceEnum::None) {
-                    moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + 2 * direction));
+
+            //capture to the left (from pawn's perspective): 
+            //checks for: move within bounds, piece at diagonal is opponent. 
+            if(isWithinBounds(currentX - 1, currentY + direction) && 
+               board->getPiecePtr(currentX - 1, currentY + direction)->getColour() != pawnptr->getColour()
+               && board->getPiecePtr(currentX - 1, currentY + direction)->pieceType() != PieceEnum::None) {
+                Move newmove = Move(this->board, currentX, currentY, currentX - 1, currentY + direction);
+                newmove.didcapture = true; 
+                moves.push_back(newmove); 
             }
+
+            //check for: en passant. 
+            return moves; 
         }
 
         //********* BISHOP POSSIBLE MOVES ************
         case PieceEnum::Bishop: {
-            //need to check in all 4 directions. 
-            //step by 2 in X direction and by 2 in Y direction: 
-            for (int deltaX = -1; deltaX <= 1; deltaX += 2) {
-                for (int deltaY = -1; deltaY <= 1; deltaY += 2) {
-                    int checkX = currentX + deltaX;
-                    int checkY = currentY + deltaY;
-                    
-                    //check until we are out of bounds, or blocked. 
-                    while (isWithinBounds(checkX, checkY)) {
-                        Piece *pieceAtSquare = board->getPiecePtr(checkX, checkY);
+            // Iterate to the top-left direction
+            for (int i = 1; i <= std::min(currentX, currentY); ++i) {
+                int x = currentX - i;
+                int y = currentY - i;
 
-                        if (pieceAtSquare->pieceType() == PieceEnum::None) {
-                            // Empty square - add as a possible move
-                            moves.push_back(Move(this->board, currentX, currentY, checkX, checkY));
-                        } else {
-                            // Encounter another piece
-                            if (pieceAtSquare->getColour() != p->getColour()) {
-                                // Opponent's piece - can capture it
-                                moves.push_back(Move(this->board, currentX, currentY, checkX, checkY));
-                            }
-                            //bishop cannot jump 
-                            break;
-                        }
-                        checkX += deltaX;
-                        checkY += deltaY;
+                // Check for no obstructions
+                if (board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    // If it's an opponent's piece, add as a capture move
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                        board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
                     }
+                    // Bishop cannot jump over pieces, so break the loop
+                    break;
+                }
+
+                // If the diagonal square is empty, add as a potential move
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+
+            //Iterate to the top-right direction 
+            for(int i = 1; currentX + i < 8 && currentY - i >= 0; ++i) {
+                int x = currentX + i;
+                int y = currentY - i;
+
+                if(board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                       board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
+                    }
+                    break;
+                }
+
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+
+            //iterate to the bottom-left direction: 
+            for(int i = 1; currentX - i >= 0 && currentY + i < 8; ++i) {
+                int x = currentX - i;
+                int y = currentY + i;
+
+                if(board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                       board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
+                    }
+                    break;
+                }
+
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+
+            //iterate to the bottom-left direction 
+            for(int i = 1; currentX + i < 8 && currentY + i < 8; ++i) {
+                int x = currentX + i;
+                int y = currentY + i;
+
+                if (board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                       board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
+                    }
+                    break;
+                }
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+            return moves; 
+        }
+
+        //********* QUEEN POSSIBLE MOVES ************ 
+        case PieceEnum::Queen: {
+            // Iterate to the top-left direction
+            for (int i = 1; i <= std::min(currentX, currentY); ++i) {
+                int x = currentX - i;
+                int y = currentY - i;
+
+                // Check for no obstructions
+                if (board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    // If it's an opponent's piece, add as a capture move
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                        board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
+                    }
+                    // Bishop cannot jump over pieces, so break the loop
+                    break;
+                }
+
+                // If the diagonal square is empty, add as a potential move
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+
+            //Iterate to the top-right direction 
+            for(int i = 1; currentX + i < 8 && currentY - i >= 0; ++i) {
+                int x = currentX + i;
+                int y = currentY - i;
+
+                if(board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                       board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
+                    }
+                    break;
+                }
+
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+
+            //iterate to the bottom-left direction: 
+            for(int i = 1; currentX - i >= 0 && currentY + i < 8; ++i) {
+                int x = currentX - i;
+                int y = currentY + i;
+
+                if(board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                       board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
+                    }
+                    break;
+                }
+
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+
+            //iterate to the bottom-left direction 
+            for(int i = 1; currentX + i < 8 && currentY + i < 8; ++i) {
+                int x = currentX + i;
+                int y = currentY + i;
+
+                if (board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                    if(board->getPiecePtr(x, y)->getColour() != p->getColour() && 
+                       board->getPiecePtr(x, y)->pieceType() != PieceEnum::None) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, y); 
+                            capturemove.didcapture = true; 
+                            moves.push_back(capturemove); 
+                    }
+                    break;
+                }
+                moves.push_back(Move(this->board, currentX, currentY, x, y));
+            }
+
+            //check horizontally to the right:
+            for(int x = currentX + 1; x < 8; x ++) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(x,currentY)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, currentY); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, x, currentY)); 
+                }
+            }
+
+            //check horizontally to the left: 
+            for(int x = currentX - 1; x >= 0; x --) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(x,currentY)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, currentY); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, x, currentY)); 
+                }
+            }
+
+
+            //check vertically down: 
+            for(int y = currentY - 1; y >= 0; y --) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(currentX, y)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, currentX, y); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, currentX, y)); 
+                }
+            }
+
+            //check vertically up: 
+            for(int y = currentY + 1; y < 8; y ++) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(currentX, y)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, currentX, y); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, currentX, y)); 
+                }
+            } 
+
+            return moves; 
+        }
+    
+
+        //********* ROOK POSSIBLE MOVES ************  
+        case PieceEnum::Rook: {
+            //check horizontally to the right:
+            for(int x = currentX + 1; x < 8; x ++) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(x,currentY)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, currentY); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, x, currentY)); 
+                }
+            }
+
+            //check horizontally to the left: 
+            for(int x = currentX - 1; x >= 0; x --) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(x, currentY)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(x,currentY)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, x, currentY); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, x, currentY)); 
+                }
+            }
+
+
+            //check vertically down: 
+            for(int y = currentY - 1; y >= 0; y --) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(currentX, y)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, currentX, y); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, currentX, y)); 
+                }
+            }
+
+            //check vertically up: 
+            for(int y = currentY + 1; y < 8; y ++) {
+                //Is there a piece in the way? We can capture this piece. 
+                if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None) {
+                     if(board->getPiecePtr(currentX, y)->pieceType() != PieceEnum::None
+                        && board->getPiecePtr(currentX, y)->getColour()!= p->getColour()) {
+                            Move capturemove = Move(this->board, currentX, currentY, currentX, y); 
+                            moves.push_back(capturemove); 
+                    }
+                    break; 
+                    //normal move: 
+                } else {
+                    moves.push_back(Move(this->board, currentX, currentY, currentX, y)); 
+                }
+            } 
+            return moves; 
+        }
+
+        //********* KING POSSIBLE MOVES ************ 
+        case PieceEnum::King: {
+            //moving up: 
+            //check for: within bounds, and capture, 
+            if(isWithinBounds(currentX, currentY + 1)) {
+                if(board->getPiecePtr(currentX, currentY + 1)->getColour() != p->getColour() &&
+                   board->getPiecePtr(currentX, currentY + 1)->pieceType() != PieceEnum::None) {
+                    //capture: 
+                    Move capturemove = Move(this->board, currentX, currentY, currentX, currentY + 1); 
+                    capturemove.didcapture = true; 
+                    moves.push_back(capturemove); 
+                } else if(board->getPiecePtr(currentX, currentY + 1)->pieceType() == PieceEnum::None){
+                    //no capture:
+                    moves.push_back(Move(this->board, currentX, currentY, currentX, currentY + 1)); 
+                }
+            }
+
+            //moving down:
+            //check for: within bounds, and capture: 
+            if(isWithinBounds(currentX, currentY - 1)) {
+                if(board->getPiecePtr(currentX, currentY - 1)->getColour() != p->getColour() &&
+                   board->getPiecePtr(currentX, currentY - 1)->pieceType() != PieceEnum::None) {
+                    //capture: 
+                    Move capturemove = Move(this->board, currentX, currentY, currentX, currentY - 1); 
+                    capturemove.didcapture = true; 
+                    moves.push_back(capturemove); 
+                } else if(board->getPiecePtr(currentX, currentY - 1)->pieceType() == PieceEnum::None){
+                    //no capture:
+                    moves.push_back(Move(this->board, currentX, currentY, currentX, currentY - 1)); 
+                }
+            }    
+
+            //moving right: 
+            //check for: within bounds, and capture: 
+            if(isWithinBounds(currentX + 1, currentY)) {
+                if(board->getPiecePtr(currentX + 1, currentY)->getColour() != p->getColour() &&
+                   board->getPiecePtr(currentX + 1, currentY)->pieceType() != PieceEnum::None) {
+                    //capture: 
+                    Move capturemove = Move(this->board, currentX, currentY, currentX + 1 , currentY); 
+                    capturemove.didcapture = true; 
+                    moves.push_back(capturemove); 
+                } else if(board->getPiecePtr(currentX + 1, currentY)->pieceType() == PieceEnum::None){
+                    //no capture:
+                    moves.push_back(Move(this->board, currentX, currentY, currentX + 1, currentY)); 
+                }
+            }    
+
+            //moving left:  
+            //check for: within bounds, and capture:  
+            if(isWithinBounds(currentX - 1, currentY)) {
+                if(board->getPiecePtr(currentX - 1, currentY)->getColour() != p->getColour() &&
+                   board->getPiecePtr(currentX - 1, currentY)->pieceType() != PieceEnum::None) {
+                    //capture: 
+                    Move capturemove = Move(this->board, currentX, currentY, currentX - 1 , currentY); 
+                    capturemove.didcapture = true; 
+                    moves.push_back(capturemove); 
+                } else if(board->getPiecePtr(currentX - 1, currentY)->pieceType() == PieceEnum::None){
+                    //no capture:
+                    moves.push_back(Move(this->board, currentX, currentY, currentX - 1, currentY)); 
+                }
+            }   
+        }
+        
+        case PieceEnum::Knight: {
+            //2D Vector that is going to store the possible movements that a Knight can make in X,Y pairs. 
+            int knightMoves[8][2] = {
+                {1, 2}, {2, 1}, {-1, 2}, {-2, 1},
+                {1, -2}, {2, -1}, {-1, -2}, {-2, -1}
+            };
+
+            //loop over possible relative moves: 
+            for(int i = 0; i < 8; i++) {
+                int newX = currentX + knightMoves[i][0];
+                int newY = currentY + knightMoves[i][1];
+
+                //checks for: 
+                //within bounds, and enemy piece: 
+                if(isWithinBounds(newX, newY)) {
+                    // Check if the target square is empty or contains an enemy piece
+                    if(board->getPiecePtr(newX, newY)->getColour() != p->getColour()) {
+                        Move move = Move(this->board, currentX, currentY, newX, newY); 
+
+                        //make the move.didcapture flag be true, if the possible move has a piece on it. 
+                        move.didcapture = (board->getPiecePtr(newX, newY)->pieceType() != PieceEnum::None);
+                        moves.push_back(move); 
+                    } 
                 }
             }
             break;
         }
+
+
+        //********* NONE POSSIBLE MOVES ************  
+        case PieceEnum::None: {
+            return moves; 
+        }
+
     }
 
 
