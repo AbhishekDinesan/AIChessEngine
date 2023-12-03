@@ -12,12 +12,7 @@ class ComputerOne : public Computer
 {
 
 public:
-    ComputerOne(Board *myboard)
-    {
-        isHuman = false;
-        isInCheck = false;
-        board = myboard;
-    }
+    ComputerOne(bool isHuman, bool isInCheck, Board *myboard) : Computer(isHuman, isInCheck, myboard) {}
     virtual void makeMove(int startFile, int startRank, int endFile, int endRank)
         override
     {

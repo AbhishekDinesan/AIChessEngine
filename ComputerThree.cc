@@ -1,11 +1,13 @@
 #include "AbstractComputer.h"
 #include <vector>
-#include "Move.h" 
+#include "Move.h"
 
 using namespace std;
 
 class ComputerThree : public Computer
 {
+    ComputerThree(bool isHuman, bool isInCheck, Board *myboard) : Computer(isHuman, isInCheck, myboard) {}
+
 public:
     void makeMove(int startFile, int startRank, int endFile, int endRank)
         override

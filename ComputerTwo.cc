@@ -6,6 +6,8 @@ using namespace std;
 
 class ComputerTwo : public Computer
 {
+    ComputerTwo(bool isHuman, bool isInCheck, Board *myboard) : Computer(isHuman, isInCheck, myboard) {}
+
 public:
     void makeMove(int startFile, int startRank, int endFile, int endRank)
         override

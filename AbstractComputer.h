@@ -6,15 +6,8 @@
 
 class Computer : public AbstractPlayer
 {
-    Computer(Board *myboard)
-    {
-        isHuman = false;
-        isInCheck = false;
-        board = myboard;
-    }
-
 protected:
-    Computer() {}
+    Computer(bool isHuman, bool isInCheck, Board *myboard) : AbstractPlayer(isHuman, isInCheck, myboard) {}
 
 public:
     virtual void makeMove(int startFile, int startRank, int endFile, int endRank) = 0;
