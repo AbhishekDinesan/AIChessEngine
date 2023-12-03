@@ -3,9 +3,8 @@
 class ComputerFour : public Computer
 {
 public:
-    void makeMove(Move &m) override
+    void makeMove(int startFile, int startRank, int endFile, int endRank)
+        override
     {
-        // Implement logic for difficulty level 0
-        // ...
     }
 };

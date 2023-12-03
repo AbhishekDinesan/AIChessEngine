@@ -20,25 +20,27 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
     TextDisplay *newTextDisplay = new TextDisplay;
     td = newTextDisplay;
 
-    
     squares.resize(8);
-    for (int row = 0; row < 8; ++row) {
+    for (int row = 0; row < 8; ++row)
+    {
         squares[row].resize(8);
-        for (int col = 0; col < 8; ++col) {
+        for (int col = 0; col < 8; ++col)
+        {
             delete squares[row][col].getOccupyingPc();
             squares[row][col].setCoords(col, row);
             squares[row][col].attach(td);
         }
     }
 
-    if (emptyBoard) {
+    if (emptyBoard)
+    {
         for (int row = 0; row < 8; ++row)
         {
             for (int col = 0; col < 8; ++col)
-                {
-                    None *emptypiece = new None(col, row);
-                    squares[col][row].setPiece(emptypiece);
-              }
+            {
+                None *emptypiece = new None(col, row);
+                squares[col][row].setPiece(emptypiece);
+            }
         }
         return;
     }
@@ -61,15 +63,16 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
     Queen *blackQueen = new Queen(false, true, 4, 0);
     squares[4][0].setPiece(blackQueen);
 
-    King *blackKing = new King(false, true, false, false,  5, 0);
+    King *blackKing = new King(false, true, false, false, 5, 0);
     squares[3][0].setPiece(blackKing);
 
     // PAWNS
-    for (int col = 0; col < 8; ++col) {
+    for (int col = 0; col < 8; ++col)
+    {
         Pawn *blackPawn = new Pawn(false, true, true, col, 1);
         squares[col][1].setPiece(blackPawn); // SWapped ROWS/COLS
-     }
-    
+    }
+
     // EMPTY SPACES
     for (int row = 2; row < 6; ++row)
     {
@@ -80,7 +83,8 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
         }
     }
 
-    for (int col = 0; col < 8; ++col) {
+    for (int col = 0; col < 8; ++col)
+    {
         Pawn *whitePawn = new Pawn(true, true, true, col, 6);
         squares[col][6].setPiece(whitePawn);
     }
@@ -120,18 +124,18 @@ Board::~Board()
     }
 }
 
-void Board::movePiece(int fromX, int fromY, int toX, int toY) {
+void Board::movePiece(int fromX, int fromY, int toX, int toY)
+{
     cout << "(2)" << endl;
-    Piece* movedPiece = squares[fromX][fromY].getOccupyingPc();
+    Piece *movedPiece = squares[fromX][fromY].getOccupyingPc();
     cout << "(3)" << endl;
     delete squares[toX][toY].getOccupyingPc();
-    
-    None* emptyPiece = new None(fromX, fromY);
+
+    None *emptyPiece = new None(fromX, fromY);
     squares[fromX][fromY].setPiece(emptyPiece);
     movedPiece->setX(toX);
     movedPiece->setY(toY);
     squares[toX][toY].setPiece(movedPiece);
-    
 }
 
 void Board::addPiece(int x, int y, char c)
@@ -141,47 +145,59 @@ void Board::addPiece(int x, int y, char c)
     {
         throw std::out_of_range("Coordinates are out of the board's bounds.");
     }
-    
+
     delete squares[x][y].getOccupyingPc();
 
     Piece *p;
-    if (c == 'K') {
+    if (c == 'K')
+    {
         p = new King(true, true, false, false, x, y);
-    } 
-    else if (c == 'k') {
+    }
+    else if (c == 'k')
+    {
         p = new King(false, true, false, false, x, y);
     }
-    else if (c == 'Q') {
+    else if (c == 'Q')
+    {
         p = new Queen(true, true, x, y);
     }
-    else if (c == 'q') {
+    else if (c == 'q')
+    {
         p = new Queen(false, true, x, y);
     }
-    else if (c == 'R') {
+    else if (c == 'R')
+    {
         // Potential for adding castling rights (AS OF NOW NO CASTLING WITH ADDED PIECES)
         p = new Rook(true, true, false, x, y);
     }
-    else if (c == 'r') {
+    else if (c == 'r')
+    {
         // Potential for adding castling rights (AS OF NOW NO CASTLING WITH ADDED PIECES)
         p = new Rook(false, true, false, x, y);
     }
-    else if (c == 'N') {
+    else if (c == 'N')
+    {
         p = new Knight(true, true, x, y);
     }
-    else if (c == 'n') {
+    else if (c == 'n')
+    {
         p = new Knight(false, true, x, y);
     }
-    else if (c == 'B') {
+    else if (c == 'B')
+    {
         p = new Bishop(true, true, x, y);
     }
-    else if (c == 'b') {
+    else if (c == 'b')
+    {
         p = new Bishop(false, true, x, y);
     }
-    else if (c == 'P') {
+    else if (c == 'P')
+    {
         // POTENTIAL FOR ADDING FIRST MOVE RIGHTS AND ENPASSANT PROPERTIES (AS OF NOW NONE OF THAT)
         p = new Pawn(true, true, false, x, y);
     }
-    else if (c == 'p') {
+    else if (c == 'p')
+    {
         // POTENTIAL FOR ADDING FIRST MOVE RIGHTS AND ENPASSANT PROPERTIES (AS OF NOW NONE OF THAT)
         p = new Pawn(false, true, false, x, y);
     }
@@ -221,29 +237,36 @@ bool Board::isCovered(int x, int y)
     return false;
 }
 
-Piece *Board::getPiecePtr(int x, int y) {
+Piece *Board::getPiecePtr(int x, int y)
+{
     cout << "(6)" << endl;
     return squares[x][y].getOccupyingPc();
 }
 
-bool Board::isValid() {
+bool Board::isValid()
+{
 
     int whiteKingCount = 0;
     int blackKingCount = 0;
 
-    for (int row = 0; row < 8; ++row) {
-        for (int col = 0; col < 8; ++col) {
+    for (int row = 0; row < 8; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
 
             // PAWNS ON FIRST AND LAST ROW
-            if (row == 0 || row == 7) {
-                if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::Pawn) {
+            if (row == 0 || row == 7)
+            {
+                if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::Pawn)
+                {
                     cerr << "Invalid Board Setup: No pawns can be placed on ranks 1 or 8" << endl;
                     cerr << "The board has been reverted to the default configuration." << endl;
                     return false;
                 }
             }
 
-            if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::King) {
+            if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::King)
+            {
                 (squares[row][col].getOccupyingPc()->getColour()) ? ++whiteKingCount : ++blackKingCount;
             }
         }
@@ -253,7 +276,8 @@ bool Board::isValid() {
     // Check to see if board is in a checked position
     //
 
-    if (whiteKingCount != 1 || blackKingCount != 1) {
+    if (whiteKingCount != 1 || blackKingCount != 1)
+    {
         cerr << "Invalid Board Setup: There must be exactly one king of each colour on the board" << endl;
         cerr << "The board has been reverted to the default configuration." << endl;
         return false;
@@ -266,6 +290,6 @@ std::ostream &operator<<(std::ostream &out, const Board &b)
     return out;
 }
 
-//PieceEnum Board::getPiece(int x, int y) {
-   // squares[x][y].getOccupyingPc()->pieceType();
+// PieceEnum Board::getPiece(int x, int y) {
+//  squares[x][y].getOccupyingPc()->pieceType();
 //}

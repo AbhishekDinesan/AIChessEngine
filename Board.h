@@ -11,9 +11,9 @@
 class Board
 {
     // 2D Vector of Squares to represent the board.
-    std::vector<std::vector<Square>> squares;
 
 public:
+    std::vector<std::vector<Square>> squares; // made this public temporary
     Board(bool emptyBoard);
     ~Board();
 
@@ -22,9 +22,9 @@ public:
     void removePiece(int x, int y);
     bool isOccupied(int x, int y);
     bool isCovered(int x, int y);
-    
-    //PieceEnum getPiece(int x, int y);
-    Piece* getPiecePtr(int x, int y);
+
+    // PieceEnum getPiece(int x, int y);
+    Piece *getPiecePtr(int x, int y);
 
     bool isValid();
     bool isCheck();
