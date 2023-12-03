@@ -2,7 +2,7 @@
 #include "RookPiece.h"
 #include <memory>
 
-Rook::Rook(bool isWhite, bool isAlive, bool canCastle, int x, int y) : isWhite{isWhite}, isAlive{isAlive}, canCastleFlag{canCastle}, x{x}, y{y} {}
+Rook::Rook(bool isWhite, bool isAlive, int x, int y, bool canCastle) : Piece(isWhite, isAlive, x, y), canCastleFlag{canCastle} {}
 
 bool Rook::getColour() const { return isWhite; }
 bool Rook::getAlive() const { return isAlive; }

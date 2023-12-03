@@ -5,10 +5,10 @@
 
 class Bishop : public Piece
 {
-    bool isWhite;
-    bool isAlive;
+    //bool isWhite;
+    //bool isAlive;
     // Move nextMove {};
-    int x, y;
+    //int x, y;
 
 public:
     Bishop(bool isWhite, bool isAlive, int x, int y);

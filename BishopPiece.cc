@@ -1,8 +1,8 @@
 #include "AbstractPiece.h"
 #include "BishopPiece.h"
 
-
-Bishop::Bishop(bool isWhite, bool isAlive, int x, int y) : isWhite{isWhite}, isAlive{isAlive}, x{x}, y{y} {}
+Bishop::Bishop(bool isWhite, bool isAlive, int x, int y) 
+    : Piece(isWhite, isAlive, x, y) {} 
 
 bool Bishop::getColour() const { return isWhite; }
 bool Bishop::getAlive() const { return isAlive; }

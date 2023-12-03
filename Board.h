@@ -31,6 +31,7 @@ public:
     bool isValid();
     bool isCheck();
     bool isCheckMate();
+    bool isStaleMate(); 
     void movePiece(int fromX, int fromY, int toX, int toY);
     void undoMove();
     void printBoard();

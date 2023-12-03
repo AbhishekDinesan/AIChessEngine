@@ -1,7 +1,7 @@
 #include "AbstractPiece.h"
 #include "QueenPiece.h"
 
-Queen::Queen(bool isWhite, bool isAlive, int x, int y) : isWhite{isWhite}, isAlive{isAlive}, x{x}, y{y} {}
+Queen::Queen(bool isWhite, bool isAlive, int x, int y) : Piece(isWhite, isAlive, x, y) {}
 
 bool Queen::getColour() const { return isWhite; }
 bool Queen::getAlive() const { return isAlive; }

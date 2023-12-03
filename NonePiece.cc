@@ -1,7 +1,7 @@
 #include "AbstractPiece.h"
 #include "NonePiece.h"
 
-None::None(int x, int y) : isWhite{true}, isAlive{true}, x{x}, y{y} {}
+None::None(int x, int y) : Piece(true, true, x, y) {} 
 bool None::isValidMove(Move &m) { return true; }
 bool None::getColour() const { return isWhite; }
 bool None::getAlive() const { return isAlive; }

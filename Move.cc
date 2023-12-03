@@ -126,7 +126,7 @@ bool Move::isValidMove() {
                     pieceAtMove->pieceType() != PieceEnum::None) {
                         return false;
             }
-            pawnptr->firstMove = false; 
+            pawnptr->setFirstMove(false); 
         }
         // Diagonal capture
         else if(abs(deltaX) == 1 && deltaY == direction) {
@@ -170,7 +170,7 @@ bool Move::isValidMove() {
         int checkY = currentY + stepY;
 
         while (checkX != toX || checkY != toY) {
-            if (board->getPiecePtr(checkX, checkY) != nullptr) {
+            if (board->getPiecePtr(checkX, checkY)->pieceType() != PieceEnum::None) {
                 return false; // Obstruction in the path
             }
             checkX += stepX;
@@ -209,7 +209,7 @@ bool Move::isValidMove() {
 
         //cannot "jump" over any other pieces 
         while (checkX != toX || checkY != toY) {
-            if (board->getPiecePtr(checkX, checkY) != nullptr) {
+            if (board->getPiecePtr(checkX, checkY)->pieceType() != PieceEnum::None) {
                 return false; 
             }
             checkX += stepX;
@@ -217,7 +217,7 @@ bool Move::isValidMove() {
         }
 
         //seeing if there is another piece at the spot we want to move to. 
-        if (pieceAtMove != nullptr) {
+        if (pieceAtMove->pieceType() != PieceEnum::None) {
             //can't capture own piece. 
             if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; 
@@ -246,7 +246,7 @@ bool Move::isValidMove() {
         Piece* pieceAtMove = board->getPiecePtr(toX, toY);
 
         // Check if there's a piece at the destination
-        if (pieceAtMove != nullptr) {
+        if (pieceAtMove->pieceType() != PieceEnum::None) {
             // If there is a piece, check if it's a capture (cannot capture pieces of the same color)
             if (pieceAtMove->getColour() == p->getColour() && pieceAtMove->pieceType() != PieceEnum::None) {
                 return false; // Cannot capture own piece
