@@ -288,6 +288,10 @@ bool Board::isValid()
     }
 }
 
+void Board::printBoard() {
+    cout << *this->td;
+}
+
 std::ostream &operator<<(std::ostream &out, const Board &b)
 {
     out << *(b.td);

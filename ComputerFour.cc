@@ -11,7 +11,7 @@ public:
     void makeMove(int startFile, int startRank, int endFile, int endRank)
         override
     {
-        map<Piece, vector<vector<int>>> pieceMap;
+        map<Piece*, vector<vector<int>>> pieceMap; // Made this a pointer to piece, it was causing an error
         vector<vector<int>> Pmatrix;
         vector<vector<int>> Kmatrix;
         vector<vector<int>> Qmatrix;
