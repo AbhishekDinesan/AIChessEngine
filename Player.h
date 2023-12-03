@@ -4,6 +4,7 @@
 class Player : public AbstractPlayer
 {
 public:
-    void makeMove(Move &m) = 0;
+    void makeMove(int startFile, int startRank, int endFile, int endRank)
+        override = 0;
     ~Player() = default;
 };
