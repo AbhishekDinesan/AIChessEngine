@@ -43,12 +43,15 @@ public:
             }
             Move newMove = masterVector[x];
             tempBoard.movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
+            
+            /*
             if (tempBoard.isCheck()) // if the board produced a check, then you execute move on real board
             {
                 board->movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
                 return;
             }
             // if this move will result in a capture, then execute that move
+            */ 
         }
         int vectorLength = masterVector.size();
         srand(static_cast<unsigned>(std::time(0)));

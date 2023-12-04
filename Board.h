@@ -28,7 +28,7 @@ public:
     Piece *getPiecePtr(int x, int y);
 
     bool isValid();
-    bool isCheck();
+    bool isCheck(bool KingColor);
     bool isCheckMate();
     bool isStaleMate();
     void movePiece(int fromX, int fromY, int toX, int toY);
@@ -36,6 +36,8 @@ public:
     void printBoard();
     friend class Move;
     friend std::ostream &operator<<(std::ostream &out, const Board &b);
+
+    std::vector<int> findKing(bool isWhite); 
 };
 
 #endif

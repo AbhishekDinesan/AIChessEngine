@@ -12,6 +12,8 @@
 #include "QueenPiece.h"
 #include "KingPiece.h"
 #include <stdio.h>
+#include <vector> 
+
 using namespace std;
 
 // constructor for Board
@@ -302,6 +304,53 @@ std::ostream &operator<<(std::ostream &out, const Board &b)
 {
     out << *(b.td);
     return out;
+}
+
+//iterate over each piece on the board, find the king.
+vector<int> Board::findKing(bool isWhite) {
+    vector<int> coords = {0, 0};
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::King && 
+                squares[row][col].getOccupyingPc()->getColour() == isWhite) {
+                    coords[0] = squares[row][col].getOccupyingPc()->getX();
+                    coords[1] = squares[row][col].getOccupyingPc()->getY();
+                }
+        }
+    }
+    return coords;
+}
+
+bool Board::isCheck(bool kingColor) {
+    vector<int> coords = findKing(kingColor); 
+    vector<Move> moves; 
+
+    int kingX = coords[0];
+    int kingY = coords[1];
+
+    int moveX = 0; 
+    int moveY = 0; 
+
+    for(int row = 0; row < 8; row ++) {
+        for(int col = 0; col < 8; col ++) {
+            Move currmove = Move(this, row, col, row, col); 
+
+            std::vector<Move> currmoves = currmove.possibleMoves(this->getPiecePtr(row, col));  
+
+            for(Move move: currmoves) {
+                moveX = move.toX; 
+                moveY = move.toY; 
+
+                if(moveX == kingX && moveY == kingY) {
+                    cout << "KING IN CHECK" << endl; 
+                    return true; 
+                }
+            }
+        }
+    }
+    
+    cout << "KING NOT IN CHECK" << endl; 
+    return false; 
 }
 
 // PieceEnum Board::getPiece(int x, int y) {
