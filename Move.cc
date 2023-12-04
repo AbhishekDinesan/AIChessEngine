@@ -569,7 +569,7 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                     }
                     break; 
                     //normal move: 
-                } else {
+                } else if (board->getPiecePtr(x, currentY)->pieceType() == PieceEnum::None) {
                     moves.push_back(Move(this->board, currentX, currentY, x, currentY)); 
                 }
             }
@@ -585,7 +585,7 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                     }
                     break; 
                     //normal move: 
-                } else {
+                } else (board->getPiecePtr(x, currentY)->pieceType() == PieceEnum::None){
                     moves.push_back(Move(this->board, currentX, currentY, x, currentY)); 
                 }
             }
