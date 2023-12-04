@@ -29,7 +29,7 @@ public:
 
     bool isValid();
     bool isCheck(bool KingColor);
-    bool isCheckMate();
+    bool isCheckMate(bool KingColor);
     bool isStaleMate();
     void movePiece(int fromX, int fromY, int toX, int toY);
     void undoMove();

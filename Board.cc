@@ -320,6 +320,7 @@ vector<int> Board::findKing(bool isWhite) {
     return coords;
 }
 
+
 bool Board::isCheck(bool kingColor) {
     vector<int> coords = findKing(kingColor); 
     vector<Move> moves; 
@@ -354,6 +355,70 @@ bool Board::isCheck(bool kingColor) {
     return false; 
 
 }
+
+bool wouldBeInCheckAfterMove(Move *move, Board *board, bool kingColor) {
+    Board tempboard(false, true); 
+
+    for(int row = 0; row < 8; row ++) {
+        for(int col = 0; col < 8; col ++) {
+            cout << "3" << endl;  
+            tempboard.squares[row][col].setPiece(board->squares[row][col].getOccupyingPc()); 
+        }
+    }
+
+    cout << "4" << endl;  
+    Move newmove = Move(&tempboard, move->fromX, move->fromY, move->toX, move->toY); 
+
+    cout << "5" << endl;  
+    bool isKingInCheck = tempboard.isCheck(kingColor); 
+
+    cout << "6" << endl;  
+    return isKingInCheck;  
+}
+
+bool Board::isCheckMate(bool kingColor) {
+
+    if (!isCheck(kingColor)) {
+        cout << "1" << endl; 
+        return false;  
+    }
+
+    // Check if the king can escape
+    vector<int> kingCoords = findKing(kingColor);
+    Move kingmove = Move(this, kingCoords[0], kingCoords[1], kingCoords[0], kingCoords[1]); 
+    vector<Move> kingMoves = kingmove.possibleMoves(this->getPiecePtr(kingCoords[0], kingCoords[1]));  
+
+
+
+    for (int i = 0;  i < kingMoves.size(); i ++) {
+        if (!wouldBeInCheckAfterMove(&kingMoves[i], this, kingColor)) {
+            cout << "2" << endl;  
+            return false; // King can escape
+        }
+    }
+
+    cout << "7" << endl; 
+
+    // Check if any other piece can block the check or capture the attacking piece
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            Piece* piece = getPiecePtr(row, col);
+            if (piece && piece->getColour() == kingColor && piece->pieceType() != PieceEnum::King) {
+                Move currmove = Move(this, row, col, row, col); 
+                vector<Move> piecemoves = currmove.possibleMoves(this->getPiecePtr(row, col)); 
+                for (Move move : piecemoves) {
+                    if (!wouldBeInCheckAfterMove(&move, this, kingColor)) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    
+    cout << "CHECKMATE" << endl; 
+    return true; 
+}
+
 
 // PieceEnum Board::getPiece(int x, int y) {
 //  squares[x][y].getOccupyingPc()->pieceType();
