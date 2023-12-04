@@ -3,6 +3,7 @@
 #include <sstream>
 #include "Game.h"
 #include <memory>
+#include "AbstractComputer.h"
 // ADD INCLUDE STATEMENTS
 using namespace std;
 
@@ -77,6 +78,19 @@ int main()
 
                     if (!isWhiteInit)
                     {
+                        if (cpuDifficulty == 1)
+                        {
+                            // ComputerOne();
+                        }
+                        else if (cpuDifficulty == 2)
+                        {
+                        }
+                        else if (cpuDifficulty == 3)
+                        {
+                        }
+                        else if (cpuDifficulty == 4)
+                        {
+                        }
                         //
                         // INITIALIZE WHITE PLAYER AS COMPUTER
                         //
