@@ -585,7 +585,7 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                     }
                     break; 
                     //normal move: 
-                } else (board->getPiecePtr(x, currentY)->pieceType() == PieceEnum::None){
+                } else if(board->getPiecePtr(x, currentY)->pieceType() == PieceEnum::None){
                     moves.push_back(Move(this->board, currentX, currentY, x, currentY)); 
                 }
             }
@@ -703,8 +703,8 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                 //checks for: 
                 //within bounds, and enemy piece: 
                 if(isWithinBounds(newX, newY)) {
-                    // Check if the target square is empty or contains an enemy piece
-                    if(board->getPiecePtr(newX, newY)->getColour() != p->getColour()) {
+                    //check for captures: 
+                    if(board->getPiecePtr(newX, newY)->getColour() != p->getColour() || board->getPiecePtr(newX, newY)->pieceType() == PieceEnum::None) {
                         Move move = Move(this->board, currentX, currentY, newX, newY); 
 
                         //make the move.didcapture flag be true, if the possible move has a piece on it. 
@@ -713,7 +713,7 @@ std::vector<Move> Move::possibleMoves(Piece *p) {
                     } 
                 }
             }
-            break;
+            return moves; 
         }
 
 
