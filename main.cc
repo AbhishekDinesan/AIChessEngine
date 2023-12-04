@@ -174,11 +174,13 @@ int main()
                     reset = true;
                     break;
                 }
-                else if (startRank == -1) {
+                else if (startRank == -1)
+                {
                     startRank = abs((processChar - '1') - 7);
                     cout << "SR: " << startRank << endl;
                 }
-                else {
+                else
+                {
                     endRank = abs((processChar - '1') - 7);
                     cout << (processChar - '1') << endl;
                     cout << "ER: " << endRank << endl;
@@ -205,7 +207,7 @@ int main()
             else if (!validCustomBoard)
             {
                 cout << "(0)" << endl;
-                customBoard = new Board(true);
+                customBoard = new Board(true, false);
             }
 
             while (true)
@@ -222,7 +224,7 @@ int main()
                 {
                     validCustomBoard = true;
 
-                    /* THIS IS WHAT IT WILL BE LATER, BUT LEAVE IT COMMENTED FOR TESTING 
+                    /* THIS IS WHAT IT WILL BE LATER, BUT LEAVE IT COMMENTED FOR TESTING
                     if (customBoard->isValid()) {
                         validCustomBoard = true;
                     } else {
@@ -230,7 +232,7 @@ int main()
                         validCustomBoard = false;
                     }
                     */
-                    
+
                     break;
                 }
                 else if (subCmd == "+")
@@ -313,9 +315,15 @@ int main()
                         cin.ignore(int(2147483647), '\n');
                         continue;
                     }
-                    
-                    if (colour == "white") { whiteStarts = true; }
-                    else if (colour == "black") { whiteStarts = false; }
+
+                    if (colour == "white")
+                    {
+                        whiteStarts = true;
+                    }
+                    else if (colour == "black")
+                    {
+                        whiteStarts = false;
+                    }
                     cout << colour << " player's turn" << endl;
                 }
                 else

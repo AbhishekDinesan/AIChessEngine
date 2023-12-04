@@ -7,11 +7,13 @@ using namespace std;
 
 class ComputerFour : public Computer
 {
+    ComputerFour(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
+
 public:
     void makeMove(int startFile, int startRank, int endFile, int endRank)
         override
     {
-        map<Piece*, vector<vector<int>>> pieceMap; // Made this a pointer to piece, it was causing an error
+        map<Piece *, vector<vector<int>>> pieceMap; // Made this a pointer to piece, it was causing an error
         vector<vector<int>> Pmatrix;
         vector<vector<int>> Kmatrix;
         vector<vector<int>> Qmatrix;
@@ -97,7 +99,7 @@ public:
         for (int x = 0; x < masterVector.size(); x++)
         {
 
-            Board tempboard = board;
+            // Board tempboard = board;
             Move m = masterVector[x];
             // execute the move
             // evaluate the board
