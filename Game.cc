@@ -55,12 +55,15 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
     for (Move move : moves)
     {
         std::cout << (int)move.toX << " " << (int)move.toY << endl;
+
     }
 
     cout << "(3)" << endl;
     if (m.isValidMove())
     {
         board->movePiece(fromX, fromY, toX, toY);
+        board->isCheck(true); 
+        board->isCheck(false); 
         // ADD THE MOVE TO A VECTOR FOR THE UNDO FUNCTION
     }
 }
