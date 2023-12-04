@@ -13,13 +13,15 @@ public:
     void makeMove(int startFile, int startRank, int endFile, int endRank)
         override
     {
-        map<Piece *, vector<vector<int>>> pieceMap; // Made this a pointer to piece, it was causing an error
+        map<PieceEnum, vector<vector<int>>> pieceMap; // Made this a pointer to piece, it was causing an error
         vector<vector<int>> Pmatrix;
         vector<vector<int>> Kmatrix;
         vector<vector<int>> Qmatrix;
         vector<vector<int>> Rmatrix;
         vector<vector<int>> Nmatrix;
         vector<vector<int>> Bmatrix;
+
+        // prefer capturing moves, checking problem
 
         Pmatrix = {{0, 0, 0, 0, 0, 0, 0, 0},
                    {50, 50, 50, 50, 50, 50, 50, 50},
@@ -30,7 +32,7 @@ public:
                    {5, 10, 10, -20, -20, 10, 10, 5},
                    {0, 0, 0, 0, 0, 0, 0, 0}};
 
-        Kmatrix = {{-50, -40, -30, -30, -30, -30, -40, -50},
+        Nmatrix = {{-50, -40, -30, -30, -30, -30, -40, -50},
                    {-40, -20, 0, 0, 0, 0, -20, -40},
                    {-30, 0, 10, 15, 15, 10, 0, -30},
                    {-30, 5, 15, 20, 20, 15, 5, -30},
@@ -74,8 +76,13 @@ public:
                    {-10, -20, -20, -20, -20, -20, -20, -10},
                    {20, 20, 0, 0, 0, 0, 20, 20},
                    {20, 30, 10, 0, 0, 10, 30, 20}};
-        Pawn P();
-        // pieceMap[P] = Pmatrix;
+
+        pieceMap[PieceEnum::Pawn] = Pmatrix;
+        pieceMap[PieceEnum::Bishop] = Bmatrix;
+        pieceMap[PieceEnum::Knight] = Nmatrix;
+        pieceMap[PieceEnum::Rook] = Rmatrix;
+        pieceMap[PieceEnum::Queen] = Qmatrix;
+        pieceMap[PieceEnum::King] = Kmatrix;
 
         /*
         loop through the possible moves
