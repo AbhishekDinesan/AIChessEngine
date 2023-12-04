@@ -351,6 +351,7 @@ bool Board::isCheck(bool kingColor) {
     
     cout << "KING NOT IN CHECK" << endl; 
     return false; 
+    
 }
 
 // PieceEnum Board::getPiece(int x, int y) {
