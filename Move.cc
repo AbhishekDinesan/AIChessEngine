@@ -38,8 +38,6 @@ bool Move::isValidMove() {
     // Create the target coordinates
     //coords movingTo = {x, y};
 
-    
-    cout << "(4)" << endl;
     Piece *p = board->getPiecePtr(fromX, fromY);
     //thisPiece represents the type of the piece that we are trying to move. 
     //Piece *thisPiece = board->getPiecePtr(p->getX(), p->getY()); 
@@ -47,7 +45,6 @@ bool Move::isValidMove() {
     int currentY = p->getY(); 
     Piece *pieceAtMove = board->getPiecePtr(toX,toY);
 
-    cout << "(6)" << endl;
     //********** BISHOP MOVE **********
     if(p->pieceType() == PieceEnum::Bishop) { 
         int deltaX = abs(currentX - toX); 
@@ -238,7 +235,6 @@ bool Move::isValidMove() {
 
         // Check for L-shaped move: 2 squares in one direction and 1 square in the other
         if (!((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2))) {
-            cout << "HERE" << endl;
             return false; 
         }
 
