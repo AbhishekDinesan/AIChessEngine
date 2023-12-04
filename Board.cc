@@ -52,8 +52,8 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
     }
     
 
-    Rook *blackLRook = new Rook(false, true, true, 0, 0);
-    Rook *blackRiRook = new Rook(false, true, true, 7, 0);
+    Rook *blackLRook = new Rook(false, true, 0, 0, true);
+    Rook *blackRiRook = new Rook(false, true, 7,0, true); 
     squares[0][0].setPiece(blackLRook);
     squares[7][0].setPiece(blackRiRook);
 
@@ -70,7 +70,7 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
     Queen *blackQueen = new Queen(false, true, 4, 0);
     squares[4][0].setPiece(blackQueen);
 
-    King *blackKing = new King(false, true, false, false, 5, 0);
+    King *blackKing = new King(false, true, 5, 0, false, false);
     squares[3][0].setPiece(blackKing);
 
     // PAWNS
@@ -96,8 +96,8 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
         squares[col][6].setPiece(whitePawn);
     }
 
-    Rook *whiteLRook = new Rook(true, true, true, 0, 7);
-    Rook *whiteRiRook = new Rook(true, true, true, 7, 7);
+    Rook *whiteLRook = new Rook(true, true, 0, 7, true);
+    Rook *whiteRiRook = new Rook(true, true, 7, 7, true);
     squares[0][7].setPiece(whiteLRook);
     squares[7][7].setPiece(whiteRiRook);
 
@@ -114,7 +114,7 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
     Queen *whiteQueen = new Queen(true, true, 3, 7);
     squares[3][7].setPiece(whiteQueen);
 
-    King *whiteKing = new King(true, true, false, false, 4, 7);
+    King *whiteKing = new King(true, true, 4, 7, false, false);
     squares[4][7].setPiece(whiteKing);
 }
 
@@ -160,11 +160,11 @@ void Board::addPiece(int x, int y, char c)
     Piece *p;
     if (c == 'K')
     {
-        p = new King(true, true, false, false, x, y);
+        p = new King(true, true, x, y, false, false);
     }
     else if (c == 'k')
     {
-        p = new King(false, true, false, false, x, y);
+        p = new King(false, true, x, y, false, false);
     }
     else if (c == 'Q')
     {
@@ -177,12 +177,12 @@ void Board::addPiece(int x, int y, char c)
     else if (c == 'R')
     {
         // Potential for adding castling rights (AS OF NOW NO CASTLING WITH ADDED PIECES)
-        p = new Rook(true, true, false, x, y);
+        p = new Rook(true, true, x, y, false);
     }
     else if (c == 'r')
     {
         // Potential for adding castling rights (AS OF NOW NO CASTLING WITH ADDED PIECES)
-        p = new Rook(false, true, false, x, y);
+        p = new Rook(false, true, x, y, false);
     }
     else if (c == 'N')
     {
