@@ -220,7 +220,6 @@ int main()
             }
             else if (!validCustomBoard)
             {
-                cout << "(0)" << endl;
                 customBoard = new Board(true, false);
             }
 
@@ -285,7 +284,6 @@ int main()
                         rank = abs((processChar - '1') - 7);
 
                     // PIECES BEING ADDED TO THE BOARD
-                    cout << "(1)" << endl;
                     customBoard->addPiece(file, rank, piece);
                     cout << *customBoard;
 

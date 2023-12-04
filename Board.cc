@@ -69,11 +69,11 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
     squares[2][0].setPiece(blackLBishop);
     squares[5][0].setPiece(blackRBishop);
 
-    Queen *blackQueen = new Queen(false, true, 4, 0);
-    squares[4][0].setPiece(blackQueen);
+    Queen *blackQueen = new Queen(false, true, 3, 0);
+    squares[3][0].setPiece(blackQueen);
 
-    King *blackKing = new King(false, true, 5, 0, false, false);
-    squares[3][0].setPiece(blackKing);
+    King *blackKing = new King(false, true, 4, 0, false, false);
+    squares[4][0].setPiece(blackKing);
 
     // PAWNS
     for (int col = 0; col < 8; ++col)
@@ -250,7 +250,6 @@ bool Board::isCovered(int x, int y)
 
 Piece *Board::getPiecePtr(int x, int y)
 {
-    cout << "(6)" << endl;
     return squares[x][y].getOccupyingPc();
 }
 
@@ -331,6 +330,8 @@ bool Board::isCheck(bool kingColor) {
     int moveX = 0; 
     int moveY = 0; 
 
+    cout << "KING LOCATION: " << kingX << "," << kingY << endl; 
+
     for(int row = 0; row < 8; row ++) {
         for(int col = 0; col < 8; col ++) {
             Move currmove = Move(this, row, col, row, col); 
@@ -341,7 +342,7 @@ bool Board::isCheck(bool kingColor) {
                 moveX = move.toX; 
                 moveY = move.toY; 
 
-                if(moveX == kingX && moveY == kingY) {
+                if(moveX == kingX && moveY == kingY && this->getPiecePtr(row, col)->getColour() != kingColor) {
                     cout << "KING IN CHECK" << endl; 
                     return true; 
                 }
@@ -351,7 +352,7 @@ bool Board::isCheck(bool kingColor) {
     
     cout << "KING NOT IN CHECK" << endl; 
     return false; 
-    
+
 }
 
 // PieceEnum Board::getPiece(int x, int y) {

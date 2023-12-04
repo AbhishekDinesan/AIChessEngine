@@ -43,7 +43,6 @@ bool Game::endGame()
 
 void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be called from the game function
 {
-    cout << "(2)" << endl;
     Move m = Move(board, fromX, fromY, toX, toY);
 
     // TEMPORARY, PLEASE DELETE:
