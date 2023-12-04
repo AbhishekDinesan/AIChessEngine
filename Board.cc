@@ -15,14 +15,16 @@
 using namespace std;
 
 // constructor for Board
-Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
+Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)*/
 {
     TextDisplay *newTextDisplay = new TextDisplay;
     td = newTextDisplay;
 
-    //Xwindow* w = new Xwindow();
-    //gd = new GraphicsDisplay(*w);
-
+    if (!temp)
+    {
+        // Xwindow* w = new Xwindow();
+        // gd = new GraphicsDisplay(*w);
+    }
     squares.resize(8);
     for (int row = 0; row < 8; ++row)
     {
@@ -32,11 +34,11 @@ Board::Board(bool emptyBoard) /*: squares(8, std::vector<Square>(8)*)*/
             delete squares[row][col].getOccupyingPc();
             squares[row][col].setCoords(col, row);
             squares[row][col].attach(td);
-            //squares[row][col].attach(gd);
+            // squares[row][col].attach(gd);
         }
     }
 
-    if (emptyBoard)
+    if (emptyBoard && !temp)
     {
         for (int row = 0; row < 8; ++row)
         {
@@ -128,8 +130,8 @@ Board::~Board()
     }
 }
 
-//this function deleted the "old piece" and replaces the piece at the new index with the one we are moving
-//replaces the piece at the old position with a None piece. 
+// this function deleted the "old piece" and replaces the piece at the new index with the one we are moving
+// replaces the piece at the old position with a None piece.
 void Board::movePiece(int fromX, int fromY, int toX, int toY)
 {
     cout << "(2)" << endl;
@@ -290,7 +292,8 @@ bool Board::isValid()
     }
 }
 
-void Board::printBoard() {
+void Board::printBoard()
+{
     cout << *this->td;
 }
 

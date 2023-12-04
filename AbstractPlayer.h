@@ -7,9 +7,8 @@
 class AbstractPlayer
 {
 protected:
-  AbstractPlayer(bool isHuman, bool isInCheck, Board *board) : isHuman{isHuman}, isInCheck{isInCheck}, board{board} {};
-
-protected:
+  AbstractPlayer(bool isWhite, bool isHuman, bool isInCheck, Board *board) : isWhite{isWhite}, isHuman{isHuman}, isInCheck{isInCheck}, board{board} {};
+  bool isWhite;
   bool isHuman;
   bool isInCheck;
   Board *board;

@@ -7,7 +7,7 @@ using namespace std;
 
 class ComputerFour : public Computer
 {
-    ComputerFour(bool isHuman, bool isInCheck, Board *myboard) : Computer(isHuman, isInCheck, myboard) {}
+    ComputerFour(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
 
 public:
     void makeMove(int startFile, int startRank, int endFile, int endRank)
@@ -99,7 +99,7 @@ public:
         for (int x = 0; x < masterVector.size(); x++)
         {
 
-            Board tempboard = board;
+            // Board tempboard = board;
             Move m = masterVector[x];
             // execute the move
             // evaluate the board
