@@ -3,6 +3,11 @@
 #include "AbstractPlayer.h"
 #include "AbstractPiece.h"
 #include "PawnPiece.h"
+#include "RookPiece.h"
+#include "QueenPiece.h"
+#include "KingPiece.h" 
+#include "BishopPiece.h"
+#include "KnightPiece.h" 
 #include <ostream>
 #include <utility>
 #include <iostream>
@@ -63,6 +68,72 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         board->movePiece(fromX, fromY, toX, toY);
         board->isCheck(true);
         board->isCheck(false);
+        
+        //check for White pawn promotion:
+        for(int i = 0; i < 8; i ++) {
+            if(board->getPiecePtr(i,0)->pieceType() == PieceEnum::Pawn) {
+                char toPromote; 
+                cout << "What do you want to Promote Pawn to? " << endl; 
+                cin >> toPromote; 
+
+
+                if(toPromote == 'R') {
+                    delete board->getPiecePtr(i,0);
+                    Rook *newpiece = new Rook(true, true, i, 0, true); 
+                    board->squares[i][0].setPiece(newpiece); 
+                }
+
+                if(toPromote == 'Q') {
+                    delete board->getPiecePtr(i,0);
+                    Queen *newpiece = new Queen(true, true, i, 0);  
+                    board->squares[i][0].setPiece(newpiece); 
+                }
+
+                if(toPromote == 'B') {
+                    delete board->getPiecePtr(i,0);
+                    Bishop *newpiece = new Bishop(true, true, i, 0);  
+                    board->squares[i][0].setPiece(newpiece); 
+                } 
+
+                if(toPromote == 'N') {
+                    delete board->getPiecePtr(i,0);
+                    Knight *newpiece = new Knight(true, true, i, 0);  
+                    board->squares[i][0].setPiece(newpiece); 
+                }  
+            }
+        }
+
+
+        //check for black pawn promotion: 
+        for(int j = 0; j < 8; j++) { 
+            if(board->getPiecePtr(j, 7)->pieceType() == PieceEnum::Pawn && 
+               board->getPiecePtr(j,7)->getColour() == false) {
+                char toPromote; 
+                do {
+                    cout << "What do you want to Promote Pawn to? (q, r, b, n) " << endl; 
+                    cin >> toPromote;
+                } while(toPromote != 'Q' && toPromote != 'R' && toPromote != 'B' && toPromote != 'N');
+
+                delete board->getPiecePtr(j, 7);
+
+                switch (toPromote) {
+                    case 'r':
+                        board->squares[j][7].setPiece(new Rook(false, true, j, 7, true));
+                        break;
+                    case 'q':
+                        board->squares[j][7].setPiece(new Queen(false, true, j, 7));
+                        break;
+                    case 'b':
+                        board->squares[j][7].setPiece(new Bishop(false, true, j, 7));
+                        break;
+                    case 'n':
+                        board->squares[j][7].setPiece(new Knight(false, true, j, 7));
+                        break;
+                }
+                break; // Break after promoting a pawn
+            }
+        }
+
     }
     if (board->isCheck(true) || board->isCheck(false))
 

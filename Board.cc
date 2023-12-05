@@ -241,7 +241,6 @@ bool Board::isOccupied(int x, int y)
     return currentPiece != nullptr && dynamic_cast<None *>(currentPiece) == nullptr;
 }
 
-// CANNOT BE IMPLEMENTED YET, Need pieces to be done.
 bool Board::isCovered(int x, int y)
 {
     return false;
@@ -385,7 +384,6 @@ bool wouldBeInCheckAfterMove(Move *move, Board *board, bool kingColor)
 
 bool Board::isCheckMate(bool kingColor)
 {
-    cout << "Abhi";
     if (!isCheck(kingColor)) // if the current state of the program is not in check, return false;
     {
         return false;
