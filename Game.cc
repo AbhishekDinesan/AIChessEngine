@@ -101,6 +101,7 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         }
         board->isCheck(true);
         board->isCheck(false);
+        
         */ 
         
         //check for White pawn promotion:
