@@ -112,7 +112,7 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
                 do {
                     cout << "What do you want to Promote Pawn to? (q, r, b, n) " << endl; 
                     cin >> toPromote;
-                } while(toPromote != 'Q' && toPromote != 'R' && toPromote != 'B' && toPromote != 'N');
+                } while(toPromote != 'q' && toPromote != 'r' && toPromote != 'b' && toPromote != 'n');
 
                 delete board->getPiecePtr(j, 7);
 
