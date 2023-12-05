@@ -153,11 +153,6 @@ void Board::movePiece(int fromX, int fromY, int toX, int toY)
 
 void Board::addPiece(int x, int y, char c)
 {
-    // make sure that coordinates are within bounds
-    if (x < 0 || x >= 8 || y < 0 || y >= 8)
-    {
-        throw std::out_of_range("Coordinates are out of the board's bounds.");
-    }
 
     delete squares[x][y].getOccupyingPc();
 
@@ -221,10 +216,6 @@ void Board::addPiece(int x, int y, char c)
 // delete the piece at the index, and replace with a NonePiece.
 void Board::removePiece(int x, int y)
 {
-    if (x < 0 || x >= 8 || y < 0 || y >= 8)
-    {
-        throw std::out_of_range("Coordinates are out of the board's bounds.");
-    }
     Piece *nonePiece = new NonePc(x, y);
     delete squares[x][y].getOccupyingPc();
     squares[x][y].setPiece(nonePiece);
@@ -232,11 +223,6 @@ void Board::removePiece(int x, int y)
 
 bool Board::isOccupied(int x, int y)
 {
-    // Check if the coordinates are within the bounds of the board
-    if (x < 0 || x >= 8 || y < 0 || y >= 8)
-    {
-        throw std::out_of_range("Coordinates are out of the board's bounds.");
-    }
 
     // Assuming `squares` is a 2D vector and getPiece() returns a Piece*
     Piece *currentPiece = squares[x][y].getOccupyingPc();
@@ -293,6 +279,29 @@ bool Board::isValid()
         cerr << "The board has been reverted to the default configuration." << endl;
         return false;
     }
+
+    if (this->isCheck(true) || this->isCheck(false))
+    {
+        cerr << "Invalid Board Setup: There must be exactly one king of each colour on the board" << endl;
+        cerr << "The board has been reverted to the default configuration." << endl;
+        return false;
+    }
+
+    if (this->isStaleMate(true) && isWhiteTurn == true)
+    {
+        cerr << "Invalid Board Setup: There must be exactly one king of each colour on the board" << endl;
+        cerr << "The board has been reverted to the default configuration." << endl;
+        return false;
+    }
+
+    if (this->isStaleMate(false) && isWhiteTurn == false)
+    {
+        cerr << "Invalid Board Setup: There must be exactly one king of each colour on the board" << endl;
+        cerr << "The board has been reverted to the default configuration." << endl;
+        return false;
+    }
+
+    return true;
 }
 
 void Board::printBoard()
