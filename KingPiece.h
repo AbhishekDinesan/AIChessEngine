@@ -10,6 +10,7 @@ class King : public Piece
 
 public:
     King(bool isWhite, bool isAlive, int x, int y, bool inCheck, bool beenMoved);
+    King(King &other);
     bool isValidMove(Move &m) override;
     bool getColour() const override;
     bool getAlive() const override;

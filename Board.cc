@@ -11,8 +11,7 @@
 #include "KnightPiece.h"
 #include "QueenPiece.h"
 #include "KingPiece.h"
-#include <stdio.h>
-#include <vector> 
+#include <vector>
 
 using namespace std;
 
@@ -21,6 +20,7 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
 {
     TextDisplay *newTextDisplay = new TextDisplay;
     td = newTextDisplay;
+    isWhiteTurn = true;
 
     if (!temp)
     {
@@ -52,10 +52,9 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
         }
         return;
     }
-    
 
     Rook *blackLRook = new Rook(false, true, 0, 0, true);
-    Rook *blackRiRook = new Rook(false, true, 7,0, true); 
+    Rook *blackRiRook = new Rook(false, true, 7, 0, true);
     squares[0][0].setPiece(blackLRook);
     squares[7][0].setPiece(blackRiRook);
 
@@ -137,7 +136,7 @@ Board::~Board()
 // replaces the piece at the old position with a None piece.
 void Board::movePiece(int fromX, int fromY, int toX, int toY)
 {
-    cout << "(2)" << endl;
+    std::cout << "(2)" << endl;
     Piece *movedPiece = squares[fromX][fromY].getOccupyingPc();
     cout << "(3)" << endl;
     delete squares[toX][toY].getOccupyingPc();
@@ -305,120 +304,174 @@ std::ostream &operator<<(std::ostream &out, const Board &b)
     return out;
 }
 
-//iterate over each piece on the board, find the king.
-vector<int> Board::findKing(bool isWhite) {
+// iterate over each piece on the board, find the king.
+vector<int> Board::findKing(bool isWhite)
+{
     vector<int> coords = {0, 0};
-    for (int row = 0; row < 8; ++row) {
-        for (int col = 0; col < 8; ++col) {
-            if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::King && 
-                squares[row][col].getOccupyingPc()->getColour() == isWhite) {
-                    coords[0] = squares[row][col].getOccupyingPc()->getX();
-                    coords[1] = squares[row][col].getOccupyingPc()->getY();
-                }
+    for (int row = 0; row < 8; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
+            if (squares[row][col].getOccupyingPc()->pieceType() == PieceEnum::King &&
+                squares[row][col].getOccupyingPc()->getColour() == isWhite)
+            {
+                coords[0] = squares[row][col].getOccupyingPc()->getX();
+                coords[1] = squares[row][col].getOccupyingPc()->getY();
+            }
         }
     }
     return coords;
 }
 
-
-bool Board::isCheck(bool kingColor) {
-    vector<int> coords = findKing(kingColor); 
-    vector<Move> moves; 
+bool Board::isCheck(bool kingColor)
+{
+    vector<int> coords = findKing(kingColor);
+    vector<Move> moves;
 
     int kingX = coords[0];
     int kingY = coords[1];
 
-    int moveX = 0; 
-    int moveY = 0; 
+    int moveX = 0;
+    int moveY = 0;
 
-    cout << "KING LOCATION: " << kingX << "," << kingY << endl; 
+    for (int row = 0; row < 8; row++)
+    {
+        for (int col = 0; col < 8; col++)
+        {
+            Move currmove = Move(this, row, col, row, col);
 
-    for(int row = 0; row < 8; row ++) {
-        for(int col = 0; col < 8; col ++) {
-            Move currmove = Move(this, row, col, row, col); 
+            std::vector<Move> currmoves = currmove.possibleMoves(this->getPiecePtr(row, col));
 
-            std::vector<Move> currmoves = currmove.possibleMoves(this->getPiecePtr(row, col));  
+            for (Move move : currmoves)
+            {
+                moveX = move.toX;
+                moveY = move.toY;
 
-            for(Move move: currmoves) {
-                moveX = move.toX; 
-                moveY = move.toY; 
-
-                if(moveX == kingX && moveY == kingY && this->getPiecePtr(row, col)->getColour() != kingColor) {
-                    cout << "KING IN CHECK" << endl; 
-                    return true; 
+                if (moveX == kingX && moveY == kingY && this->getPiecePtr(row, col)->getColour() != kingColor)
+                {
+                    cout << "KING IN CHECK" << endl;
+                    return true;
                 }
             }
         }
     }
-    
-    cout << "KING NOT IN CHECK" << endl; 
-    return false; 
 
+    cout << "KING NOT IN CHECK" << endl;
+    return false;
 }
 
-bool wouldBeInCheckAfterMove(Move *move, Board *board, bool kingColor) {
-    Board tempboard(false, true); 
+bool wouldBeInCheckAfterMove(Move *move, Board *board, bool kingColor)
+{
+    Board tempboard(false, true);
 
-    for(int row = 0; row < 8; row ++) {
-        for(int col = 0; col < 8; col ++) {
-            cout << "3" << endl;  
-            tempboard.squares[row][col].setPiece(board->squares[row][col].getOccupyingPc()); 
+    for (int row = 0; row < 8; row++)
+    {
+        for (int col = 0; col < 8; col++)
+        {
+            cout << "3" << endl;
+            tempboard.squares[row][col].setPiece(board->squares[row][col].getOccupyingPc());
         }
     }
 
-    cout << "4" << endl;  
-    Move newmove = Move(&tempboard, move->fromX, move->fromY, move->toX, move->toY); 
+    cout << "4" << endl;
+    Move newmove = Move(&tempboard, move->fromX, move->fromY, move->toX, move->toY);
 
-    cout << "5" << endl;  
-    bool isKingInCheck = tempboard.isCheck(kingColor); 
+    cout << "5" << endl;
+    bool isKingInCheck = tempboard.isCheck(kingColor);
 
-    cout << "6" << endl;  
-    return isKingInCheck;  
+    cout << "6" << endl;
+    return isKingInCheck;
 }
 
-bool Board::isCheckMate(bool kingColor) {
-
-    if (!isCheck(kingColor)) {
-        cout << "1" << endl; 
-        return false;  
+bool Board::isCheckMate(bool kingColor)
+{
+    cout << "Abhi";
+    if (!isCheck(kingColor)) // if the current state of the program is not in check, return false;
+    {
+        return false;
     }
-
-    // Check if the king can escape
-    vector<int> kingCoords = findKing(kingColor);
-    Move kingmove = Move(this, kingCoords[0], kingCoords[1], kingCoords[0], kingCoords[1]); 
-    vector<Move> kingMoves = kingmove.possibleMoves(this->getPiecePtr(kingCoords[0], kingCoords[1]));  
-
-
-
-    for (int i = 0;  i < kingMoves.size(); i ++) {
-        if (!wouldBeInCheckAfterMove(&kingMoves[i], this, kingColor)) {
-            cout << "2" << endl;  
-            return false; // King can escape
-        }
-    }
-
-    cout << "7" << endl; 
-
-    // Check if any other piece can block the check or capture the attacking piece
-    for (int row = 0; row < 8; ++row) {
-        for (int col = 0; col < 8; ++col) {
-            Piece* piece = getPiecePtr(row, col);
-            if (piece && piece->getColour() == kingColor && piece->pieceType() != PieceEnum::King) {
-                Move currmove = Move(this, row, col, row, col); 
-                vector<Move> piecemoves = currmove.possibleMoves(this->getPiecePtr(row, col)); 
-                for (Move move : piecemoves) {
-                    if (!wouldBeInCheckAfterMove(&move, this, kingColor)) {
-                        return false;
+    for (int row = 0; row < 8; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
+            // iterate over each of the possible pieces
+            // if it is the right color, not a noen or king
+            // simulate all the possible moves of this piece
+            // if after we simualte any of these moves, the king is no longer in check
+            // we return false;
+            Piece *piece = getPiecePtr(row, col);
+            if (piece && (piece->getColour() == kingColor) && (piece->pieceType() != PieceEnum::None))
+            {
+                Move currmove = Move(this, row, col, row, col);                                // dummy object
+                vector<Move> piecemoves = currmove.possibleMoves(this->getPiecePtr(row, col)); // generates all moves of a given piece
+                for (int r = 0; r < piecemoves.size(); r++)
+                {
+                    Board tempBoard = *this;
+                    Move newMove = piecemoves[r];                                                // this is the rth move of the pieceMoves vector
+                    tempBoard.movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY); // now we execut the move
+                    bool isKingInCheck = tempBoard.isCheck(kingColor);
+                    if (!isKingInCheck)
+                    {
+                        return false; // the King has escaped
                     }
                 }
             }
         }
     }
-    
-    cout << "CHECKMATE" << endl; 
-    return true; 
-}
 
+    /*vector<int> kingCoords = findKing(kingColor);
+    // std::cout << kingCoords[0] << kingCoords[1] << std::endl;
+    Move kingmove = Move(this, kingCoords[0], kingCoords[1], kingCoords[0], kingCoords[1]);           // dummy obj
+    vector<Move> kingMoves = kingmove.possibleMoves(this->getPiecePtr(kingCoords[0], kingCoords[1])); // list of possible moves for King
+    for (auto move : kingMoves)
+    {
+        std::cout << "|" << move.toX << "," << move.toY << "|" << std::endl;
+    }
+    for (int q = 0; q < kingMoves.size(); q++)
+    {
+        cout << "HELLO " << kingMoves.size() << endl;
+        Board tempBoard = *this;
+        Move newMove = kingMoves[q];                                                 // this is the xth move of the kingMoves vector
+        tempBoard.movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY); // now we execut the move
+        if (!tempBoard.isCheck(kingColor))
+        {
+            return false;
+        }
+    }
+     cout << "do" << endl;
+     // Check if any other piece can block the check or capture the attacking piece
+     for (int row = 0; row < 8; ++row)
+     {
+         for (int col = 0; col < 8; ++col)
+         {
+             // iterate over each of the possible pieces
+             // if it is the right color, not a noen or king
+             // simulate all the possible moves of this piece
+             // if after we simualte any of these moves, the king is no longer in check
+             // we return false;
+             Piece *piece = getPiecePtr(row, col);
+             if (piece && (piece->getColour() == kingColor) && (piece->pieceType() != PieceEnum::King) && (piece->pieceType() != PieceEnum::None))
+             {
+                 Move currmove = Move(this, row, col, row, col);                                // dummy object
+                 vector<Move> piecemoves = currmove.possibleMoves(this->getPiecePtr(row, col)); // generates all moves of a given piece
+                 for (int r = 0; r < piecemoves.size(); r++)
+                 {
+                     Board tempBoard = *this;
+                     Move newMove = piecemoves[r];                                                // this is the rth move of the pieceMoves vector
+                     tempBoard.movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY); // now we execut the move
+                     bool isKingInCheck = tempBoard.isCheck(kingColor);
+                     if (!isKingInCheck)
+                     {
+                         return false; // the King has escaped
+                     }
+                 }
+             }
+         }
+     }
+     */
+    cout << "CHECKMATE" << endl;
+    return true;
+}
 
 // PieceEnum Board::getPiece(int x, int y) {
 //  squares[x][y].getOccupyingPc()->pieceType();

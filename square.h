@@ -5,35 +5,34 @@
 
 #include "AbstractObserver.h"
 #include "AbstractPiece.h"
-#include <vector> 
+#include <vector>
 
- 
-//NOTE: Square is not an observer, it will be observed though
-//      (by textdisplay, graphicsdisplay)
+// NOTE: Square is not an observer, it will be observed though
+//       (by textdisplay, graphicsdisplay)
 
-class Square {
+class Square
+{
     int x;
     int y;
-    bool occupied; 
-    std::vector<Observer *> observers; 
-    
-    Piece *occupiedBy;  
+    bool occupied;
+    std::vector<Observer *> observers;
+
+    Piece *occupiedBy;
 
 public:
-
     Square();
+    Square(const Square &other);
     ~Square();
 
     int getX();
     int getY();
     void setCoords(int x, int y);
-    bool getOccupied(); 
+    bool getOccupied();
     Piece *getOccupyingPc();
 
-    void notifyObservers(Square &s); 
-    void attach(Observer *o); 
-    void setPiece(Piece *piece); 
+    void notifyObservers(Square &s);
+    void attach(Observer *o);
+    void setPiece(Piece *piece);
 };
-
 
 #endif

@@ -16,6 +16,7 @@ class Board
 
 public:
     std::vector<std::vector<Square>> squares; // made this public temporary
+    bool isWhiteTurn;
     Board(bool emptyBoard, bool temp);
     ~Board();
 
@@ -37,7 +38,7 @@ public:
     friend class Move;
     friend std::ostream &operator<<(std::ostream &out, const Board &b);
 
-    std::vector<int> findKing(bool isWhite); 
+    std::vector<int> findKing(bool isWhite);
 };
 
 #endif

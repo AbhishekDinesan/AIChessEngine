@@ -7,6 +7,7 @@ class Knight : public Piece
 {
 public:
     Knight(bool isWhite, bool isAlive, int x, int y);
+    Knight(Knight &other);
     bool isValidMove(Move &m) override;
     bool getColour() const override;
     bool getAlive() const override;

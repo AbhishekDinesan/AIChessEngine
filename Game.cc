@@ -1,6 +1,6 @@
 #include "Game.h"
-#include "Board.h"         
-#include "AbstractPlayer.h" 
+#include "Board.h"
+#include "AbstractPlayer.h"
 #include "AbstractPiece.h"
 #include "PawnPiece.h"
 #include <ostream>
@@ -44,6 +44,7 @@ bool Game::endGame()
 void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be called from the game function
 {
     Move m = Move(board, fromX, fromY, toX, toY);
+    board->isWhiteTurn = !board->isWhiteTurn;
 
     // TEMPORARY, PLEASE DELETE:
     std::vector<Move> moves = m.possibleMoves(board->getPiecePtr(fromX, fromY));
@@ -54,19 +55,22 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
     for (Move move : moves)
     {
         std::cout << (int)move.toX << " " << (int)move.toY << endl;
-
     }
 
     cout << "(3)" << endl;
     if (m.isValidMove())
     {
         board->movePiece(fromX, fromY, toX, toY);
-        board->isCheck(true); 
-        board->isCheck(false); 
-        //board->isCheckMate(true); 
-        //board->isCheckMate(false);  
-        // ADD THE MOVE TO A VECTOR FOR THE UNDO FUNCTION
+        board->isCheck(true);
+        board->isCheck(false);
     }
+    if (board->isCheck(true) || board->isCheck(false))
+
+    {
+        board->isCheckMate(true);
+        board->isCheckMate(false);
+    }
+    // ADD THE MOVE TO A VECTOR FOR THE UNDO FUNCTION
 }
 
 void Game::addPiece(int x, int y, char piece)
