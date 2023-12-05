@@ -8,6 +8,7 @@
 #include "KingPiece.h" 
 #include "BishopPiece.h"
 #include "KnightPiece.h" 
+#include "NonePiece.h" 
 #include <ostream>
 #include <utility>
 #include <iostream>
@@ -69,17 +70,31 @@ bool Game::endGame()
     return true;
 }
 
+void Game::passantMove(int fromX, int fromY, int toX, int toY) {
+    if (fromX > toX) {
+        delete board->squares[fromX - 1][fromY].getOccupyingPc();
+        NonePc *emptyPiece = new NonePc(fromX - 1, fromY);
+        board->squares[fromX - 1][fromY].setPiece(emptyPiece);
+    }
+    else if (fromY < toX) {
+        delete board->squares[fromX + 1][fromY].getOccupyingPc();
+        NonePc *emptyPiece = new NonePc(fromX + 1, fromY);
+        board->squares[fromX + 1][fromY].setPiece(emptyPiece);
+    }
+}
+
 void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be called from the game function
 {
     Move m = Move(board, fromX, fromY, toX, toY);
-
-    // TEMPORARY, PLEASE DELETE:
 
     Piece *pc = board->getPiecePtr(fromX, fromY);
 
     if (m.isValidMove())
     {
         board->movePiece(fromX, fromY, toX, toY);
+        if (m.getDidPassant() == true) {
+            this->passantMove(fromX, fromY, toX, toY);
+        }
         board->isCheck(true);
         board->isCheck(false);
         
