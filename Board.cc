@@ -150,7 +150,7 @@ void Board::movePiece(int fromX, int fromY, int toX, int toY)
     movedPiece->setX(toX);
     movedPiece->setY(toY);
     squares[toX][toY].setPiece(movedPiece);
-    //isWhiteTurn = !isWhiteTurn;
+    isWhiteTurn = !isWhiteTurn;
 }
 
 void Board::addPiece(int x, int y, char c)

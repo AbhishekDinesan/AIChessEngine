@@ -230,6 +230,7 @@ int main()
 
             cout << "(1)" << endl;
             g->movePiece(startFile, startRank, endFile, endRank);
+            g->printBoard();
             if (g->getGameOver() == true) {
                 if (g->getCurrTurn() == true) {
                     ++blackScore;
@@ -250,6 +251,7 @@ int main()
         }
         else if ((cmd == "move") && (g->getCurrPlayer()->getIsHuman() == false)) {
             g->getCurrPlayer()->makeMove(0, 0, 0, 0);
+            g->printBoard();
             cout << "COMPUTER MADE MOVE" << endl;
             if (g->getGameOver() == true) {
                 if (g->getCurrTurn() == true) {

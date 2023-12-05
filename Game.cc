@@ -35,7 +35,7 @@ bool Game::setGameOver(bool over) {
 }
 
 AbstractPlayer* Game::getCurrPlayer() {
-    if (board->isWhiteTurn) {
+    if (board->isWhiteTurn == true) {
         return whitePlayer;
     } else {
         return blackPlayer;
@@ -83,7 +83,6 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
     if (m.isValidMove())
     {
         board->movePiece(fromX, fromY, toX, toY);
-        printBoard();
         if (pc->getColour() == true) {
             if (board->isCheck(false) == true) {
                 cout << "Black is in check." << endl;
@@ -105,7 +104,7 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         
         //board->isCheck(true);
         //board->isCheck(false);
-        board->isWhiteTurn = !board->isWhiteTurn;
+        
         
     }
     /*
@@ -134,6 +133,7 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
     */
     //whiteToMove = !whiteToMove;
     // ADD THE MOVE TO A VECTOR FOR THE UNDO FUNCTION
+    //printBoard();
 }
 
 void Game::addPiece(int x, int y, char piece)
