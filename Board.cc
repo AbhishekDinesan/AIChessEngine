@@ -383,6 +383,32 @@ bool wouldBeInCheckAfterMove(Move *move, Board *board, bool kingColor)
     return isKingInCheck;
 }
 
+bool Board::isStaleMate(bool kingColor)
+{
+    // cout << "STALEMATE CALLS ME" << endl;
+    vector<Move> masterVector;
+    for (int row = 0; row < 8; ++row)
+    {
+        for (int col = 0; col < 8; ++col)
+        {
+            Piece *piece = getPiecePtr(row, col);
+            if ((piece) && (piece->pieceType() != PieceEnum::None) && (piece->getColour() == kingColor))
+            {
+                Move currmove = Move(this, row, col, row, col);
+                vector<Move> piecemoves = currmove.possibleMoves(this->getPiecePtr(row, col));
+                masterVector.insert(masterVector.end(), piecemoves.begin(), piecemoves.end());
+            }
+        }
+    }
+    if (masterVector.size() == 0)
+    {
+        cout << "THIS IS A STALEMATE";
+        return true;
+    }
+    // cout << "I HAVE A SIZE OF " << masterVector.size() << endl;
+    return false;
+}
+
 bool Board::isCheckMate(bool kingColor)
 {
     cout << "Abhi";

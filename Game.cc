@@ -63,9 +63,10 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         board->movePiece(fromX, fromY, toX, toY);
         board->isCheck(true);
         board->isCheck(false);
+        board->isStaleMate(true);
+        board->isStaleMate(false);
     }
     if (board->isCheck(true) || board->isCheck(false))
-
     {
         board->isCheckMate(true);
         board->isCheckMate(false);
