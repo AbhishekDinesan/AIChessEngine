@@ -30,7 +30,6 @@ public:
     bool ValidBoard();
     bool endGame();
     void movePiece(int fromX, int fromY, int toX, int toY);
-    void passantMove(int fromX, int fromY, int toX, int toY);
     void printBoard();
     AbstractPlayer* getCurrPlayer();
     bool getCurrTurn();
