@@ -1,16 +1,13 @@
 #include "AbstractComputer.h"
+#include "ComputerThree.h"
 #include <vector>
 #include "Move.h"
 
 using namespace std;
 
-class ComputerThree : public Computer
-{
-    ComputerThree(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
+ComputerThree::ComputerThree(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
 
-public:
-    void makeMove(int startFile, int startRank, int endFile, int endRank)
-        override
+void ComputerThree::makeMove(int startFile, int startRank, int endFile, int endRank)
     {
         // now this is for the opponents moves
         Move m(board, startFile, startRank, endFile, endRank);
@@ -35,5 +32,16 @@ public:
         // then do the logic from computerII
     }
 
+    bool ComputerThree::getIsHuman() {
+        return false;
+    }
+
+    bool ComputerThree::getColour() {
+        return isWhite;
+    }
+
+    void ComputerThree::setBoard(Board* b) {
+        board = b;
+    }
+
     // literally the same logic from q2
-};

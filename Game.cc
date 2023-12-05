@@ -8,19 +8,42 @@
 #include <iostream>
 using namespace std;
 
-Game::Game(bool whiteToMove, bool customProvided, Board *theCustomBoard) : moveCount{0}, whiteToMove{whiteToMove}, board{theCustomBoard}
+Game::Game(AbstractPlayer* white, AbstractPlayer* black, bool whiteToMove, bool customProvided, Board *theCustomBoard) : 
+    whitePlayer{white}, blackPlayer{black}, moveCount{0}, whiteToMove{whiteToMove}, board{theCustomBoard}
 {
-
     if (!customProvided)
     {
         board = new Board(false, false);
     }
+    whitePlayer->setBoard(board);
+    blackPlayer->setBoard(board);
+    board->setTurn(whiteToMove);
     printBoard();
 }
 
 Game::~Game()
 {
     // delete board; IM USING UNIQUE POINTERS NOW
+}
+
+bool Game::getGameOver() {
+    return gameOver;
+}
+
+bool Game::setGameOver(bool over) {
+    gameOver = over;
+}
+
+AbstractPlayer* Game::getCurrPlayer() {
+    if (board->isWhiteTurn == true) {
+        return whitePlayer;
+    } else {
+        return blackPlayer;
+    }
+}
+
+bool Game::getCurrTurn() {
+    return board->isWhiteTurn;
 }
 
 void Game::init()
@@ -44,7 +67,6 @@ bool Game::endGame()
 void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be called from the game function
 {
     Move m = Move(board, fromX, fromY, toX, toY);
-    board->isWhiteTurn = !board->isWhiteTurn;
 
     // TEMPORARY, PLEASE DELETE:
     std::vector<Move> moves = m.possibleMoves(board->getPiecePtr(fromX, fromY));
@@ -61,17 +83,57 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
     if (m.isValidMove())
     {
         board->movePiece(fromX, fromY, toX, toY);
-        board->isCheck(true);
-        board->isCheck(false);
-        board->isStaleMate(true);
-        board->isStaleMate(false);
+
+        if (pc->getColour() == true) {
+            if (board->isCheck(false) == true) {
+                cout << "Black is in check." << endl;
+                if (board->isCheckMate(false) == true) {
+                    cout << "Checkmate! White wins." << endl;
+                    this->setGameOver(true);
+                }
+            }
+        }
+        else if (pc->getColour() == false) {
+            if (board->isCheck(true) == true) {
+                cout << "White is in check." << endl;
+                if (board->isCheckMate(true) == true) {
+                    cout << "Checkmate! Black wins." << endl;
+                    this->setGameOver(true);
+                }
+            }
+        }
+        
+        //board->isCheck(true);
+        //board->isCheck(false);
+        
+        
     }
+    /*
+    else {
+        cerr << "Invalid Move" << endl;
+    }
+
+    if(board->isCheck(true)) {
+        if (board->isCheckMate(true) == true) {
+            cout << "Checkmate! Black wins." << endl;
+        }
+    }
+
+    if(board->isCheck(false)) {
+        if (board->isCheckMate(false) == true) {
+            cout << "Checkmate! White wins." << endl;
+        }
+    }
+    
     if (board->isCheck(true) || board->isCheck(false))
     {
         board->isCheckMate(true);
         board->isCheckMate(false);
     }
+    */
+    //whiteToMove = !whiteToMove;
     // ADD THE MOVE TO A VECTOR FOR THE UNDO FUNCTION
+    //printBoard();
 }
 
 void Game::addPiece(int x, int y, char piece)
