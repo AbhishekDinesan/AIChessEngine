@@ -2,15 +2,15 @@
 
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
-//#include <X11/Xlib.h>     ?GIVING ERROR?
+#include <X11/Xlib.h>
 #include <iostream>
 #include <string>
 
 class Xwindow {
-  //Display *d;      ?GIVING ERROR?
-  //Window w;        ?GIVING ERROR?
+  Display *d;
+  Window w;
   int s;
-  //GC gc;           ?GIVING ERROR?
+  GC gc;
   unsigned long colours[10];
 
  public:

@@ -74,10 +74,10 @@ Square::Square(const Square &other) : x(other.x), y(other.y), occupied(nullptr),
         else
 
         {
-            None *none = dynamic_cast<None *>(other.occupiedBy);
+            NonePc *none = dynamic_cast<NonePc *>(other.occupiedBy);
             if (none)
             {
-                occupiedBy = new None(*none);
+                occupiedBy = new NonePc(*none);
             }
         }
     }

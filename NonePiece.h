@@ -3,11 +3,11 @@
 
 #include "AbstractPiece.h"
 
-class None : public Piece
+class NonePc : public Piece
 {
 public:
-    None(int x, int y);
-    None(None &other);
+    NonePc(int x, int y);
+    NonePc(NonePc &other);
     bool isValidMove(Move &m) override; // CHANGED THIS TO A BOOL, I THINK THIS IS BETTER
     bool getColour() const override;
     bool getAlive() const override;
