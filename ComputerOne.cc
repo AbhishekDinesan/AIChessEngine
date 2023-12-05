@@ -23,8 +23,8 @@ public:
         {
             for (int j = 0; j < 8; j++)
             {
-                if (board->squares[i][j].getOccupyingPc()->getColour() == isWhite &&
-                    board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::None)
+                if ((board->squares[i][j].getOccupyingPc()->getColour() == isWhite) &&
+                    (board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::None))
                 {
                     vector<Move> tempVector = m.possibleMoves(board->squares[i][j].getOccupyingPc());
                     masterVector.insert(masterVector.end(), tempVector.begin(), tempVector.end());
