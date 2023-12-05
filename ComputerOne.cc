@@ -21,6 +21,7 @@ void ComputerOne::makeMove(int startFile, int startRank, int endFile, int endRan
             {
                 if (board->squares[i][j].getOccupyingPc()->getColour() == isWhite &&
                     board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::NonePc)
+
                 {
                     vector<Move> tempVector = m.possibleMoves(board->squares[i][j].getOccupyingPc());
                     masterVector.insert(masterVector.end(), tempVector.begin(), tempVector.end());

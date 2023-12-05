@@ -39,15 +39,11 @@ using namespace std;
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    cout << "*4" << endl;
                     tempBoard.squares[i][j].setPiece(board->squares[i][j].getOccupyingPc());
                 }
             }
-            cout << "*5" << endl;
             Move newMove = masterVector[x];
-            cout << "*6" << endl;
             tempBoard.movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
-            cout << "*7" << endl;
             
             /*
             if (tempBoard.isCheck()) // if the board produced a check, then you execute move on real board
@@ -55,8 +51,6 @@ using namespace std;
                 board->movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
                 return;
             }
-            // if this move will result in a capture, then execute that move
-            */ 
         }
         cout << "*8" << endl;
         int vectorLength = masterVector.size();
