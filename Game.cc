@@ -92,36 +92,32 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         board->isCheck(false);
         
         //check for White pawn promotion:
-        for(int i = 0; i < 8; i ++) {
-            if(board->getPiecePtr(i,0)->pieceType() == PieceEnum::Pawn) {
+        for(int i = 0; i < 8; i++) { 
+            if(board->getPiecePtr(i, 0)->pieceType() == PieceEnum::Pawn && 
+               board->getPiecePtr(i,0)->getColour() == true) {
                 char toPromote; 
-                cout << "What do you want to Promote Pawn to? " << endl; 
-                cin >> toPromote; 
+                do {
+                    cout << "What do you want to Promote Pawn to? (Q, R, B, N) " << endl; 
+                    cin >> toPromote;
+                } while(toPromote != 'Q' && toPromote != 'R' && toPromote != 'B' && toPromote != 'N');
 
+                delete board->getPiecePtr(i, 0);
 
-                if(toPromote == 'R') {
-                    delete board->getPiecePtr(i,0);
-                    Rook *newpiece = new Rook(true, true, i, 0, true); 
-                    board->squares[i][0].setPiece(newpiece); 
+                switch (toPromote) {
+                    case 'R':
+                        board->squares[i][0].setPiece(new Rook(true, true, i, 0, true));
+                        break;
+                    case 'Q':
+                        board->squares[i][0].setPiece(new Queen(true, true, i, 0));
+                        break;
+                    case 'B':
+                        board->squares[i][0].setPiece(new Bishop(true, true, i, 0));
+                        break;
+                    case 'N':
+                        board->squares[i][0].setPiece(new Knight(true, true, i, 0));
+                        break;
                 }
-
-                if(toPromote == 'Q') {
-                    delete board->getPiecePtr(i,0);
-                    Queen *newpiece = new Queen(true, true, i, 0);  
-                    board->squares[i][0].setPiece(newpiece); 
-                }
-
-                if(toPromote == 'B') {
-                    delete board->getPiecePtr(i,0);
-                    Bishop *newpiece = new Bishop(true, true, i, 0);  
-                    board->squares[i][0].setPiece(newpiece); 
-                } 
-
-                if(toPromote == 'N') {
-                    delete board->getPiecePtr(i,0);
-                    Knight *newpiece = new Knight(true, true, i, 0);  
-                    board->squares[i][0].setPiece(newpiece); 
-                }  
+                break; // Break after promoting a pawn
             }
         }
 
