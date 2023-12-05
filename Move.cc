@@ -31,6 +31,11 @@ Piece *Move::CapturedPiece()
     return captured;
 }
 
+bool Move::willCapture()
+{
+    return didcapture;
+}
+
 // execute move:
 bool Move::isValidMove()
 {

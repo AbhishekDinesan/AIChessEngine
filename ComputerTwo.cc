@@ -33,25 +33,15 @@ public:
         }
         for (int x = 0; x < masterVector.size(); x++)
         {
-            Board tempBoard(false, true);
-            for (int i = 0; i < 8; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    tempBoard.squares[i][j].setPiece(board->squares[i][j].getOccupyingPc());
-                }
-            }
+            Board tempBoard = *board;
             Move newMove = masterVector[x];
             tempBoard.movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
-            
-            /*
-            if (tempBoard.isCheck()) // if the board produced a check, then you execute move on real board
+            bool isKingInCheck = tempBoard.isCheck(!isWhite);
+            if (!isKingInCheck || newMove.willCapture())
             {
                 board->movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
                 return;
             }
-            // if this move will result in a capture, then execute that move
-            */ 
         }
         int vectorLength = masterVector.size();
         srand(static_cast<unsigned>(std::time(0)));
