@@ -394,7 +394,7 @@ bool Board::isStaleMate(bool kingColor)
         for (int col = 0; col < 8; ++col)
         {
             Piece *piece = getPiecePtr(row, col);
-            if ((piece) && (piece->pieceType() != PieceEnum::None) && (piece->getColour() == kingColor))
+            if ((piece) && (piece->pieceType() != PieceEnum::NonePc) && (piece->getColour() == kingColor))
             {
                 Move currmove = Move(this, row, col, row, col);
                 vector<Move> piecemoves = currmove.possibleMoves(this->getPiecePtr(row, col));
