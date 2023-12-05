@@ -14,7 +14,6 @@ using namespace std;
         Computer(isWhite, isHuman, isInCheck, myboard) {}
 
     void ComputerTwo::makeMove(int startFile, int startRank, int endFile, int endRank) {
-        cout << "*1" << endl;
         Move m(board, startFile, startRank, endFile, endRank);
         vector<Move> masterVector;
         for (int i = 0; i < 8; i++)
@@ -24,11 +23,8 @@ using namespace std;
                 if (board->squares[i][j].getOccupyingPc()->getColour() == isWhite &&
                     board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::NonePc)
                 {
-                    cout << "*2" << endl;
                     vector<Move> tempVector = m.possibleMoves(board->squares[i][j].getOccupyingPc());
-                    cout << "*3" << endl;
                     masterVector.insert(masterVector.end(), tempVector.begin(), tempVector.end());
-                    // std ::cout << "(" << board->squares[i][j].getX() << "," << board->squares[i][j].getY() << ")" << std::endl;
                 }
             }
         }

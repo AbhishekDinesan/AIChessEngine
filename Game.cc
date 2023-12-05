@@ -74,17 +74,9 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
     Move m = Move(board, fromX, fromY, toX, toY);
 
     // TEMPORARY, PLEASE DELETE:
-    std::vector<Move> moves = m.possibleMoves(board->getPiecePtr(fromX, fromY));
 
     Piece *pc = board->getPiecePtr(fromX, fromY);
-    std::cout << "For Piece: " << (int)pc->pieceType() << endl;
 
-    for (Move move : moves)
-    {
-        std::cout << (int)move.toX << " " << (int)move.toY << endl;
-    }
-
-    cout << "(3)" << endl;
     if (m.isValidMove())
     {
         board->movePiece(fromX, fromY, toX, toY);
@@ -176,12 +168,11 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         
         
     }
-    /*
     else {
         cerr << "Invalid Move" << endl;
 
     }
-
+    /*
     if(board->isCheck(true)) {
         if (board->isCheckMate(true) == true) {
             cout << "Checkmate! Black wins." << endl;
