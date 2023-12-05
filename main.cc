@@ -282,16 +282,12 @@ int main()
                 cin >> subCmd;
                 if (subCmd == "done")
                 {
-                    validCustomBoard = true;
-
-                    /* THIS IS WHAT IT WILL BE LATER, BUT LEAVE IT COMMENTED FOR TESTING
                     if (customBoard->isValid()) {
                         validCustomBoard = true;
                     } else {
-                        customBoard = new Board(false);
+                        customBoard = new Board(false, false);
                         validCustomBoard = false;
                     }
-                    */
 
                     break;
                 }
