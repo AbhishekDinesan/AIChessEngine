@@ -5,18 +5,18 @@
 
 enum class PieceEnum
 {
-  NonePc, 
+  NonePc,
   Pawn,
-  Rook,
   Knight,
   Bishop,
+  Rook,
   Queen,
   King
 };
 
 class Piece
 {
-protected: 
+protected:
   bool isWhite;
   bool isAlive;
   // Move nextMove {}
@@ -24,7 +24,7 @@ protected:
 
 public:
   Piece(bool isWhite, bool isAlive, int x, int y)
-          : isWhite(isWhite), isAlive(isAlive), x(x), y(y) {}
+      : isWhite(isWhite), isAlive(isAlive), x(x), y(y) {}
 
   virtual bool isValidMove(Move &m) = 0; // CHANGED TO A BOOL
   virtual bool getColour() const = 0;
