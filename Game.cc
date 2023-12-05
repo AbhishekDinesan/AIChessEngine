@@ -134,6 +134,7 @@ void Game::movePiece(int fromX, int fromY, int toX, int toY) // wouldn't this be
         }
 
 
+
         //check for black pawn promotion: 
         for(int j = 0; j < 8; j++) { 
             if(board->getPiecePtr(j, 7)->pieceType() == PieceEnum::Pawn && 
