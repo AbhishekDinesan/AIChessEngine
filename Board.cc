@@ -140,9 +140,7 @@ void Board::setTurn(bool isWhite) {
 // replaces the piece at the old position with a None piece.
 void Board::movePiece(int fromX, int fromY, int toX, int toY)
 {
-    std::cout << "(2)" << endl;
     Piece *movedPiece = squares[fromX][fromY].getOccupyingPc();
-    cout << "(3)" << endl;
     delete squares[toX][toY].getOccupyingPc();
 
     NonePc *emptyPiece = new NonePc(fromX, fromY);
@@ -369,24 +367,17 @@ bool wouldBeInCheckAfterMove(Move *move, Board *board, bool kingColor)
     {
         for (int col = 0; col < 8; col++)
         {
-            cout << "3" << endl;
             tempboard.squares[row][col].setPiece(board->squares[row][col].getOccupyingPc());
         }
     }
 
-    cout << "4" << endl;
     Move newmove = Move(&tempboard, move->fromX, move->fromY, move->toX, move->toY);
-
-    cout << "5" << endl;
     bool isKingInCheck = tempboard.isCheck(kingColor);
-
-    cout << "6" << endl;
     return isKingInCheck;
 }
 
 bool Board::isStaleMate(bool kingColor)
 {
-    // cout << "STALEMATE CALLS ME" << endl;
     vector<Move> masterVector;
     for (int row = 0; row < 8; ++row)
     {
@@ -403,10 +394,9 @@ bool Board::isStaleMate(bool kingColor)
     }
     if (masterVector.size() == 0)
     {
-        cout << "THIS IS A STALEMATE";
+        cout << "Stalemate.";
         return true;
     }
-    // cout << "I HAVE A SIZE OF " << masterVector.size() << endl;
     return false;
 }
 

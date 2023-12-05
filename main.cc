@@ -102,7 +102,6 @@ int main()
                         {
                             whitePlayer = new ComputerFour(true, false, false, nullptr);
                         }
-                        cout << "WHITE = COMPUTER" << cpuDifficulty << endl;
                         isWhiteInit = true;
                     }
                     else
@@ -123,20 +122,17 @@ int main()
                         {
                             blackPlayer = new ComputerFour(false, false, false, nullptr);
                         }
-                        cout << "BLACK = COMPUTER" << cpuDifficulty << endl;
                         isBlackInit = true;
                     }
                 }
                 else if (playerType == "human" && !isWhiteInit)
                 {
                     whitePlayer = new Player(true, true, false, nullptr);
-                    cout << "WHITE = HUMAN" << endl;
                     isWhiteInit = true;
                 }
                 else if (playerType == "human" && !isBlackInit)
                 {
                     blackPlayer = new Player(false, true, false, nullptr);
-                    cout << "BLACK = HUMAN" << endl;
                     isBlackInit = true;
                 }
                 else
@@ -165,15 +161,15 @@ int main()
             else {
                 ++whiteScore;
             }
-            delete g;
-            cout << "Resigned" << endl << endl;
+            string colour = (g->getCurrTurn()) ? "Black" : "White";
+            cout << " resigned" << endl << endl;
             cout << "Final Score:" << endl;
             cout << "White: " << whiteScore << endl;
             cout << "Black: " << blackScore << endl;
+            delete g;
         }
         else if ((cmd == "move") && (g->getCurrPlayer()->getIsHuman() == true))
         {
-            cout << "HUMAN MADE MOVE" << endl;
             if (!g)
             {
                 cerr << "Invalid Input: Moves cannot be made until a game has been started" << endl;
@@ -216,19 +212,15 @@ int main()
                 else if (startRank == -1)
                 {
                     startRank = abs((processChar - '1') - 7);
-                    cout << "SR: " << startRank << endl;
                 }
                 else
                 {
                     endRank = abs((processChar - '1') - 7);
-                    cout << (processChar - '1') << endl;
-                    cout << "ER: " << endRank << endl;
                 }
             }
             if (reset)
                 continue;
 
-            cout << "(1)" << endl;
             g->movePiece(startFile, startRank, endFile, endRank);
             g->printBoard();
             if (g->getGameOver() == true) {
@@ -245,14 +237,10 @@ int main()
                 delete g;
                 //delete customBoard;
             }
-
-            cout << "From: (" << startFile << "," << startRank << ")" << endl;
-            cout << "To: (" << endFile << "," << endRank << ")" << endl;
         }
         else if ((cmd == "move") && (g->getCurrPlayer()->getIsHuman() == false)) {
             g->getCurrPlayer()->makeMove(0, 0, 0, 0);
             g->printBoard();
-            cout << "COMPUTER MADE MOVE" << endl;
             if (g->getGameOver() == true) {
                 if (g->getCurrTurn() == true) {
                     ++blackScore;
@@ -345,8 +333,6 @@ int main()
                     // PIECES BEING ADDED TO THE BOARD
                     customBoard->addPiece(file, rank, piece);
                     cout << *customBoard;
-
-                    // cout << piece << " added at (" << file << "," << rank << ")" << endl;
                 }
                 else if (subCmd == "-")
                 {
@@ -374,7 +360,6 @@ int main()
 
                     customBoard->removePiece(file, rank);
                     cout << *customBoard;
-                    cout << "piece removed from (" << file << "," << rank << ")" << endl;
                 }
                 else if (subCmd == "=")
                 {

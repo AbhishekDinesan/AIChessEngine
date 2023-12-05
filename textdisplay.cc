@@ -55,6 +55,7 @@ TextDisplay::~TextDisplay() {}
 
 std::ostream &operator<<(std::ostream &out, const TextDisplay &td)
 {
+    cout << endl;
     for (int i = 0; i < 8; ++i)
     {
         out << abs(i - 8) << " ";
@@ -64,6 +65,6 @@ std::ostream &operator<<(std::ostream &out, const TextDisplay &td)
         }
         out << '\n';
     }
-    out << "\n  abcdefgh" << endl;
+    out << "\n  abcdefgh" << endl << endl;
     return out;
 }
