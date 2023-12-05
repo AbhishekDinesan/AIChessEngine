@@ -31,8 +31,9 @@ public:
     bool isValid();
     bool isCheck(bool KingColor);
     bool isCheckMate(bool KingColor);
-    bool isStaleMate();
+    bool isStaleMate(bool KingColor);
     void movePiece(int fromX, int fromY, int toX, int toY);
+    void setTurn(bool isWhite);
     void undoMove();
     void printBoard();
     friend class Move;

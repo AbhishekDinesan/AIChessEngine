@@ -1,6 +1,7 @@
 
 #include "AbstractComputer.h"
 #include "AbstractPiece.h"
+#include "ComputerOne.h"
 #include "Move.h"
 #include "Board.h"
 #include <vector>
@@ -9,22 +10,18 @@
 #include <ctime>
 using namespace std;
 
-class ComputerOne : public Computer
-{
+ComputerOne::ComputerOne(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
 
-public:
-    ComputerOne(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
-    virtual void makeMove(int startFile, int startRank, int endFile, int endRank)
-        override
-    {
+void ComputerOne::makeMove(int startFile, int startRank, int endFile, int endRank) {
         Move m(board, startFile, startRank, endFile, endRank);
         vector<Move> masterVector;
         for (int i = 0; i < 8; i++)
         {
             for (int j = 0; j < 8; j++)
             {
-                if ((board->squares[i][j].getOccupyingPc()->getColour() == isWhite) &&
-                    (board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::None))
+                if (board->squares[i][j].getOccupyingPc()->getColour() == isWhite &&
+                    board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::NonePc)
+
                 {
                     vector<Move> tempVector = m.possibleMoves(board->squares[i][j].getOccupyingPc());
                     masterVector.insert(masterVector.end(), tempVector.begin(), tempVector.end());
@@ -38,4 +35,15 @@ public:
         Move newMove = masterVector[random_number];
         board->movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
     }
-};
+
+    bool ComputerOne::getIsHuman() {
+        return false;
+    }
+
+    bool ComputerOne::getColour() {
+        return isWhite;
+    }
+
+    void ComputerOne::setBoard(Board* b) {
+        board = b;
+    }

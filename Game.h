@@ -15,14 +15,15 @@ using namespace std;
 class Game
 {
     Board* board;
-    Player *whitePlayer;
-    Player *blackPlayer;
+    AbstractPlayer *whitePlayer;
+    AbstractPlayer *blackPlayer;
     bool whiteToMove;
     int moveCount;
+    bool gameOver;
     // Vector pastMoves;
 
 public:
-    Game(bool whiteToMove, bool customProvided, Board* theCustomBoard);
+    Game(AbstractPlayer* white, AbstractPlayer* black, bool whiteToMove, bool customProvided, Board *theCustomBoard);
     ~Game();
 
     void init();
@@ -30,6 +31,10 @@ public:
     bool endGame();
     void movePiece(int fromX, int fromY, int toX, int toY);
     void printBoard();
+    AbstractPlayer* getCurrPlayer();
+    bool getCurrTurn();
+    bool getGameOver();
+    bool setGameOver(bool over);
     void addPiece(int x, int y, char piece);
     friend std::ostream &operator<<(std::ostream &out, const Game &g);
 };

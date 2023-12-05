@@ -1,18 +1,14 @@
-#include "AbstractComputer.h"
-#include "AbstractPiece.h"
+#include "ComputerFour.h"
 #include "PawnPiece.h"
+#include <climits>
 #include <map>
 
 using namespace std;
 
-class ComputerFour : public Computer
-{
-    ComputerFour(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
+ComputerFour::ComputerFour(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
 
-public:
-    void makeMove(int startFile, int startRank, int endFile, int endRank)
-        override
-    {
+
+void ComputerFour::makeMove(int startFile, int startRank, int endFile, int endRank) {
         map<PieceEnum, vector<vector<int>>> pieceMap; // Made this a pointer to piece, it was causing an error
         vector<vector<int>> Pmatrix;
         vector<vector<int>> Kmatrix;
@@ -124,7 +120,19 @@ public:
                 }
             }
         }
-
+        
         // execute the move that is masterVector[x]
     }
-};
+
+bool ComputerFour::getIsHuman() {
+    return false;
+}
+
+bool ComputerFour::getColour() {
+    return isWhite;
+}
+
+void ComputerFour::setBoard(Board* b) {
+    board = b;
+}
+
