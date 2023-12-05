@@ -1,8 +1,9 @@
 #include "AbstractPiece.h"
 #include "KingPiece.h"
 
-King::King(bool isWhite, bool isAlive, int x, int y, bool inCheck, bool beenMoved):
-    Piece(isWhite, isAlive, x, y), inCheck{inCheck}, beenMoved{beenMoved} {} 
+King::King(bool isWhite, bool isAlive, int x, int y, bool inCheck, bool beenMoved) : Piece(isWhite, isAlive, x, y), inCheck{inCheck}, beenMoved{beenMoved} {}
+
+King::King(King &other) : Piece(other.isWhite, other.isAlive, other.x, other.y) {}
 
 bool King::getColour() const { return isWhite; }
 bool King::getAlive() const { return isAlive; }

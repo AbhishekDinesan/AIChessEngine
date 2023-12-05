@@ -7,6 +7,7 @@ class Queen : public Piece
 {
 public:
     Queen(bool isWhite, bool isAlive, int x, int y);
+    Queen(Queen &other);
     bool isValidMove(Move &m) override;
     bool getColour() const override;
     bool getAlive() const override;

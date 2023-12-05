@@ -3,14 +3,15 @@
 
 #include "AbstractPiece.h"
 
-class Pawn : public Piece {
-private: 
+class Pawn : public Piece
+{
+private:
     bool isEnPassantable;
-    bool firstMove; 
+    bool firstMove;
 
- public:
-    
+public:
     Pawn(bool isWhite, bool isAlive, bool beenMoved, int x, int y);
+    Pawn(Pawn &other);
     bool isValidMove(Move &m) override;
     bool getColour() const override;
     bool getAlive() const override;
@@ -21,7 +22,7 @@ private:
     bool getPassantability() const;
     bool isFirstMove() const;
     PieceEnum pieceType() override;
-    void setFirstMove(bool b);  
+    void setFirstMove(bool b);
 };
 
 #endif

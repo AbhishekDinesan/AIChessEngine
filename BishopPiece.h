@@ -5,13 +5,14 @@
 
 class Bishop : public Piece
 {
-    //bool isWhite;
-    //bool isAlive;
-    // Move nextMove {};
-    //int x, y;
+    // bool isWhite;
+    // bool isAlive;
+    //  Move nextMove {};
+    // int x, y;
 
 public:
     Bishop(bool isWhite, bool isAlive, int x, int y);
+    Bishop(Bishop &other);
     bool isValidMove(Move &m) override;
     bool getColour() const override;
     bool getAlive() const override;

@@ -3,6 +3,8 @@
 
 Queen::Queen(bool isWhite, bool isAlive, int x, int y) : Piece(isWhite, isAlive, x, y) {}
 
+Queen::Queen(Queen &other) : Piece(other.isWhite, other.isAlive, other.x, other.y) {}
+
 bool Queen::getColour() const { return isWhite; }
 bool Queen::getAlive() const { return isAlive; }
 int Queen::getX() const { return x; }

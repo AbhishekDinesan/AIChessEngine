@@ -1,8 +1,10 @@
 #include "AbstractPiece.h"
 #include "KnightPiece.h"
 
-Knight::Knight(bool isWhite, bool isAlive, int x, int y) 
-    : Piece(isWhite, isAlive, x, y) {} 
+Knight::Knight(bool isWhite, bool isAlive, int x, int y)
+    : Piece(isWhite, isAlive, x, y) {}
+
+Knight::Knight(Knight &other) : Piece(other.isWhite, other.isAlive, other.x, other.y) {}
 
 bool Knight::getColour() const { return isWhite; }
 bool Knight::getAlive() const { return isAlive; }
