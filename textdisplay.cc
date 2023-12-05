@@ -1,5 +1,5 @@
-#include "TextDisplay.h"
-#include "Square.h"
+#include "textdisplay.h"
+#include "square.h"
 using namespace std;
 
 TextDisplay::TextDisplay() : theDisplay(8, std::vector<char>(8, '_')) {}
@@ -7,7 +7,7 @@ TextDisplay::TextDisplay() : theDisplay(8, std::vector<char>(8, '_')) {}
 void TextDisplay::notify(Square &s)
 {
     Piece *p = s.getOccupyingPc();
-    if (p->pieceType() == PieceEnum::None) {
+    if (p->pieceType() == PieceEnum::NonePc) {
         //int xCoord = s.getX();
         //int yCoord = s.getY();
         char spaceColour = (s.getX() % 2 == s.getY() % 2) ? ' ' : '_';

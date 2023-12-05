@@ -46,7 +46,7 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
         {
             for (int col = 0; col < 8; ++col)
             {
-                None *emptypiece = new None(col, row);
+                NonePc *emptypiece = new NonePc(col, row);
                 squares[col][row].setPiece(emptypiece);
             }
         }
@@ -86,7 +86,7 @@ Board::Board(bool emptyBoard, bool temp) /*: squares(8, std::vector<Square>(8)*)
     {
         for (int col = 0; col < 8; ++col)
         {
-            None *emptypiece = new None(col, row);
+            NonePc *emptypiece = new NonePc(col, row);
             squares[col][row].setPiece(emptypiece);
         }
     }
@@ -132,6 +132,10 @@ Board::~Board()
     }
 }
 
+void Board::setTurn(bool isWhite) {
+    isWhiteTurn = isWhite;
+}
+
 // this function deleted the "old piece" and replaces the piece at the new index with the one we are moving
 // replaces the piece at the old position with a None piece.
 void Board::movePiece(int fromX, int fromY, int toX, int toY)
@@ -141,11 +145,12 @@ void Board::movePiece(int fromX, int fromY, int toX, int toY)
     cout << "(3)" << endl;
     delete squares[toX][toY].getOccupyingPc();
 
-    None *emptyPiece = new None(fromX, fromY);
+    NonePc *emptyPiece = new NonePc(fromX, fromY);
     squares[fromX][fromY].setPiece(emptyPiece);
     movedPiece->setX(toX);
     movedPiece->setY(toY);
     squares[toX][toY].setPiece(movedPiece);
+    //isWhiteTurn = !isWhiteTurn;
 }
 
 void Board::addPiece(int x, int y, char c)
@@ -222,7 +227,7 @@ void Board::removePiece(int x, int y)
     {
         throw std::out_of_range("Coordinates are out of the board's bounds.");
     }
-    Piece *nonePiece = new None(x, y);
+    Piece *nonePiece = new NonePc(x, y);
     delete squares[x][y].getOccupyingPc();
     squares[x][y].setPiece(nonePiece);
 }
@@ -238,7 +243,7 @@ bool Board::isOccupied(int x, int y)
     // Assuming `squares` is a 2D vector and getPiece() returns a Piece*
     Piece *currentPiece = squares[x][y].getOccupyingPc();
 
-    return currentPiece != nullptr && dynamic_cast<None *>(currentPiece) == nullptr;
+    return currentPiece != nullptr && dynamic_cast<NonePc *>(currentPiece) == nullptr;
 }
 
 // CANNOT BE IMPLEMENTED YET, Need pieces to be done.
@@ -349,14 +354,11 @@ bool Board::isCheck(bool kingColor)
 
                 if (moveX == kingX && moveY == kingY && this->getPiecePtr(row, col)->getColour() != kingColor)
                 {
-                    cout << "KING IN CHECK" << endl;
                     return true;
                 }
             }
         }
     }
-
-    cout << "KING NOT IN CHECK" << endl;
     return false;
 }
 
@@ -400,7 +402,7 @@ bool Board::isCheckMate(bool kingColor)
             // if after we simualte any of these moves, the king is no longer in check
             // we return false;
             Piece *piece = getPiecePtr(row, col);
-            if (piece && (piece->getColour() == kingColor) && (piece->pieceType() != PieceEnum::None))
+            if (piece && (piece->getColour() == kingColor) && (piece->pieceType() != PieceEnum::NonePc))
             {
                 Move currmove = Move(this, row, col, row, col);                                // dummy object
                 vector<Move> piecemoves = currmove.possibleMoves(this->getPiecePtr(row, col)); // generates all moves of a given piece
@@ -469,7 +471,9 @@ bool Board::isCheckMate(bool kingColor)
          }
      }
      */
-    cout << "CHECKMATE" << endl;
+
+    //string colour = (kingColor) ? "Black" : "White";
+    //cout << "Checkmate! " << colour << " wins!" << endl;
     return true;
 }
 

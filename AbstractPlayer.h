@@ -15,6 +15,10 @@ protected:
 
 public:
   virtual void makeMove(int startFile, int startRank, int endFile, int endRank) = 0;
+  virtual bool getIsHuman() = 0;
+  virtual bool getColour() = 0;
+  virtual void setBoard(Board* b) = 0;
   virtual ~AbstractPlayer() = default;
+  
 };
 #endif

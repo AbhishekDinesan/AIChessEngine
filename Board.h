@@ -33,6 +33,7 @@ public:
     bool isCheckMate(bool KingColor);
     bool isStaleMate();
     void movePiece(int fromX, int fromY, int toX, int toY);
+    void setTurn(bool isWhite);
     void undoMove();
     void printBoard();
     friend class Move;

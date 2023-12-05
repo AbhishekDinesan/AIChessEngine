@@ -3,7 +3,12 @@
 #include <sstream>
 #include "Game.h"
 #include <memory>
+#include "AbstractPlayer.h"
 #include "AbstractComputer.h"
+#include "ComputerOne.h"
+#include "ComputerTwo.h"
+#include "ComputerThree.h"
+#include "ComputerFour.h"
 // ADD INCLUDE STATEMENTS
 using namespace std;
 
@@ -33,8 +38,10 @@ int main()
 {
     int whiteScore = 0;
     int blackScore = 0;
-    unique_ptr<Game> g;
+    Game* g;
     Board *customBoard;
+    AbstractPlayer* whitePlayer;
+    AbstractPlayer* blackPlayer;
     bool validCustomBoard = false;
     bool whiteStarts = true;
     string cmd;
@@ -64,9 +71,10 @@ int main()
                     {
                         cerr << "Invalid Input: \"" << strCpuDifficulty;
                         cerr << "\" is not a valid computer difficulty" << endl;
-                        //
-                        //  DELETE EXISTING PLAYERS
-                        //
+                        
+                        delete whitePlayer;
+                        delete blackPlayer;
+
                         cin.ignore(int(2147483647), '\n');
                         break;
                     }
@@ -80,45 +88,54 @@ int main()
                     {
                         if (cpuDifficulty == 1)
                         {
-                            // ComputerOne();
+                            whitePlayer = new ComputerOne(true, false, false, nullptr);
                         }
-                        else if (cpuDifficulty == 2)
+                        else if (cpuDifficulty == 2) 
                         {
+                            whitePlayer = new ComputerTwo(true, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 3)
                         {
+                            whitePlayer = new ComputerThree(true, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 4)
                         {
+                            whitePlayer = new ComputerFour(true, false, false, nullptr);
                         }
-                        //
-                        // INITIALIZE WHITE PLAYER AS COMPUTER
-                        //
                         cout << "WHITE = COMPUTER" << cpuDifficulty << endl;
                         isWhiteInit = true;
                     }
                     else
                     {
-                        //
-                        // INITIALIZE BLACK PLAYER AS COMPUTER
-                        //
+                        if (cpuDifficulty == 1)
+                        {
+                            blackPlayer = new ComputerOne(false, false, false, nullptr);
+                        }
+                        else if (cpuDifficulty == 2) 
+                        {
+                            blackPlayer = new ComputerTwo(false, false, false, nullptr);
+                        }
+                        else if (cpuDifficulty == 3)
+                        {
+                            blackPlayer = new ComputerThree(false, false, false, nullptr);
+                        }
+                        else if (cpuDifficulty == 4)
+                        {
+                            blackPlayer = new ComputerFour(false, false, false, nullptr);
+                        }
                         cout << "BLACK = COMPUTER" << cpuDifficulty << endl;
                         isBlackInit = true;
                     }
                 }
                 else if (playerType == "human" && !isWhiteInit)
                 {
-                    //
-                    // INITIALIZE WHITE PLAYER AS HUMAN
-                    //
+                    whitePlayer = new Player(true, true, false, nullptr);
                     cout << "WHITE = HUMAN" << endl;
                     isWhiteInit = true;
                 }
                 else if (playerType == "human" && !isBlackInit)
                 {
-                    //
-                    // INITIALIZE BLACK PLAYER AS HUMAN
-                    //
+                    blackPlayer = new Player(false, true, false, nullptr);
                     cout << "BLACK = HUMAN" << endl;
                     isBlackInit = true;
                 }
@@ -126,34 +143,42 @@ int main()
                 {
                     cerr << "Invalid Input: \"" << playerType;
                     cerr << "\" is not a valid player type" << endl;
-                    //
-                    //  DELETE EXISTING PLAYERS
-                    //
+                    
+                    delete whitePlayer;
+                    delete blackPlayer;
+
                     cin.ignore(int(2147483647), '\n');
                     break;
                 }
 
                 if (isWhiteInit && isBlackInit)
                 {
-                    g = make_unique<Game>(whiteStarts, validCustomBoard, customBoard);
+                    g = new Game(whitePlayer, blackPlayer, whiteStarts, validCustomBoard, customBoard);
                 }
             }
         }
         else if (cmd == "resign")
         {
-            //
-            // RESIGN
-            //
-            cout << "Resigned" << endl;
+            if (g->getCurrTurn() == true) {
+                ++blackScore;
+            }
+            else {
+                ++whiteScore;
+            }
+            delete g;
+            cout << "Resigned" << endl << endl;
+            cout << "Final Score:" << endl;
+            cout << "White: " << whiteScore << endl;
+            cout << "Black: " << blackScore << endl;
         }
-        else if (cmd == "move")
+        else if ((cmd == "move") && (g->getCurrPlayer()->getIsHuman() == true))
         {
+            cout << "HUMAN MADE MOVE" << endl;
             if (!g)
             {
                 cerr << "Invalid Input: Moves cannot be made until a game has been started" << endl;
                 cin.ignore(int(2147483647), '\n');
                 continue;
-                ;
             }
 
             char processChar = '0';
@@ -205,21 +230,53 @@ int main()
 
             cout << "(1)" << endl;
             g->movePiece(startFile, startRank, endFile, endRank);
-            g->printBoard();
+            if (g->getGameOver() == true) {
+                if (g->getCurrTurn() == true) {
+                    ++blackScore;
+                } 
+                else {
+                    ++whiteScore;
+                }
+                cout << "Final Score:" << endl;
+                cout << "White: " << whiteScore << endl;
+                cout << "Black: " << blackScore << endl;
+                validCustomBoard = false;
+                delete g;
+                //delete customBoard;
+            }
 
             cout << "From: (" << startFile << "," << startRank << ")" << endl;
             cout << "To: (" << endFile << "," << endRank << ")" << endl;
         }
+        else if ((cmd == "move") && (g->getCurrPlayer()->getIsHuman() == false)) {
+            g->getCurrPlayer()->makeMove(0, 0, 0, 0);
+            cout << "COMPUTER MADE MOVE" << endl;
+            if (g->getGameOver() == true) {
+                if (g->getCurrTurn() == true) {
+                    ++blackScore;
+                } 
+                else {
+                    ++whiteScore;
+                }
+                cout << "Final Score:" << endl;
+                cout << "White: " << whiteScore << endl;
+                cout << "Black: " << blackScore << endl;
+                validCustomBoard = false;
+                delete g;
+            }
+        }
         else if (cmd == "setup")
         {
-            if (g != nullptr)
+            if (!g)
             {
                 cerr << "Invalid Input: Setup mode cannot be accessed while a game is in progress" << endl;
                 cin.ignore(int(2147483647), '\n');
                 continue;
             }
+
             else if (!validCustomBoard)
             {
+                //delete customBoard;
                 customBoard = new Board(true, false);
             }
 
@@ -336,7 +393,7 @@ int main()
                     {
                         whiteStarts = false;
                     }
-                    cout << colour << " player's turn" << endl;
+                    cout << colour << " player starts" << endl;
                 }
                 else
                 {
@@ -355,12 +412,13 @@ int main()
             // **MAYBE** ADD FIELDS FOR EN PASSANT AND CASTLING RIGHTS
             //
         }
-        else if (cmd == "undo")
+        else if (cmd == "quit")
         {
-            //
-            // UNDO PREVIOUS MOVE
-            //
-            cout << "Move Undid" << endl;
+            //if (g) delete g;
+            //if (customBoard) delete customBoard;
+            //if (whitePlayer) delete whitePlayer;
+            //if (blackPlayer) delete blackPlayer;
+            break;
         }
         else
         {
