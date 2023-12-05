@@ -45,22 +45,16 @@ using namespace std;
             Move newMove = masterVector[x];
             tempBoard.movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
             
-            /*
-            if (tempBoard.isCheck()) // if the board produced a check, then you execute move on real board
+            if (tempBoard.isCheck(!this->getColour())) // if the board produced a check, then you execute move on real board
             {
                 board->movePiece(newMove.fromX, newMove.fromY, newMove.toX, newMove.toY);
                 return;
             }
         }
-        cout << "*8" << endl;
         int vectorLength = masterVector.size();
-        cout << "*9" << endl;
         srand(static_cast<unsigned>(std::time(0)));
-        cout << "*10" << endl;
         int random_number = rand() % (vectorLength + 1);
-        cout << "*11" << endl;
         Move newMove2 = masterVector[random_number];
-        cout << "*12" << endl;
         board->movePiece(newMove2.fromX, newMove2.fromY, newMove2.toX, newMove2.toY);
         // if there are no chequaing moves, then you can generate a random move
         // no checking moves, generate a random move
