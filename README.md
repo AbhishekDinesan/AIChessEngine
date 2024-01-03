@@ -4,7 +4,7 @@ Playable Chess Engine using Minimax Search-Tree Algorithm &amp; Alpha-Beta Pruni
 
 ## How does this work?
 
-There are three main components to this project
+There are four main components to this project
 1. Building Chess
 2. Evaluation
 3. Minimax Search Tree
@@ -26,8 +26,16 @@ https://www.chessprogramming.org/Simplified_Evaluation_Function
 
 ![image](https://github.com/AbhishekDinesan/MinimaxChess/assets/69426715/0e773c63-f880-400a-a7f8-b597c21eb96c)
 
-## What is Alpha-Beta Pruning?
+## Optimization Strategies
+
+### What is Alpha-Beta Pruning?
+
+### What is Move Ordering and how does it improve the MiniMax Algorithm?
+
+graph theory!
 
 ## Instructions on how to play
+
+
 
 
