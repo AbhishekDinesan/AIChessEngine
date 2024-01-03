@@ -5,6 +5,7 @@
 #include <memory>
 #include "Gameplay/AbstractPlayer.h"
 #include "Gameplay/Board.h"
+#include "Gameplay/Computer.h"
 // ADD INCLUDE STATEMENTS
 using namespace std;
 
@@ -92,7 +93,7 @@ int main()
                         }
                         else if (cpuDifficulty == 3)
                         {
-                            // whitePlayer = new ComputerThree(true, false, false, nullptr);
+                            whitePlayer = new ComputerThree(true, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 4)
                         {
@@ -112,7 +113,7 @@ int main()
                         }
                         else if (cpuDifficulty == 3)
                         {
-                            // blackPlayer = new ComputerThree(false, false, false, nullptr);
+                            blackPlayer = new ComputerThree(false, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 4)
                         {
