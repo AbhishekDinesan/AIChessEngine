@@ -45,7 +45,7 @@ int main()
 
     while (true)
     {
-        cin >> cmd;
+        std::cin >> cmd;
         if (cmd == "game")
         {
             string parameter = "";
@@ -57,97 +57,14 @@ int main()
 
             while (!isWhiteInit || !isBlackInit)
             {
-                cin >> parameter;
-                istringstream processParameter{parameter};
-                getline(processParameter, playerType, '[');
-
-                if (playerType == "computer")
-                {
-                    getline(processParameter, strCpuDifficulty, ']');
-                    if (!isValidCpuInput(strCpuDifficulty))
-                    {
-                        cerr << "Invalid Input: \"" << strCpuDifficulty;
-                        cerr << "\" is not a valid computer difficulty" << endl;
-
-                        delete whitePlayer;
-                        delete blackPlayer;
-
-                        cin.ignore(int(2147483647), '\n');
-                        break;
-                    }
-                    else
-                    {
-                        istringstream strToInt{strCpuDifficulty};
-                        strToInt >> cpuDifficulty;
-                    }
-
-                    if (!isWhiteInit)
-                    {
-                        if (cpuDifficulty == 1)
-                        {
-                            // whitePlayer = new ComputerOne(true, false, false, nullptr);
-                        }
-                        else if (cpuDifficulty == 2)
-                        {
-                            // whitePlayer = new ComputerTwo(true, false, false, nullptr);
-                        }
-                        else if (cpuDifficulty == 3)
-                        {
-                            whitePlayer = new ComputerThree(true, false, false, nullptr);
-                        }
-                        else if (cpuDifficulty == 4)
-                        {
-                            // whitePlayer = new ComputerFour(true, false, false, nullptr);
-                        }
-                        isWhiteInit = true;
-                    }
-                    else
-                    {
-                        if (cpuDifficulty == 1)
-                        {
-                            // blackPlayer = new ComputerOne(false, false, false, nullptr);
-                        }
-                        else if (cpuDifficulty == 2)
-                        {
-                            // blackPlayer = new ComputerTwo(false, false, false, nullptr);
-                        }
-                        else if (cpuDifficulty == 3)
-                        {
-                            blackPlayer = new ComputerThree(false, false, false, nullptr);
-                        }
-                        else if (cpuDifficulty == 4)
-                        {
-                            // blackPlayer = new ComputerFour(false, false, false, nullptr);
-                        }
-                        isBlackInit = true;
-                    }
-                }
-                else if (playerType == "human" && !isWhiteInit)
-                {
-                    whitePlayer = new Player(true, true, false, nullptr);
-                    isWhiteInit = true;
-                }
-                else if (playerType == "human" && !isBlackInit)
-                {
-                    blackPlayer = new Player(false, true, false, nullptr);
-                    isBlackInit = true;
-                }
-                else
-                {
-                    cerr << "Invalid Input: \"" << playerType;
-                    cerr << "\" is not a valid player type" << endl;
-
-                    delete whitePlayer;
-                    delete blackPlayer;
-
-                    cin.ignore(int(2147483647), '\n');
-                    break;
-                }
-
-                if (isWhiteInit && isBlackInit)
-                {
-                    g = new Game(whitePlayer, blackPlayer, whiteStarts, validCustomBoard, customBoard);
-                }
+                blackPlayer = new ComputerThree(false, false, false, nullptr);
+                isBlackInit = true;
+                whitePlayer = new Player(true, true, false, nullptr);
+                isWhiteInit = true;
+            }
+            if (isWhiteInit && isBlackInit)
+            {
+                g = new Game(whitePlayer, blackPlayer, whiteStarts, validCustomBoard, customBoard);
             }
         }
         else if (cmd == "resign")
@@ -262,155 +179,8 @@ int main()
                 delete g;
             }
         }
-        else if (cmd == "setup")
-        {
-            if (!g)
-            {
-                cerr << "Invalid Input: Setup mode cannot be accessed while a game is in progress" << endl;
-                cin.ignore(int(2147483647), '\n');
-                continue;
-            }
-
-            else if (!validCustomBoard)
-            {
-                // delete customBoard;
-                customBoard = new Board(true, false);
-            }
-
-            while (true)
-            {
-                string subCmd = "";
-                string colour;
-                char processChar = '\0';
-                char piece = '\0';
-                int file = -1;
-                int rank = -1;
-
-                cin >> subCmd;
-                if (subCmd == "done")
-                {
-                    if (customBoard->isValid())
-                    {
-                        validCustomBoard = true;
-                    }
-                    else
-                    {
-                        customBoard = new Board(false, false);
-                        validCustomBoard = false;
-                    }
-
-                    break;
-                }
-                else if (subCmd == "+")
-                {
-                    cin >> processChar;
-                    if (!isValidPieceInput(processChar))
-                    {
-                        cerr << "Invalid Input: \"" << processChar;
-                        cerr << "\" is not a valid piece identifier" << endl;
-                        cin.ignore(int(2147483647), '\n');
-                        continue;
-                    }
-                    else
-                        piece = processChar;
-
-                    cin >> processChar;
-                    if (!isValidFileInput(processChar))
-                    {
-                        cerr << "Invalid Input: \"" << processChar;
-                        cerr << "\" is not a valid file" << endl;
-                        cin.ignore(int(2147483647), '\n');
-                        continue;
-                    }
-                    else
-                        file = processChar - 'a';
-
-                    cin >> processChar;
-                    if (!isValidRankInput(processChar))
-                    {
-                        cerr << "Invalid Input: \"" << processChar;
-                        cerr << "\" is not a valid rank" << endl;
-                        cin.ignore(int(2147483647), '\n');
-                        continue;
-                    }
-                    else
-                        rank = abs((processChar - '1') - 7);
-
-                    // PIECES BEING ADDED TO THE BOARD
-                    customBoard->addPiece(file, rank, piece);
-                    cout << *customBoard;
-                }
-                else if (subCmd == "-")
-                {
-                    cin >> processChar;
-                    if (!isValidFileInput(processChar))
-                    {
-                        cerr << "Invalid Input: \"" << processChar;
-                        cerr << "\" is not a valid file" << endl;
-                        cin.ignore(int(2147483647), '\n');
-                        continue;
-                    }
-                    else
-                        file = processChar - 'a';
-
-                    cin >> processChar;
-                    if (!isValidRankInput(processChar))
-                    {
-                        cerr << "Invalid Input: \"" << processChar;
-                        cerr << "\" is not a valid rank" << endl;
-                        cin.ignore(int(2147483647), '\n');
-                        continue;
-                    }
-                    else
-                        rank = abs((processChar - '1') - 7);
-
-                    customBoard->removePiece(file, rank);
-                    cout << *customBoard;
-                }
-                else if (subCmd == "=")
-                {
-                    cin >> colour;
-                    if (colour != "white" && colour != "black")
-                    {
-                        cerr << "Invalid Input: \"" << colour;
-                        cerr << "\" is not a valid colour" << endl;
-                        cin.ignore(int(2147483647), '\n');
-                        continue;
-                    }
-
-                    if (colour == "white")
-                    {
-                        whiteStarts = true;
-                    }
-                    else if (colour == "black")
-                    {
-                        whiteStarts = false;
-                    }
-                    cout << colour << " player starts" << endl;
-                }
-                else
-                {
-                    cerr << "Invalid Input: \"" << subCmd;
-                    cerr << "\" is not a valid command within the setup scope" << endl;
-                    cin.ignore(int(2147483647), '\n');
-                    continue;
-                }
-            }
-
-            //
-            // CHECK FOR VALID BOARD
-            //
-
-            //
-            // **MAYBE** ADD FIELDS FOR EN PASSANT AND CASTLING RIGHTS
-            //
-        }
         else if (cmd == "quit")
         {
-            // if (g) delete g;
-            // if (customBoard) delete customBoard;
-            // if (whitePlayer) delete whitePlayer;
-            // if (blackPlayer) delete blackPlayer;
             break;
         }
         else
