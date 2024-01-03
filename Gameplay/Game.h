@@ -14,7 +14,7 @@ using namespace std;
 
 class Game
 {
-    Board* board;
+    Board *board;
     AbstractPlayer *whitePlayer;
     AbstractPlayer *blackPlayer;
     bool whiteToMove;
@@ -23,7 +23,7 @@ class Game
     // Vector pastMoves;
 
 public:
-    Game(AbstractPlayer* white, AbstractPlayer* black, bool whiteToMove, bool customProvided, Board *theCustomBoard);
+    Game(AbstractPlayer *white, AbstractPlayer *black, bool whiteToMove, bool customProvided, Board *theCustomBoard);
     ~Game();
 
     void init();
@@ -31,7 +31,7 @@ public:
     bool endGame();
     void movePiece(int fromX, int fromY, int toX, int toY);
     void printBoard();
-    AbstractPlayer* getCurrPlayer();
+    AbstractPlayer *getCurrPlayer();
     bool getCurrTurn();
     bool getGameOver();
     bool setGameOver(bool over);

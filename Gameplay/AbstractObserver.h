@@ -1,5 +1,5 @@
-#ifndef _OBSERVER_H_
-#define _OBSERVER_H_
+#ifndef OBSERVER
+#define OBSERVER
 
 class Square;
 
@@ -10,4 +10,4 @@ public:
     virtual ~Observer() = default;
 };
 
-#endif
+#endif OBSERVER

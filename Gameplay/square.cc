@@ -1,13 +1,13 @@
 // square.cc
 #include <iostream>
 #include "square.h"
-#include "PawnPiece.h"
-#include "RookPiece.h"
-#include "QueenPiece.h"
-#include "KingPiece.h"
-#include "BishopPiece.h"
-#include "KnightPiece.h"
-#include "NonePiece.h"
+#include "../Pieces/PawnPiece.h"
+#include "../Pieces/RookPiece.h"
+#include "../Pieces/QueenPiece.h"
+#include "../Pieces/KingPiece.h"
+#include "../Pieces/BishopPiece.h"
+#include "../Pieces/KnightPiece.h"
+#include "../Pieces/NonePiece.h"
 // #include "NonePiece.h"
 using namespace std;
 

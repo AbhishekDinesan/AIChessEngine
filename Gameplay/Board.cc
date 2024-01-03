@@ -1,16 +1,16 @@
 #include <stdexcept>
 #include "Board.h"
-#include "NonePiece.h"
+#include "../Pieces/NonePiece.h"
 #include "square.h"
 #include "stdexcept"
 #include "textdisplay.h"
-#include "AbstractPiece.h"
-#include "PawnPiece.h"
-#include "RookPiece.h"
-#include "BishopPiece.h"
-#include "KnightPiece.h"
-#include "QueenPiece.h"
-#include "KingPiece.h"
+#include "../Pieces/AbstractPiece.h"
+#include "../Pieces/PawnPiece.h"
+#include "../Pieces/RookPiece.h"
+#include "../Pieces/BishopPiece.h"
+#include "../Pieces/KnightPiece.h"
+#include "../Pieces/QueenPiece.h"
+#include "../Pieces/KingPiece.h"
 #include <vector>
 
 using namespace std;
@@ -132,7 +132,8 @@ Board::~Board()
     }
 }
 
-void Board::setTurn(bool isWhite) {
+void Board::setTurn(bool isWhite)
+{
     isWhiteTurn = isWhite;
 }
 
@@ -495,8 +496,8 @@ bool Board::isCheckMate(bool kingColor)
      }
      */
 
-    //string colour = (kingColor) ? "Black" : "White";
-    //cout << "Checkmate! " << colour << " wins!" << endl;
+    // string colour = (kingColor) ? "Black" : "White";
+    // cout << "Checkmate! " << colour << " wins!" << endl;
     return true;
 }
 

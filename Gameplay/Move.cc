@@ -1,11 +1,11 @@
 #include "Move.h"
-#include "NonePiece.h"
-#include "BishopPiece.h"
-#include "KingPiece.h"
-#include "PawnPiece.h"
-#include "QueenPiece.h"
-#include "RookPiece.h"
-#include "KnightPiece.h"
+#include "../Pieces/NonePiece.h"
+#include "../Pieces/BishopPiece.h"
+#include "../Pieces/KingPiece.h"
+#include "../Pieces/PawnPiece.h"
+#include "../Pieces/QueenPiece.h"
+#include "../Pieces/RookPiece.h"
+#include "../Pieces/KnightPiece.h"
 #include <stdlib.h>
 #include "Game.h"
 #include "Board.h"
@@ -45,7 +45,7 @@ bool Move::isValidMove()
     Piece *p = board->getPiecePtr(fromX, fromY);
     if (p->getColour() != board->isWhiteTurn)
     {
-       return false;
+        return false;
     }
 
     // thisPiece represents the type of the piece that we are trying to move.

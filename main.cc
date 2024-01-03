@@ -1,14 +1,10 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "Game.h"
+#include "Gameplay/Game.h"
 #include <memory>
-#include "AbstractPlayer.h"
-#include "AbstractComputer.h"
-#include "ComputerOne.h"
-#include "ComputerTwo.h"
-#include "ComputerThree.h"
-#include "ComputerFour.h"
+#include "Gameplay/AbstractPlayer.h"
+#include "Gameplay/Board.h"
 // ADD INCLUDE STATEMENTS
 using namespace std;
 
@@ -38,10 +34,10 @@ int main()
 {
     int whiteScore = 0;
     int blackScore = 0;
-    Game* g;
+    Game *g;
     Board *customBoard;
-    AbstractPlayer* whitePlayer;
-    AbstractPlayer* blackPlayer;
+    AbstractPlayer *whitePlayer;
+    AbstractPlayer *blackPlayer;
     bool validCustomBoard = false;
     bool whiteStarts = true;
     string cmd;
@@ -71,7 +67,7 @@ int main()
                     {
                         cerr << "Invalid Input: \"" << strCpuDifficulty;
                         cerr << "\" is not a valid computer difficulty" << endl;
-                        
+
                         delete whitePlayer;
                         delete blackPlayer;
 
@@ -88,19 +84,19 @@ int main()
                     {
                         if (cpuDifficulty == 1)
                         {
-                            whitePlayer = new ComputerOne(true, false, false, nullptr);
+                            // whitePlayer = new ComputerOne(true, false, false, nullptr);
                         }
-                        else if (cpuDifficulty == 2) 
+                        else if (cpuDifficulty == 2)
                         {
-                            whitePlayer = new ComputerTwo(true, false, false, nullptr);
+                            // whitePlayer = new ComputerTwo(true, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 3)
                         {
-                            whitePlayer = new ComputerThree(true, false, false, nullptr);
+                            // whitePlayer = new ComputerThree(true, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 4)
                         {
-                            whitePlayer = new ComputerFour(true, false, false, nullptr);
+                            // whitePlayer = new ComputerFour(true, false, false, nullptr);
                         }
                         isWhiteInit = true;
                     }
@@ -108,19 +104,19 @@ int main()
                     {
                         if (cpuDifficulty == 1)
                         {
-                            blackPlayer = new ComputerOne(false, false, false, nullptr);
+                            // blackPlayer = new ComputerOne(false, false, false, nullptr);
                         }
-                        else if (cpuDifficulty == 2) 
+                        else if (cpuDifficulty == 2)
                         {
-                            blackPlayer = new ComputerTwo(false, false, false, nullptr);
+                            // blackPlayer = new ComputerTwo(false, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 3)
                         {
-                            blackPlayer = new ComputerThree(false, false, false, nullptr);
+                            // blackPlayer = new ComputerThree(false, false, false, nullptr);
                         }
                         else if (cpuDifficulty == 4)
                         {
-                            blackPlayer = new ComputerFour(false, false, false, nullptr);
+                            // blackPlayer = new ComputerFour(false, false, false, nullptr);
                         }
                         isBlackInit = true;
                     }
@@ -139,7 +135,7 @@ int main()
                 {
                     cerr << "Invalid Input: \"" << playerType;
                     cerr << "\" is not a valid player type" << endl;
-                    
+
                     delete whitePlayer;
                     delete blackPlayer;
 
@@ -155,14 +151,17 @@ int main()
         }
         else if (cmd == "resign")
         {
-            if (g->getCurrTurn() == true) {
+            if (g->getCurrTurn() == true)
+            {
                 ++blackScore;
             }
-            else {
+            else
+            {
                 ++whiteScore;
             }
             string colour = (g->getCurrTurn()) ? "Black" : "White";
-            cout << " resigned" << endl << endl;
+            cout << " resigned" << endl
+                 << endl;
             cout << "Final Score:" << endl;
             cout << "White: " << whiteScore << endl;
             cout << "Black: " << blackScore << endl;
@@ -223,11 +222,14 @@ int main()
 
             g->movePiece(startFile, startRank, endFile, endRank);
             g->printBoard();
-            if (g->getGameOver() == true) {
-                if (g->getCurrTurn() == true) {
+            if (g->getGameOver() == true)
+            {
+                if (g->getCurrTurn() == true)
+                {
                     ++blackScore;
-                } 
-                else {
+                }
+                else
+                {
                     ++whiteScore;
                 }
                 cout << "Final Score:" << endl;
@@ -235,17 +237,21 @@ int main()
                 cout << "Black: " << blackScore << endl;
                 validCustomBoard = false;
                 delete g;
-                //delete customBoard;
+                // delete customBoard;
             }
         }
-        else if ((cmd == "move") && (g->getCurrPlayer()->getIsHuman() == false)) {
+        else if ((cmd == "move") && (g->getCurrPlayer()->getIsHuman() == false))
+        {
             g->getCurrPlayer()->makeMove(0, 0, 0, 0);
             g->printBoard();
-            if (g->getGameOver() == true) {
-                if (g->getCurrTurn() == true) {
+            if (g->getGameOver() == true)
+            {
+                if (g->getCurrTurn() == true)
+                {
                     ++blackScore;
-                } 
-                else {
+                }
+                else
+                {
                     ++whiteScore;
                 }
                 cout << "Final Score:" << endl;
@@ -266,7 +272,7 @@ int main()
 
             else if (!validCustomBoard)
             {
-                //delete customBoard;
+                // delete customBoard;
                 customBoard = new Board(true, false);
             }
 
@@ -282,9 +288,12 @@ int main()
                 cin >> subCmd;
                 if (subCmd == "done")
                 {
-                    if (customBoard->isValid()) {
+                    if (customBoard->isValid())
+                    {
                         validCustomBoard = true;
-                    } else {
+                    }
+                    else
+                    {
                         customBoard = new Board(false, false);
                         validCustomBoard = false;
                     }
@@ -397,10 +406,10 @@ int main()
         }
         else if (cmd == "quit")
         {
-            //if (g) delete g;
-            //if (customBoard) delete customBoard;
-            //if (whitePlayer) delete whitePlayer;
-            //if (blackPlayer) delete blackPlayer;
+            // if (g) delete g;
+            // if (customBoard) delete customBoard;
+            // if (whitePlayer) delete whitePlayer;
+            // if (blackPlayer) delete blackPlayer;
             break;
         }
         else

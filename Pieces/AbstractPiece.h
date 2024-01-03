@@ -1,7 +1,7 @@
 #ifndef _ABSTRACTPIECE_H_
 #define _ABSTRACTPIECE_H_
 
-#include "Move.h"
+#include "../Gameplay/Move.h"
 
 enum class PieceEnum
 {

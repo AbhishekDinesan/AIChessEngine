@@ -1,10 +1,8 @@
-
-
-#ifndef __SQUARE_H__
-#define __SQUARE_H__
+#ifndef __SQUARE__
+#define __SQUARE__
 
 #include "AbstractObserver.h"
-#include "AbstractPiece.h"
+#include "../Pieces/AbstractPiece.h"
 #include <vector>
 
 // NOTE: Square is not an observer, it will be observed though
@@ -35,4 +33,4 @@ public:
     void setPiece(Piece *piece);
 };
 
-#endif
+#endif __SQUARE__
