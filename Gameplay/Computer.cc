@@ -9,19 +9,18 @@
 
 using namespace std;
 
-ComputerThree::ComputerThree(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard) {}
+const int GRID_DIMENSION = 8;
 
-void ComputerThree::makeMove(int startFile, int startRank, int endFile, int endRank)
+map<PieceEnum, vector<vector<int>>> pieceMap;
+vector<vector<int>> Pmatrix;
+vector<vector<int>> Kmatrix;
+vector<vector<int>> Qmatrix;
+vector<vector<int>> Rmatrix;
+vector<vector<int>> Nmatrix;
+vector<vector<int>> Bmatrix;
+
+ComputerThree::ComputerThree(bool isWhite, bool isHuman, bool isInCheck, Board *myboard) : Computer(isWhite, isHuman, isInCheck, myboard)
 {
-    map<PieceEnum, vector<vector<int>>> pieceMap; // Made this a pointer to piece, it was causing an error
-    vector<vector<int>> Pmatrix;
-    vector<vector<int>> Kmatrix;
-    vector<vector<int>> Qmatrix;
-    vector<vector<int>> Rmatrix;
-    vector<vector<int>> Nmatrix;
-    vector<vector<int>> Bmatrix;
-
-    // prefer capturing moves, checking problem
 
     Pmatrix = {{0, 0, 0, 0, 0, 0, 0, 0},
                {50, 50, 50, 50, 50, 50, 50, 50},
@@ -83,14 +82,40 @@ void ComputerThree::makeMove(int startFile, int startRank, int endFile, int endR
     pieceMap[PieceEnum::Rook] = Rmatrix;
     pieceMap[PieceEnum::Queen] = Qmatrix;
     pieceMap[PieceEnum::King] = Kmatrix;
+}
 
+int EvaluateSquare(Square square)
+{
+    PieceEnum piece = square.getOccupyingPc()->pieceType();
+    if (piece == PieceEnum::NonePc)
+    {
+        return 0;
+    }
+    return pieceMap[piece][square.getX()][square.getY()];
+}
+
+int EvaluationFunction(Board *board)
+{
+    int result = 0;
+    for (int i = 0; i < GRID_DIMENSION; i++)
+    {
+        for (int j = 0; j < GRID_DIMENSION; j++)
+        {
+            result += EvaluateSquare(board->squares[i][j]);
+        }
+    }
+    return result;
+}
+
+void ComputerThree::makeMove(int startFile, int startRank, int endFile, int endRank)
+{
     /////////////////////////////////////////////////////////////////////////////////////////////////////
     Move m(board, startFile, startRank, endFile, endRank);
     vector<Move> masterVector;         // holds all CPU's possible moves
     vector<Move> opponentMasterVector; // holds all opponents possible moves
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < GRID_DIMENSION; i++)
     {
-        for (int j = 0; j < 8; j++)
+        for (int j = 0; j < GRID_DIMENSION; j++)
         {
             if (board->squares[i][j].getOccupyingPc()->getColour() == isWhite &&
                 board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::NonePc)
@@ -154,6 +179,7 @@ void ComputerThree::makeMove(int startFile, int startRank, int endFile, int endR
     srand(static_cast<unsigned>(std::time(0)));
     int random_number = rand() % (vectorLength + 1);
     Move newMove2 = masterVector[random_number];
+    // cout << EvaluationFunction(board) << endl;
     board->movePiece(newMove2.fromX, newMove2.fromY, newMove2.toX, newMove2.toY);
 }
 
