@@ -107,6 +107,41 @@ int EvaluationFunction(Board *board)
     return result;
 }
 
+int max(int one, int two)
+{
+    if (one > two)
+    {
+        return one;
+    }
+    return two;
+}
+
+int MiniMax(Board *board, int depth, bool isMax)
+{
+    if (depth == 0)
+    {
+        return EvaluationFunction(board);
+    }
+    if (isMax)
+    {
+        int maxEval = INT_MIN;
+        int max = INT_MIN;
+        Board *tempBoard = board;
+        // for each legal move
+        //  create a temporary baord, simulate the move
+        int eval = MiniMax(tempBoard, depth - 1, false);
+        maxEval = max(maxEval, eval);
+    }
+    else
+    {
+        int minEval = INT_MAX;
+        ChessBoard tempBoard = board;
+        int eval = minimax(tempBoard, depth - 1, true);
+        minEval = min(minEval, eval);
+    }
+    return minEval;
+}
+
 void ComputerThree::makeMove(int startFile, int startRank, int endFile, int endRank)
 {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
