@@ -118,19 +118,34 @@ int max(int one, int two)
 
 int MiniMax(Board *board, int depth, bool isMax)
 {
-    if (depth == 0)
+    Move m(board, 0, 0, 0, 0);
+    vector<Move> masterVector;
+    if (depth == 0 || board->isStaleMate(true) || board->isStaleMate(false) || board->isCheckMate(true) || board->isCheckMate(false)) // rewrite to a isOver function
     {
         return EvaluationFunction(board);
     }
     if (isMax)
     {
         int maxEval = INT_MIN;
-        int max = INT_MIN;
-        Board *tempBoard = board;
-        // for each legal move
-        //  create a temporary baord, simulate the move
-        int eval = MiniMax(tempBoard, depth - 1, false);
-        maxEval = max(maxEval, eval);
+        for (int i = 0; i < GRID_DIMENSION; i++)
+        {
+            for (int j = 0; j < GRID_DIMENSION; j++)
+            {
+                if (board->squares[i][j].getOccupyingPc()->getColour() == isWhite &&
+                    board->squares[i][j].getOccupyingPc()->pieceType() != PieceEnum::NonePc)
+                {
+                    vector<Move> tempVector = m.possibleMoves(board->squares[i][j].getOccupyingPc());
+                    masterVector.insert(masterVector.end(), tempVector.begin(), tempVector.end());
+                }
+            }
+        }
+        for (int i = 0; i < masterVector.size(); i++)
+        {
+            Board *tempBoard = board;
+            board->movePiece(masterVector[i].fromX, masterVector[i].fromY, masterVector[i].toX, masterVector[0].toY);
+            int eval = MiniMax(tempBoard, depth - 1, false);
+            maxEval = max(maxEval, eval);
+        }
     }
     else
     {
@@ -141,7 +156,7 @@ int MiniMax(Board *board, int depth, bool isMax)
     }
     return minEval;
 }
-
+}
 void ComputerThree::makeMove(int startFile, int startRank, int endFile, int endRank)
 {
     /////////////////////////////////////////////////////////////////////////////////////////////////////
