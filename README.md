@@ -38,9 +38,5 @@ Alpha-Beta Pruning is a method of pruning un-needed branches from the game's sea
 The idea is that the highest value, alpha, and a lowest value, beta. The condition alpha >= beta must hold.
 By keeping track of both alpha/beta, we are able to eliminate potential branch searches before they even occur!
 
-## Instructions on how to play
-
-Deployment is work in progress..
-
 
 
